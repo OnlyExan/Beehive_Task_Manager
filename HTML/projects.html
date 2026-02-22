@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Beehive • Projects</title>
+
+<style>
+:root{
+  --bg:#000;
+  --card:#111;
+  --text:#fff;
+  --muted:#ccc;
+  --accent:#f7b500;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 28px;
+  background:#0a0a0a;
+  border-bottom:1px solid #222;
+}
+nav a{
+  color:var(--accent);
+  text-decoration:none;
+  font-weight:700;
+}
+nav a:hover{text-decoration:underline}
+.container{padding:32px; max-width:1000px; margin:0 auto;}
+h1{margin:0 0 6px; color:var(--accent)}
+p{margin:0 0 20px; color:var(--muted)}
+.card{
+  background:var(--card);
+  border:1px solid #222;
+  border-radius:14px;
+  padding:20px;
+}
+ul{margin:10px 0 0; padding-left:18px; color:var(--muted)}
+.badge{
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  background:rgba(247,181,0,.15);
+  border:1px solid rgba(247,181,0,.35);
+  color:var(--accent);
+  font-size:12px;
+  font-weight:700;
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="dashboard.html">← Dashboard</a>
+  <a href="login.html">Logout</a>
+</nav>
+
+<div class="container">
+  <h1>Projects <span class="badge">Beta</span></h1>
+  <p>View and manage your projects.</p>
+
+  <div class="card">
+    <h2 style="margin:0 0 10px;">Example Projects</h2>
+    <ul>
+      <li>Beehive Website Redesign</li>
+      <li>Mobile App Bug Fixes</li>
+      <li>Customer Support Ticket Queue</li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>
