@@ -1,0 +1,13 @@
+# Ingore your venv
+.venv/
+venv/
+
+# Ignore ediror/OS junk
+.vscode/
+__pycache__/
+*.pyc
+.DS_Store
+Readme_Starting_venv.txt
+
+# Ignore env files
+.env
