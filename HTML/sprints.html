@@ -1,17 +1,23 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Beehive • Sprints</title>
 
 <style>
 :root{
   --bg:#000;
-  --card:#111;
+  --panel:#0b0b0b;
+  --card:#121212;
+  --card2:#161616;
+  --border:#242424;
   --text:#fff;
-  --muted:#ccc;
+  --muted:#bdbdbd;
   --accent:#f7b500;
+  --accentSoft: rgba(247,181,0,.18);
+  --shadow: 0 18px 50px rgba(0,0,0,.45);
+  --radius: 16px;
 }
 *{box-sizing:border-box}
 body{
@@ -20,88 +26,551 @@ body{
   background:var(--bg);
   color:var(--text);
 }
-nav{
+.app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns: 260px 1fr;
+}
+@media (max-width: 900px){
+  .app{grid-template-columns: 1fr}
+  .sidebar{display:none}
+}
+.sidebar{
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  padding:18px 14px;
+}
+.brand{
+  display:flex; align-items:center; gap:10px;
+  padding:10px 10px 16px;
+}
+.logo{
+  width:38px;height:38px;border-radius:14px;
+  background: radial-gradient(circle at 30% 30%, #ffd66b, var(--accent));
+  display:grid;place-items:center;
+  color:#1a1300;font-weight:900;
+}
+.small{font-size:12px;color:var(--muted)}
+.nav{
+  display:grid; gap:8px;
+  padding:8px;
+}
+.nav a{
+  text-decoration:none;
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px;
+  border-radius:14px;
+  color:var(--muted);
+  border:1px solid transparent;
+}
+.nav a:hover{
+  background: var(--card);
+  border-color: var(--border);
+  color: var(--text);
+}
+.nav a.active{
+  background: var(--accentSoft);
+  border-color: rgba(247,181,0,.35);
+  color: var(--text);
+}
+.nav .dot{
+  width:10px;height:10px;border-radius:999px;background:var(--accent);
+  box-shadow: 0 0 0 4px rgba(247,181,0,.12);
+}
+
+.main{display:grid; grid-template-rows: 64px 1fr}
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 18px;
+  border-bottom:1px solid var(--border);
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(10px);
+  position:sticky; top:0;
+  gap:12px;
+}
+.leftTop{
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.select{
+  background: var(--card);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:10px 12px;
+  border-radius: 14px;
+}
+.btn{
+  border:1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  padding:10px 12px;
+  border-radius: 14px;
+  cursor:pointer;
+  font-weight:700;
+}
+.btn:hover{border-color: rgba(247,181,0,.35)}
+.btn.primary{
+  background: linear-gradient(180deg, #ffd66b, var(--accent));
+  border:0;
+  color:#1a1300;
+}
+.search{
+  display:flex; align-items:center; gap:10px;
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius: 14px;
+  padding:10px 12px;
+  width:min(420px, 100%);
+}
+.search input{
+  width:100%;
+  border:0; outline:0;
+  background:transparent;
+  color:var(--text);
+  font-size:14px;
+}
+.userpill{
+  border:1px solid var(--border);
+  background: var(--card);
+  padding:10px 12px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size:13px;
+}
+.content{padding:18px}
+.hgroup h1{margin:0; color:var(--accent); font-size:22px}
+.hgroup p{margin:6px 0 0; color:var(--muted)}
+
+.board{
+  margin-top:14px;
+  display:grid;
+  grid-template-columns: repeat(4, minmax(220px, 1fr));
+  gap:12px;
+}
+@media (max-width: 1100px){
+  .board{grid-template-columns: repeat(2, minmax(220px, 1fr))}
+}
+@media (max-width: 640px){
+  .board{grid-template-columns: 1fr}
+}
+.col{
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  overflow:hidden;
+  box-shadow: var(--shadow);
+  min-height: 360px;
+  display:flex;
+  flex-direction:column;
+}
+.colHead{
+  padding:12px 14px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:16px 28px;
-  background:#0a0a0a;
-  border-bottom:1px solid #222;
+  background: rgba(255,255,255,.02);
+  border-bottom:1px solid var(--border);
 }
-nav a{
-  color:var(--accent);
-  text-decoration:none;
-  font-weight:700;
+.colHead .title{
+  font-weight:900;
+  color: var(--text);
 }
-nav a:hover{text-decoration:underline}
-.container{padding:32px; max-width:1000px; margin:0 auto;}
-h1{margin:0 0 6px; color:var(--accent)}
-p{margin:0 0 20px; color:var(--muted)}
-.card{
-  background:var(--card);
-  border:1px solid #222;
-  border-radius:14px;
-  padding:20px;
+.count{
+  font-size:12px;
+  color: var(--muted);
+  padding:6px 10px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background: rgba(0,0,0,.25);
 }
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:10px;
-}
-th, td{
+.colBody{
   padding:12px;
-  border-bottom:1px solid #222;
-  text-align:left;
+  display:grid;
+  gap:10px;
+  align-content:start;
+  flex:1;
 }
-th{color:var(--accent)}
-td{color:var(--muted)}
-.status{
-  color:var(--accent);
-  font-weight:700;
+.ticket{
+  background: var(--card2);
+  border:1px solid var(--border);
+  border-radius: 14px;
+  padding:10px 10px;
+}
+.ticket:hover{border-color: rgba(247,181,0,.35)}
+.tTop{
+  display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+}
+.key{
+  font-weight:900;
+  color: var(--accent);
+  font-size:12px;
+  letter-spacing:.3px;
+}
+.pri{
+  font-size:12px;
+  color: var(--muted);
+}
+.summary{
+  margin:6px 0 10px;
+  color: var(--text);
+  font-weight:800;
+}
+.meta{
+  display:flex; justify-content:space-between; align-items:center; gap:10px;
+  font-size:12px;
+  color: var(--muted);
+}
+.tag{
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(247,181,0,.35);
+  background: var(--accentSoft);
+  color: var(--accent);
+  font-weight:800;
+}
+.ticketActions{
+  display:flex; gap:6px;
+}
+.iconBtn{
+  border:1px solid var(--border);
+  background:#0c0c0c;
+  color:var(--text);
+  border-radius: 10px;
+  padding:6px 8px;
+  cursor:pointer;
+}
+.iconBtn:hover{border-color: rgba(247,181,0,.35)}
+.footer{
+  margin-top:12px;
+  color: var(--muted);
+  font-size:12px;
+}
+
+/* Modal */
+.modalBack{
+  position:fixed; inset:0;
+  background: rgba(0,0,0,.65);
+  display:none;
+  align-items:center; justify-content:center;
+  padding:18px;
+}
+.modal{
+  width:min(640px, 100%);
+  background: var(--card2);
+  border:1px solid var(--border);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  padding:16px;
+}
+.modal h2{margin:6px 0 10px; color:var(--accent)}
+.formGrid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+@media (max-width: 640px){
+  .formGrid{grid-template-columns: 1fr}
+}
+.formRow{display:grid; gap:6px}
+label{color: var(--muted); font-size:13px}
+input, textarea, select{
+  width:100%;
+  padding:10px 12px;
+  border-radius: 14px;
+  border:1px solid var(--border);
+  background: #0c0c0c;
+  color: var(--text);
+  outline: none;
+}
+textarea{min-height:90px; resize:vertical}
+.modalActions{
+  display:flex; justify-content:flex-end; gap:10px;
+  margin-top:12px;
 }
 </style>
 </head>
+
 <body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">B</div>
+      <div>
+        <div style="font-weight:800;">Beehive</div>
+        <div class="small">Sprints & Boards</div>
+      </div>
+    </div>
 
-<nav>
-  <a href="dashboard.html">← Dashboard</a>
-  <a href="login.html">Logout</a>
-</nav>
+    <nav class="nav">
+      <a href="dashboard.html"><span class="dot"></span>Dashboard</a>
+      <a href="projects.html"><span class="dot"></span>Projects</a>
+      <a class="active" href="sprints.html"><span class="dot"></span>Sprints</a>
+      <a href="login.html"><span class="dot"></span>Logout</a>
+    </nav>
+  </aside>
 
-<div class="container">
-  <h1>Sprints</h1>
-  <p>Plan sprint cycles and track progress.</p>
+  <section class="main">
+    <header class="topbar">
+      <div class="leftTop">
+        <select id="sprintSelect" class="select" title="Choose sprint"></select>
+        <button class="btn" onclick="seedDemo()">Load demo</button>
+        <button class="btn primary" onclick="openModal(true)">+ Add ticket</button>
+      </div>
 
-  <div class="card">
-    <h2 style="margin:0 0 10px;">Sprint List (Example)</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Sprint</th>
-          <th>Dates</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Sprint 1</td>
-          <td>Feb 24 – Mar 9</td>
-          <td class="status">Active</td>
-        </tr>
-        <tr>
-          <td>Sprint 2</td>
-          <td>Mar 10 – Mar 23</td>
-          <td>Planned</td>
-        </tr>
-        <tr>
-          <td>Sprint 3</td>
-          <td>Mar 24 – Apr 6</td>
-          <td>Planned</td>
-        </tr>
-      </tbody>
-    </table>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="search" title="Filters tickets by summary, key, tag">
+          🔎 <input id="q" type="text" placeholder="Search tickets (e.g., BEE-1 auth)" />
+        </div>
+        <div class="userpill">Signed in • Nathan</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="hgroup">
+        <h1>Sprints</h1>
+        <p>Board view like Jira: move work through columns (this demo uses buttons).</p>
+      </div>
+
+      <section class="board">
+        <div class="col">
+          <div class="colHead"><div class="title">Backlog</div><div class="count" id="c_backlog">0</div></div>
+          <div class="colBody" id="backlog"></div>
+        </div>
+        <div class="col">
+          <div class="colHead"><div class="title">In Progress</div><div class="count" id="c_progress">0</div></div>
+          <div class="colBody" id="progress"></div>
+        </div>
+        <div class="col">
+          <div class="colHead"><div class="title">Review</div><div class="count" id="c_review">0</div></div>
+          <div class="colBody" id="review"></div>
+        </div>
+        <div class="col">
+          <div class="colHead"><div class="title">Done</div><div class="count" id="c_done">0</div></div>
+          <div class="colBody" id="done"></div>
+        </div>
+      </section>
+
+      <div class="footer">
+        Tip: Tickets persist in <b>localStorage</b>. Next step is drag-and-drop + backend.
+      </div>
+    </main>
+  </section>
+</div>
+
+<!-- Modal -->
+<div id="modalBack" class="modalBack" role="dialog" aria-modal="true" aria-label="Add Ticket">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+      <h2 style="margin:0;">Add Ticket</h2>
+      <button class="btn" onclick="openModal(false)">Close</button>
+    </div>
+
+    <div class="formGrid" style="margin-top:10px;">
+      <div class="formRow">
+        <label for="tkey">Ticket key</label>
+        <input id="tkey" placeholder="e.g., BEE-101" />
+      </div>
+      <div class="formRow">
+        <label for="tpri">Priority</label>
+        <select id="tpri">
+          <option>P3 - Normal</option>
+          <option>P2 - High</option>
+          <option>P1 - Urgent</option>
+          <option>P4 - Low</option>
+        </select>
+      </div>
+
+      <div class="formRow" style="grid-column: 1 / -1;">
+        <label for="tsum">Summary</label>
+        <input id="tsum" placeholder="e.g., Add login validation + redirect" />
+      </div>
+
+      <div class="formRow">
+        <label for="ttag">Tag</label>
+        <input id="ttag" placeholder="e.g., auth" />
+      </div>
+      <div class="formRow">
+        <label for="tstate">Column</label>
+        <select id="tstate">
+          <option value="backlog">Backlog</option>
+          <option value="progress">In Progress</option>
+          <option value="review">Review</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+
+      <div class="formRow" style="grid-column: 1 / -1;">
+        <label for="tdesc">Description (optional)</label>
+        <textarea id="tdesc" placeholder="Notes..."></textarea>
+      </div>
+    </div>
+
+    <div class="modalActions">
+      <button class="btn" onclick="openModal(false)">Cancel</button>
+      <button class="btn primary" onclick="addTicket()">Add</button>
+    </div>
   </div>
 </div>
 
+<script>
+const LS_SPRINTS = "beehive_sprints_v1";
+const LS_TICKETS = "beehive_tickets_v1";
+
+function load(key){
+  try { return JSON.parse(localStorage.getItem(key)) || []; }
+  catch { return []; }
+}
+function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
+
+function escapeHtml(s){
+  return String(s ?? "")
+    .replaceAll("&","&amp;").replaceAll("<","&lt;")
+    .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function ensureSprints(){
+  let sprints = load(LS_SPRINTS);
+  if(sprints.length === 0){
+    sprints = [
+      { id:"s1", name:"Sprint 1", dates:"Feb 24 – Mar 9" },
+      { id:"s2", name:"Sprint 2", dates:"Mar 10 – Mar 23" }
+    ];
+    save(LS_SPRINTS, sprints);
+  }
+  return sprints;
+}
+
+function seedDemo(){
+  const sprints = ensureSprints();
+  const demo = [
+    { sprintId: sprints[0].id, key:"BEE-1",  summary:"Login page + routing to dashboard", tag:"auth",  priority:"P2 - High", state:"done" },
+    { sprintId: sprints[0].id, key:"BEE-2",  summary:"Projects list (table + create modal)",  tag:"ui",    priority:"P3 - Normal", state:"review" },
+    { sprintId: sprints[0].id, key:"BEE-3",  summary:"Sprint board columns + counters",       tag:"ui",    priority:"P3 - Normal", state:"progress" },
+    { sprintId: sprints[0].id, key:"BEE-4",  summary:"Add ticket modal + localStorage",       tag:"data",  priority:"P3 - Normal", state:"backlog" },
+    { sprintId: sprints[1].id, key:"BEE-10", summary:"Drag & drop (next)",                    tag:"ux",    priority:"P4 - Low",    state:"backlog" }
+  ];
+  save(LS_TICKETS, demo);
+  render();
+}
+
+function fillSprintSelect(){
+  const select = document.getElementById("sprintSelect");
+  const sprints = ensureSprints();
+  select.innerHTML = sprints.map(s => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)} • ${escapeHtml(s.dates)}</option>`).join("");
+  // keep selection stable
+  const last = localStorage.getItem("beehive_last_sprint");
+  if(last && sprints.some(s => s.id === last)) select.value = last;
+  select.addEventListener("change", () => {
+    localStorage.setItem("beehive_last_sprint", select.value);
+    render();
+  });
+}
+
+function openModal(show){
+  document.getElementById("modalBack").style.display = show ? "flex" : "none";
+  if(show) document.getElementById("tkey").focus();
+}
+
+function addTicket(){
+  const sprintId = document.getElementById("sprintSelect").value;
+  const key = document.getElementById("tkey").value.trim().toUpperCase();
+  const summary = document.getElementById("tsum").value.trim();
+  const tag = document.getElementById("ttag").value.trim() || "general";
+  const priority = document.getElementById("tpri").value;
+  const state = document.getElementById("tstate").value;
+
+  if(!key) return alert("Ticket key is required (e.g., BEE-101).");
+  if(!summary) return alert("Summary is required.");
+
+  const tickets = load(LS_TICKETS);
+  if(tickets.some(t => t.key === key && t.sprintId === sprintId)) {
+    return alert("That ticket key already exists in this sprint.");
+  }
+  tickets.push({ sprintId, key, summary, tag, priority, state });
+  save(LS_TICKETS, tickets);
+
+  // clear
+  document.getElementById("tkey").value = "";
+  document.getElementById("tsum").value = "";
+  document.getElementById("ttag").value = "";
+  document.getElementById("tpri").value = "P3 - Normal";
+  document.getElementById("tstate").value = "backlog";
+  document.getElementById("tdesc").value = "";
+
+  openModal(false);
+  render();
+}
+
+function moveTicket(key, dir){
+  const sprintId = document.getElementById("sprintSelect").value;
+  const order = ["backlog","progress","review","done"];
+  const tickets = load(LS_TICKETS);
+  const t = tickets.find(x => x.sprintId === sprintId && x.key === key);
+  if(!t) return;
+  const i = order.indexOf(t.state);
+  const ni = Math.max(0, Math.min(order.length-1, i + dir));
+  t.state = order[ni];
+  save(LS_TICKETS, tickets);
+  render();
+}
+
+function deleteTicket(key){
+  const sprintId = document.getElementById("sprintSelect").value;
+  if(!confirm(`Delete ${key}?`)) return;
+  let tickets = load(LS_TICKETS);
+  tickets = tickets.filter(t => !(t.sprintId === sprintId && t.key === key));
+  save(LS_TICKETS, tickets);
+  render();
+}
+
+function ticketCard(t){
+  return `
+  <div class="ticket">
+    <div class="tTop">
+      <div class="key">${escapeHtml(t.key)}</div>
+      <div class="pri">${escapeHtml(t.priority)}</div>
+    </div>
+    <div class="summary">${escapeHtml(t.summary)}</div>
+    <div class="meta">
+      <span class="tag">${escapeHtml(t.tag)}</span>
+      <span class="ticketActions">
+        <button class="iconBtn" title="Move left" onclick="moveTicket('${escapeHtml(t.key)}', -1)">←</button>
+        <button class="iconBtn" title="Move right" onclick="moveTicket('${escapeHtml(t.key)}', 1)">→</button>
+        <button class="iconBtn" title="Delete" onclick="deleteTicket('${escapeHtml(t.key)}')">✕</button>
+      </span>
+    </div>
+  </div>`;
+}
+
+function render(){
+  const sprintId = document.getElementById("sprintSelect").value;
+  const q = (document.getElementById("q").value || "").trim().toLowerCase();
+
+  const tickets = load(LS_TICKETS)
+    .filter(t => t.sprintId === sprintId)
+    .filter(t => (t.key + " " + t.summary + " " + t.tag).toLowerCase().includes(q));
+
+  const by = (state) => tickets.filter(t => t.state === state);
+
+  const buckets = {
+    backlog: by("backlog"),
+    progress: by("progress"),
+    review: by("review"),
+    done: by("done"),
+  };
+
+  for(const id of ["backlog","progress","review","done"]){
+    document.getElementById(id).innerHTML = buckets[id].map(ticketCard).join("");
+    document.getElementById("c_" + (id === "progress" ? "progress" : id)).textContent = buckets[id].length;
+    if(buckets[id].length === 0){
+      document.getElementById(id).innerHTML = `<div style="color:#bdbdbd;font-size:13px;padding:6px 2px;">No tickets.</div>`;
+    }
+  }
+}
+
+fillSprintSelect();
+document.getElementById("q").addEventListener("input", render);
+render();
+</script>
 </body>
 </html>
