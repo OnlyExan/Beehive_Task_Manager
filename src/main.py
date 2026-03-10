@@ -7,7 +7,7 @@ from .database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI(title="BeeHive TTM API", version="1.0.0")
+app = FastAPI(title="BeeHive TTM API")
 
 
 def get_db():
@@ -25,4 +25,4 @@ def home():
 
 @app.get("/employees")
 def list_employees(db: Session = Depends(get_db)):
-    return db.query(models.Employee).all()
+    return db.query(models.employees).all()

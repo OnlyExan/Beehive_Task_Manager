@@ -3,8 +3,8 @@ from sqlalchemy import Column, Integer, String, Boolean, TIMESTAMP, text
 from .database import Base
 
 # Below is a template of a SQLAlchemy model. You can replace it with your actual models as needed.
-class Template(Base):
-    __tablename__ = "templates"
+class employees(Base):
+    __tablename__ = "employees"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
