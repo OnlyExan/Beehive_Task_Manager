@@ -1,5 +1,5 @@
-# routers/employess.py
-
+# routers/employees.py
+import bcrypt
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from src.database import SessionLocal
@@ -14,6 +14,10 @@ def get_db():
     finally:
         db.close()
 
+# Scrambles the password before saving
+def hash_password(plain_password: str) -> str:
+    return bcrypt.hashpw(plain_password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
 @router.post("", response_model=schemas.EmployeeRead, status_code=status.HTTP_201_CREATED)
 def create_employee(employee_in: schemas.EmployeeCreate, db: Session = Depends(get_db)):
     existing = db.query(models.Employee).filter(models.Employee.email == employee_in.email).first()
@@ -27,12 +31,12 @@ def create_employee(employee_in: schemas.EmployeeCreate, db: Session = Depends(g
         full_name=employee_in.full_name,
         email=employee_in.email,
         role=employee_in.role,
+        hashed_password=hash_password(employee_in.password)  #hashed password
     )
     db.add(employee)
     db.commit()
     db.refresh(employee)
     return employee
-
 
 @router.put("/{employee_id}", response_model=schemas.EmployeeRead)
 def update_employee(employee_id: int, employee_in: schemas.EmployeeUpdate, db: Session = Depends(get_db)):
@@ -54,7 +58,6 @@ def update_employee(employee_id: int, employee_in: schemas.EmployeeUpdate, db: S
     db.refresh(employee)
     return employee
 
-
 @router.get("/{employee_id}", response_model=schemas.EmployeeRead)
 def get_employee(employee_id: int, db: Session = Depends(get_db)):
     employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
@@ -62,12 +65,10 @@ def get_employee(employee_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employee not found")
     return employee
 
-
 @router.get("", response_model=list[schemas.EmployeeRead])
 def list_employees(db: Session = Depends(get_db)):
     employees = db.query(models.Employee).all()
     return employees
-
 
 @router.get("/debug")
 def debug_employees(db: Session = Depends(get_db)):
