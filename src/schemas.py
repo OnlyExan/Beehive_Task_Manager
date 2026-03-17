@@ -6,7 +6,7 @@ class EmployeeBase(BaseModel):
     role: str
 
 class EmployeeCreate(EmployeeBase):
-    pass        # Will need to add password hash variable here when we add authentication
+    password: str  # password will come from the user
 
 class EmployeeUpdate(EmployeeBase):
     full_name: str | None = None
@@ -15,6 +15,11 @@ class EmployeeUpdate(EmployeeBase):
 
 class EmployeeRead(EmployeeBase):
     id: int
-    
-    class Config: 
-        from_attributes = True 
+
+    class Config:
+        from_attributes = True
+
+# New schema for the login endpoint
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
