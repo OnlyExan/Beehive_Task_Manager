@@ -41,23 +41,35 @@ body{
   padding:18px 14px;
 }
 .brand{
-  display:flex; align-items:center; gap:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
   padding:10px 10px 16px;
 }
 .logo{
-  width:38px;height:38px;border-radius:14px;
+  width:38px;
+  height:38px;
+  border-radius:14px;
   background: radial-gradient(circle at 30% 30%, #ffd66b, var(--accent));
-  display:grid;place-items:center;
-  color:#1a1300;font-weight:900;
+  display:grid;
+  place-items:center;
+  color:#1a1300;
+  font-weight:900;
 }
-.small{font-size:12px;color:var(--muted)}
+.small{
+  font-size:12px;
+  color:var(--muted);
+}
 .nav{
-  display:grid; gap:8px;
+  display:grid;
+  gap:8px;
   padding:8px;
 }
 .nav a{
   text-decoration:none;
-  display:flex; align-items:center; gap:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
   padding:10px 12px;
   border-radius:14px;
   color:var(--muted);
@@ -74,56 +86,78 @@ body{
   color: var(--text);
 }
 .nav .dot{
-  width:10px;height:10px;border-radius:999px;background:var(--accent);
+  width:10px;
+  height:10px;
+  border-radius:999px;
+  background:var(--accent);
   box-shadow: 0 0 0 4px rgba(247,181,0,.12);
 }
-
-.main{display:grid; grid-template-rows: 64px 1fr}
+.main{
+  display:grid;
+  grid-template-rows: 80px 1fr;
+}
 .topbar{
-  display:flex; align-items:center; justify-content:space-between;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
   padding:12px 18px;
   border-bottom:1px solid var(--border);
   background: rgba(0,0,0,.55);
   backdrop-filter: blur(10px);
-  position:sticky; top:0;
+  position:sticky;
+  top:0;
   gap:12px;
 }
 .leftTop{
-  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
 }
 .select{
   background: var(--card);
   border:1px solid var(--border);
   color:var(--text);
   padding:10px 12px;
-  border-radius: 14px;
+  border-radius:14px;
+  min-width:170px;
 }
 .btn{
   border:1px solid var(--border);
   background: var(--card);
   color: var(--text);
   padding:10px 12px;
-  border-radius: 14px;
+  border-radius:14px;
   cursor:pointer;
   font-weight:700;
 }
-.btn:hover{border-color: rgba(247,181,0,.35)}
+.btn:hover{
+  border-color: rgba(247,181,0,.35);
+}
 .btn.primary{
   background: linear-gradient(180deg, #ffd66b, var(--accent));
   border:0;
   color:#1a1300;
 }
+.btn.activeView{
+  background: var(--accentSoft);
+  border-color: rgba(247,181,0,.35);
+  color: var(--accent);
+}
 .search{
-  display:flex; align-items:center; gap:10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
   background: var(--card);
   border:1px solid var(--border);
-  border-radius: 14px;
+  border-radius:14px;
   padding:10px 12px;
   width:min(420px, 100%);
 }
 .search input{
   width:100%;
-  border:0; outline:0;
+  border:0;
+  outline:0;
   background:transparent;
   color:var(--text);
   font-size:14px;
@@ -132,14 +166,44 @@ body{
   border:1px solid var(--border);
   background: var(--card);
   padding:10px 12px;
-  border-radius: 999px;
+  border-radius:999px;
   color: var(--muted);
   font-size:13px;
 }
-.content{padding:18px}
-.hgroup h1{margin:0; color:var(--accent); font-size:22px}
-.hgroup p{margin:6px 0 0; color:var(--muted)}
-
+.content{
+  padding:18px;
+}
+.hgroup h1{
+  margin:0;
+  color:var(--accent);
+  font-size:22px;
+}
+.hgroup p{
+  margin:6px 0 0;
+  color:var(--muted);
+}
+.sprintInfo{
+  margin-top:12px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.infoChip{
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--muted);
+  font-size:13px;
+}
+.emptyState{
+  margin-top:16px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  color:var(--muted);
+}
 .board{
   margin-top:14px;
   display:grid;
@@ -172,7 +236,6 @@ body{
 }
 .colHead .title{
   font-weight:900;
-  color: var(--text);
 }
 .count{
   font-size:12px;
@@ -192,18 +255,22 @@ body{
 .ticket{
   background: var(--card2);
   border:1px solid var(--border);
-  border-radius: 14px;
-  padding:10px 10px;
+  border-radius:14px;
+  padding:10px;
 }
-.ticket:hover{border-color: rgba(247,181,0,.35)}
+.ticket:hover{
+  border-color: rgba(247,181,0,.35);
+}
 .tTop{
-  display:flex; justify-content:space-between; gap:10px; align-items:flex-start;
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start;
 }
 .key{
   font-weight:900;
   color: var(--accent);
   font-size:12px;
-  letter-spacing:.3px;
 }
 .pri{
   font-size:12px;
@@ -215,9 +282,13 @@ body{
   font-weight:800;
 }
 .meta{
-  display:flex; justify-content:space-between; align-items:center; gap:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
   font-size:12px;
   color: var(--muted);
+  flex-wrap:wrap;
 }
 .tag{
   padding:4px 8px;
@@ -227,41 +298,87 @@ body{
   color: var(--accent);
   font-weight:800;
 }
+.assignee{
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:#0c0c0c;
+  color:var(--text);
+  font-weight:700;
+}
 .ticketActions{
-  display:flex; gap:6px;
+  display:flex;
+  gap:6px;
 }
 .iconBtn{
   border:1px solid var(--border);
   background:#0c0c0c;
   color:var(--text);
-  border-radius: 10px;
+  border-radius:10px;
   padding:6px 8px;
   cursor:pointer;
 }
-.iconBtn:hover{border-color: rgba(247,181,0,.35)}
+.iconBtn:hover{
+  border-color: rgba(247,181,0,.35);
+}
+.tasksList{
+  margin-top:14px;
+  display:grid;
+  gap:12px;
+}
+.taskRow{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:16px;
+  box-shadow: var(--shadow);
+}
+.taskTop{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.taskTitle{
+  font-weight:900;
+  color:var(--text);
+  margin-top:8px;
+}
+.taskMeta{
+  margin-top:10px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  color:var(--muted);
+  font-size:13px;
+}
 .footer{
   margin-top:12px;
   color: var(--muted);
   font-size:12px;
 }
-
-/* Modal */
 .modalBack{
-  position:fixed; inset:0;
+  position:fixed;
+  inset:0;
   background: rgba(0,0,0,.65);
   display:none;
-  align-items:center; justify-content:center;
+  align-items:center;
+  justify-content:center;
   padding:18px;
 }
 .modal{
-  width:min(640px, 100%);
+  width:min(680px, 100%);
   background: var(--card2);
   border:1px solid var(--border);
-  border-radius: 18px;
+  border-radius:18px;
   box-shadow: var(--shadow);
   padding:16px;
 }
-.modal h2{margin:6px 0 10px; color:var(--accent)}
+.modal h2{
+  margin:6px 0 10px;
+  color:var(--accent);
+}
 .formGrid{
   display:grid;
   grid-template-columns: 1fr 1fr;
@@ -270,20 +387,31 @@ body{
 @media (max-width: 640px){
   .formGrid{grid-template-columns: 1fr}
 }
-.formRow{display:grid; gap:6px}
-label{color: var(--muted); font-size:13px}
+.formRow{
+  display:grid;
+  gap:6px;
+}
+label{
+  color: var(--muted);
+  font-size:13px;
+}
 input, textarea, select{
   width:100%;
   padding:10px 12px;
-  border-radius: 14px;
+  border-radius:14px;
   border:1px solid var(--border);
   background: #0c0c0c;
   color: var(--text);
   outline: none;
 }
-textarea{min-height:90px; resize:vertical}
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
 .modalActions{
-  display:flex; justify-content:flex-end; gap:10px;
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
   margin-top:12px;
 }
 </style>
@@ -296,7 +424,7 @@ textarea{min-height:90px; resize:vertical}
       <div class="logo">B</div>
       <div>
         <div style="font-weight:800;">Beehive</div>
-        <div class="small">Sprints & Boards</div>
+        <div class="small">Sprints & Tasks</div>
       </div>
     </div>
 
@@ -311,14 +439,20 @@ textarea{min-height:90px; resize:vertical}
   <section class="main">
     <header class="topbar">
       <div class="leftTop">
-        <select id="sprintSelect" class="select" title="Choose sprint"></select>
-        <button class="btn" onclick="seedDemo()">Load demo</button>
-        <button class="btn primary" onclick="openModal(true)">+ Add ticket</button>
+        <select id="projectSelect" class="select"></select>
+        <select id="sprintSelect" class="select"></select>
+        <select id="personSelect" class="select"></select>
+
+        <button id="boardViewBtn" class="btn activeView" onclick="setViewMode('board')">Board View</button>
+        <button id="myTasksBtn" class="btn" onclick="setViewMode('mytasks')">My Tasks</button>
+
+        <button class="btn" onclick="openSprintModal(true)">+ Create sprint</button>
+        <button class="btn primary" onclick="openTicketModal(true)">+ Add ticket</button>
       </div>
 
       <div style="display:flex; align-items:center; gap:10px;">
-        <div class="search" title="Filters tickets by summary, key, tag">
-          🔎 <input id="q" type="text" placeholder="Search tickets (e.g., BEE-1 auth)" />
+        <div class="search">
+          🔎 <input id="q" type="text" placeholder="Search tickets" />
         </div>
         <div class="userpill">Signed in • Nathan</div>
       </div>
@@ -327,10 +461,24 @@ textarea{min-height:90px; resize:vertical}
     <main class="content">
       <div class="hgroup">
         <h1>Sprints</h1>
-        <p>Board view like Jira: move work through columns (this demo uses buttons).</p>
+        <p>Switch between the sprint board and a personal task view.</p>
       </div>
 
-      <section class="board">
+      <div class="sprintInfo">
+        <div class="infoChip" id="projectInfo">Project: None</div>
+        <div class="infoChip" id="sprintInfo">Sprint: None</div>
+        <div class="infoChip" id="viewInfo">View: Board</div>
+      </div>
+
+      <div id="emptyProjects" class="emptyState" style="display:none;">
+        No projects found yet. Create a project first.
+      </div>
+
+      <div id="emptySprints" class="emptyState" style="display:none;">
+        This project has no sprints yet. Create one to get started.
+      </div>
+
+      <section id="boardWrap" class="board" style="display:none;">
         <div class="col">
           <div class="colHead"><div class="title">Backlog</div><div class="count" id="c_backlog">0</div></div>
           <div class="colBody" id="backlog"></div>
@@ -349,19 +497,58 @@ textarea{min-height:90px; resize:vertical}
         </div>
       </section>
 
+      <section id="myTasksWrap" class="tasksList" style="display:none;"></section>
+
       <div class="footer">
-        Tip: Tickets persist in <b>localStorage</b>. Next step is drag-and-drop + backend.
+        Tickets are separated by project and sprint, and can be assigned to people.
       </div>
     </main>
   </section>
 </div>
 
-<!-- Modal -->
-<div id="modalBack" class="modalBack" role="dialog" aria-modal="true" aria-label="Add Ticket">
+<!-- Create Sprint Modal -->
+<div id="sprintModalBack" class="modalBack" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+      <h2 style="margin:0;">Create Sprint</h2>
+      <button class="btn" onclick="openSprintModal(false)">Close</button>
+    </div>
+
+    <div class="formGrid" style="margin-top:10px;">
+      <div class="formRow">
+        <label for="sprintName">Sprint name</label>
+        <input id="sprintName" placeholder="e.g., Sprint 1" />
+      </div>
+
+      <div class="formRow">
+        <label for="sprintProject">Project</label>
+        <select id="sprintProject"></select>
+      </div>
+
+      <div class="formRow">
+        <label for="sprintStart">Start date</label>
+        <input id="sprintStart" type="date" />
+      </div>
+
+      <div class="formRow">
+        <label for="sprintEnd">End date</label>
+        <input id="sprintEnd" type="date" />
+      </div>
+    </div>
+
+    <div class="modalActions">
+      <button class="btn" onclick="openSprintModal(false)">Cancel</button>
+      <button class="btn primary" onclick="createSprint()">Create Sprint</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Ticket Modal -->
+<div id="ticketModalBack" class="modalBack" role="dialog" aria-modal="true">
   <div class="modal">
     <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
       <h2 style="margin:0;">Add Ticket</h2>
-      <button class="btn" onclick="openModal(false)">Close</button>
+      <button class="btn" onclick="openTicketModal(false)">Close</button>
     </div>
 
     <div class="formGrid" style="margin-top:10px;">
@@ -369,6 +556,7 @@ textarea{min-height:90px; resize:vertical}
         <label for="tkey">Ticket key</label>
         <input id="tkey" placeholder="e.g., BEE-101" />
       </div>
+
       <div class="formRow">
         <label for="tpri">Priority</label>
         <select id="tpri">
@@ -381,13 +569,14 @@ textarea{min-height:90px; resize:vertical}
 
       <div class="formRow" style="grid-column: 1 / -1;">
         <label for="tsum">Summary</label>
-        <input id="tsum" placeholder="e.g., Add login validation + redirect" />
+        <input id="tsum" placeholder="e.g., Build project settings page" />
       </div>
 
       <div class="formRow">
         <label for="ttag">Tag</label>
-        <input id="ttag" placeholder="e.g., auth" />
+        <input id="ttag" placeholder="e.g., ui" />
       </div>
+
       <div class="formRow">
         <label for="tstate">Column</label>
         <select id="tstate">
@@ -398,6 +587,11 @@ textarea{min-height:90px; resize:vertical}
         </select>
       </div>
 
+      <div class="formRow">
+        <label for="tassignee">Assignee</label>
+        <input id="tassignee" placeholder="e.g., Nathan" />
+      </div>
+
       <div class="formRow" style="grid-column: 1 / -1;">
         <label for="tdesc">Description (optional)</label>
         <textarea id="tdesc" placeholder="Notes..."></textarea>
@@ -405,170 +599,463 @@ textarea{min-height:90px; resize:vertical}
     </div>
 
     <div class="modalActions">
-      <button class="btn" onclick="openModal(false)">Cancel</button>
-      <button class="btn primary" onclick="addTicket()">Add</button>
+      <button class="btn" onclick="openTicketModal(false)">Cancel</button>
+      <button class="btn primary" onclick="addTicket()">Add Ticket</button>
     </div>
   </div>
 </div>
 
 <script>
-const LS_SPRINTS = "beehive_sprints_v1";
-const LS_TICKETS = "beehive_tickets_v1";
+const LS_PROJECTS = "beehive_projects_v1";
+const LS_SPRINTS = "beehive_sprints_v2";
+const LS_TICKETS = "beehive_tickets_v3";
+const LS_SELECTED_PROJECT = "beehive_selected_project";
+const LS_SELECTED_SPRINT = "beehive_selected_sprint";
+const LS_SELECTED_PERSON = "beehive_selected_person";
+const LS_VIEW_MODE = "beehive_view_mode";
 
 function load(key){
-  try { return JSON.parse(localStorage.getItem(key)) || []; }
-  catch { return []; }
+  try{
+    return JSON.parse(localStorage.getItem(key)) || [];
+  }catch{
+    return [];
+  }
 }
-function save(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
-
+function save(key, value){
+  localStorage.setItem(key, JSON.stringify(value));
+}
 function escapeHtml(s){
   return String(s ?? "")
-    .replaceAll("&","&amp;").replaceAll("<","&lt;")
-    .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
     .replaceAll("'","&#039;");
 }
+function getProjects(){ return load(LS_PROJECTS); }
+function getSprints(){ return load(LS_SPRINTS); }
+function getTickets(){ return load(LS_TICKETS); }
 
-function ensureSprints(){
-  let sprints = load(LS_SPRINTS);
-  if(sprints.length === 0){
-    sprints = [
-      { id:"s1", name:"Sprint 1", dates:"Feb 24 – Mar 9" },
-      { id:"s2", name:"Sprint 2", dates:"Mar 10 – Mar 23" }
-    ];
-    save(LS_SPRINTS, sprints);
-  }
-  return sprints;
+function getViewMode(){
+  return localStorage.getItem(LS_VIEW_MODE) || "board";
 }
-
-function seedDemo(){
-  const sprints = ensureSprints();
-  const demo = [
-    { sprintId: sprints[0].id, key:"BEE-1",  summary:"Login page + routing to dashboard", tag:"auth",  priority:"P2 - High", state:"done" },
-    { sprintId: sprints[0].id, key:"BEE-2",  summary:"Projects list (table + create modal)",  tag:"ui",    priority:"P3 - Normal", state:"review" },
-    { sprintId: sprints[0].id, key:"BEE-3",  summary:"Sprint board columns + counters",       tag:"ui",    priority:"P3 - Normal", state:"progress" },
-    { sprintId: sprints[0].id, key:"BEE-4",  summary:"Add ticket modal + localStorage",       tag:"data",  priority:"P3 - Normal", state:"backlog" },
-    { sprintId: sprints[1].id, key:"BEE-10", summary:"Drag & drop (next)",                    tag:"ux",    priority:"P4 - Low",    state:"backlog" }
-  ];
-  save(LS_TICKETS, demo);
+function setViewMode(mode){
+  localStorage.setItem(LS_VIEW_MODE, mode);
+  document.getElementById("boardViewBtn").classList.toggle("activeView", mode === "board");
+  document.getElementById("myTasksBtn").classList.toggle("activeView", mode === "mytasks");
+  document.getElementById("viewInfo").textContent = mode === "board" ? "View: Board" : "View: My Tasks";
   render();
 }
 
-function fillSprintSelect(){
-  const select = document.getElementById("sprintSelect");
-  const sprints = ensureSprints();
-  select.innerHTML = sprints.map(s => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.name)} • ${escapeHtml(s.dates)}</option>`).join("");
-  // keep selection stable
-  const last = localStorage.getItem("beehive_last_sprint");
-  if(last && sprints.some(s => s.id === last)) select.value = last;
-  select.addEventListener("change", () => {
-    localStorage.setItem("beehive_last_sprint", select.value);
+function fillProjectSelect(){
+  const projectSelect = document.getElementById("projectSelect");
+  const sprintProject = document.getElementById("sprintProject");
+  const projects = getProjects();
+
+  projectSelect.innerHTML = "";
+  sprintProject.innerHTML = "";
+
+  projects.forEach(project => {
+    const option1 = document.createElement("option");
+    option1.value = project.key;
+    option1.textContent = `${project.key} • ${project.name}`;
+    projectSelect.appendChild(option1);
+
+    const option2 = document.createElement("option");
+    option2.value = project.key;
+    option2.textContent = `${project.key} • ${project.name}`;
+    sprintProject.appendChild(option2);
+  });
+
+  const savedProject = localStorage.getItem(LS_SELECTED_PROJECT);
+  if(savedProject && projects.some(p => p.key === savedProject)){
+    projectSelect.value = savedProject;
+  }
+  if(projects.length > 0 && !projectSelect.value){
+    projectSelect.value = projects[0].key;
+  }
+
+  if(projectSelect.value){
+    sprintProject.value = projectSelect.value;
+  }
+
+  projectSelect.addEventListener("change", () => {
+    localStorage.setItem(LS_SELECTED_PROJECT, projectSelect.value);
+    fillSprintSelect();
+    fillPersonSelect();
     render();
   });
 }
 
-function openModal(show){
-  document.getElementById("modalBack").style.display = show ? "flex" : "none";
-  if(show) document.getElementById("tkey").focus();
+function fillSprintSelect(){
+  const sprintSelect = document.getElementById("sprintSelect");
+  const projectKey = document.getElementById("projectSelect").value;
+  const sprints = getSprints().filter(s => s.projectKey === projectKey);
+
+  sprintSelect.innerHTML = "";
+
+  sprints.forEach(sprint => {
+    const option = document.createElement("option");
+    option.value = sprint.id;
+    option.textContent = `${sprint.name} • ${formatDateRange(sprint.start, sprint.end)}`;
+    sprintSelect.appendChild(option);
+  });
+
+  const savedSprint = localStorage.getItem(LS_SELECTED_SPRINT);
+  if(savedSprint && sprints.some(s => s.id === savedSprint)){
+    sprintSelect.value = savedSprint;
+  }
+  if(sprints.length > 0 && !sprintSelect.value){
+    sprintSelect.value = sprints[0].id;
+  }
+
+  sprintSelect.onchange = () => {
+    localStorage.setItem(LS_SELECTED_SPRINT, sprintSelect.value);
+    fillPersonSelect();
+    render();
+  };
+}
+
+function fillPersonSelect(){
+  const personSelect = document.getElementById("personSelect");
+  const projectKey = document.getElementById("projectSelect").value;
+  const sprintId = document.getElementById("sprintSelect").value;
+
+  const tickets = getTickets().filter(t => t.projectKey === projectKey && t.sprintId === sprintId);
+  const people = [...new Set(tickets.map(t => (t.assignee || "Unassigned").trim()).filter(Boolean))];
+
+  personSelect.innerHTML = "";
+  const allOption = document.createElement("option");
+  allOption.value = "All";
+  allOption.textContent = "All People";
+  personSelect.appendChild(allOption);
+
+  people.forEach(person => {
+    const option = document.createElement("option");
+    option.value = person;
+    option.textContent = person;
+    personSelect.appendChild(option);
+  });
+
+  const savedPerson = localStorage.getItem(LS_SELECTED_PERSON);
+  if(savedPerson && [...people, "All"].includes(savedPerson)){
+    personSelect.value = savedPerson;
+  } else {
+    personSelect.value = "All";
+  }
+
+  personSelect.onchange = () => {
+    localStorage.setItem(LS_SELECTED_PERSON, personSelect.value);
+    render();
+  };
+}
+
+function formatDateRange(start, end){
+  if(!start || !end) return "No dates";
+  return `${start} → ${end}`;
+}
+
+function openSprintModal(show){
+  document.getElementById("sprintModalBack").style.display = show ? "flex" : "none";
+  if(show){
+    const currentProject = document.getElementById("projectSelect").value;
+    document.getElementById("sprintProject").value = currentProject || "";
+    document.getElementById("sprintName").focus();
+  }
+}
+
+function openTicketModal(show){
+  document.getElementById("ticketModalBack").style.display = show ? "flex" : "none";
+  if(show){
+    const selectedPerson = localStorage.getItem(LS_SELECTED_PERSON);
+    if(selectedPerson && selectedPerson !== "All"){
+      document.getElementById("tassignee").value = selectedPerson;
+    }
+    document.getElementById("tkey").focus();
+  }
+}
+
+function createSprint(){
+  const name = document.getElementById("sprintName").value.trim();
+  const projectKey = document.getElementById("sprintProject").value;
+  const start = document.getElementById("sprintStart").value;
+  const end = document.getElementById("sprintEnd").value;
+
+  if(!projectKey){
+    alert("Choose a project first.");
+    return;
+  }
+  if(!name){
+    alert("Sprint name is required.");
+    return;
+  }
+
+  const sprints = getSprints();
+  const alreadyExists = sprints.some(
+    s => s.projectKey === projectKey && s.name.toLowerCase() === name.toLowerCase()
+  );
+
+  if(alreadyExists){
+    alert("That sprint name already exists in this project.");
+    return;
+  }
+
+  const sprintId = "s" + Date.now();
+  sprints.push({ id: sprintId, projectKey, name, start, end });
+  save(LS_SPRINTS, sprints);
+
+  document.getElementById("sprintName").value = "";
+  document.getElementById("sprintStart").value = "";
+  document.getElementById("sprintEnd").value = "";
+
+  document.getElementById("projectSelect").value = projectKey;
+  localStorage.setItem(LS_SELECTED_PROJECT, projectKey);
+
+  fillSprintSelect();
+  document.getElementById("sprintSelect").value = sprintId;
+  localStorage.setItem(LS_SELECTED_SPRINT, sprintId);
+
+  fillPersonSelect();
+  openSprintModal(false);
+  render();
 }
 
 function addTicket(){
+  const projectKey = document.getElementById("projectSelect").value;
   const sprintId = document.getElementById("sprintSelect").value;
   const key = document.getElementById("tkey").value.trim().toUpperCase();
   const summary = document.getElementById("tsum").value.trim();
   const tag = document.getElementById("ttag").value.trim() || "general";
   const priority = document.getElementById("tpri").value;
   const state = document.getElementById("tstate").value;
+  const assignee = document.getElementById("tassignee").value.trim() || "Unassigned";
+  const description = document.getElementById("tdesc").value.trim();
 
-  if(!key) return alert("Ticket key is required (e.g., BEE-101).");
-  if(!summary) return alert("Summary is required.");
-
-  const tickets = load(LS_TICKETS);
-  if(tickets.some(t => t.key === key && t.sprintId === sprintId)) {
-    return alert("That ticket key already exists in this sprint.");
+  if(!projectKey){
+    alert("No project selected.");
+    return;
   }
-  tickets.push({ sprintId, key, summary, tag, priority, state });
+  if(!sprintId){
+    alert("Create a sprint first.");
+    return;
+  }
+  if(!key){
+    alert("Ticket key is required.");
+    return;
+  }
+  if(!summary){
+    alert("Summary is required.");
+    return;
+  }
+
+  const tickets = getTickets();
+  const exists = tickets.some(
+    t => t.projectKey === projectKey && t.sprintId === sprintId && t.key === key
+  );
+  if(exists){
+    alert("That ticket key already exists in this sprint.");
+    return;
+  }
+
+  tickets.push({
+    projectKey,
+    sprintId,
+    key,
+    summary,
+    tag,
+    priority,
+    state,
+    assignee,
+    description
+  });
+
   save(LS_TICKETS, tickets);
 
-  // clear
   document.getElementById("tkey").value = "";
   document.getElementById("tsum").value = "";
   document.getElementById("ttag").value = "";
   document.getElementById("tpri").value = "P3 - Normal";
   document.getElementById("tstate").value = "backlog";
+  document.getElementById("tassignee").value = "";
   document.getElementById("tdesc").value = "";
 
-  openModal(false);
+  fillPersonSelect();
+  openTicketModal(false);
   render();
 }
 
 function moveTicket(key, dir){
+  const projectKey = document.getElementById("projectSelect").value;
   const sprintId = document.getElementById("sprintSelect").value;
-  const order = ["backlog","progress","review","done"];
-  const tickets = load(LS_TICKETS);
-  const t = tickets.find(x => x.sprintId === sprintId && x.key === key);
-  if(!t) return;
-  const i = order.indexOf(t.state);
-  const ni = Math.max(0, Math.min(order.length-1, i + dir));
-  t.state = order[ni];
+  const order = ["backlog", "progress", "review", "done"];
+
+  const tickets = getTickets();
+  const ticket = tickets.find(
+    t => t.projectKey === projectKey && t.sprintId === sprintId && t.key === key
+  );
+  if(!ticket) return;
+
+  const currentIndex = order.indexOf(ticket.state);
+  const nextIndex = Math.max(0, Math.min(order.length - 1, currentIndex + dir));
+  ticket.state = order[nextIndex];
+
   save(LS_TICKETS, tickets);
   render();
 }
 
 function deleteTicket(key){
+  const projectKey = document.getElementById("projectSelect").value;
   const sprintId = document.getElementById("sprintSelect").value;
+
   if(!confirm(`Delete ${key}?`)) return;
-  let tickets = load(LS_TICKETS);
-  tickets = tickets.filter(t => !(t.sprintId === sprintId && t.key === key));
+
+  const tickets = getTickets().filter(
+    t => !(t.projectKey === projectKey && t.sprintId === sprintId && t.key === key)
+  );
+
   save(LS_TICKETS, tickets);
+  fillPersonSelect();
   render();
 }
 
 function ticketCard(t){
   return `
-  <div class="ticket">
-    <div class="tTop">
-      <div class="key">${escapeHtml(t.key)}</div>
-      <div class="pri">${escapeHtml(t.priority)}</div>
+    <div class="ticket">
+      <div class="tTop">
+        <div class="key">${escapeHtml(t.key)}</div>
+        <div class="pri">${escapeHtml(t.priority)}</div>
+      </div>
+      <div class="summary">${escapeHtml(t.summary)}</div>
+      <div class="meta">
+        <span class="tag">${escapeHtml(t.tag)}</span>
+        <span class="assignee">${escapeHtml(t.assignee || "Unassigned")}</span>
+      </div>
+      <div class="meta" style="margin-top:8px;">
+        <span>${escapeHtml(t.state)}</span>
+        <span class="ticketActions">
+          <button class="iconBtn" onclick="moveTicket('${escapeHtml(t.key)}', -1)">←</button>
+          <button class="iconBtn" onclick="moveTicket('${escapeHtml(t.key)}', 1)">→</button>
+          <button class="iconBtn" onclick="deleteTicket('${escapeHtml(t.key)}')">✕</button>
+        </span>
+      </div>
     </div>
-    <div class="summary">${escapeHtml(t.summary)}</div>
-    <div class="meta">
-      <span class="tag">${escapeHtml(t.tag)}</span>
-      <span class="ticketActions">
-        <button class="iconBtn" title="Move left" onclick="moveTicket('${escapeHtml(t.key)}', -1)">←</button>
-        <button class="iconBtn" title="Move right" onclick="moveTicket('${escapeHtml(t.key)}', 1)">→</button>
-        <button class="iconBtn" title="Delete" onclick="deleteTicket('${escapeHtml(t.key)}')">✕</button>
-      </span>
+  `;
+}
+
+function myTaskRow(t){
+  return `
+    <div class="taskRow">
+      <div class="taskTop">
+        <div>
+          <div class="key">${escapeHtml(t.key)}</div>
+          <div class="taskTitle">${escapeHtml(t.summary)}</div>
+        </div>
+        <div class="assignee">${escapeHtml(t.assignee || "Unassigned")}</div>
+      </div>
+      <div class="taskMeta">
+        <span class="tag">${escapeHtml(t.tag)}</span>
+        <span>${escapeHtml(t.priority)}</span>
+        <span>Status: ${escapeHtml(t.state)}</span>
+      </div>
+      <div class="taskMeta" style="margin-top:12px;">
+        <button class="iconBtn" onclick="moveTicket('${escapeHtml(t.key)}', -1)">Move Left</button>
+        <button class="iconBtn" onclick="moveTicket('${escapeHtml(t.key)}', 1)">Move Right</button>
+        <button class="iconBtn" onclick="deleteTicket('${escapeHtml(t.key)}')">Delete</button>
+      </div>
     </div>
-  </div>`;
+  `;
 }
 
 function render(){
+  const projects = getProjects();
+  const projectKey = document.getElementById("projectSelect").value;
   const sprintId = document.getElementById("sprintSelect").value;
+  const selectedPerson = document.getElementById("personSelect").value || "All";
   const q = (document.getElementById("q").value || "").trim().toLowerCase();
+  const viewMode = getViewMode();
 
-  const tickets = load(LS_TICKETS)
-    .filter(t => t.sprintId === sprintId)
-    .filter(t => (t.key + " " + t.summary + " " + t.tag).toLowerCase().includes(q));
+  const emptyProjects = document.getElementById("emptyProjects");
+  const emptySprints = document.getElementById("emptySprints");
+  const boardWrap = document.getElementById("boardWrap");
+  const myTasksWrap = document.getElementById("myTasksWrap");
 
-  const by = (state) => tickets.filter(t => t.state === state);
+  if(projects.length === 0){
+    emptyProjects.style.display = "block";
+    emptySprints.style.display = "none";
+    boardWrap.style.display = "none";
+    myTasksWrap.style.display = "none";
+    document.getElementById("projectInfo").textContent = "Project: None";
+    document.getElementById("sprintInfo").textContent = "Sprint: None";
+    return;
+  }
 
-  const buckets = {
-    backlog: by("backlog"),
-    progress: by("progress"),
-    review: by("review"),
-    done: by("done"),
-  };
+  emptyProjects.style.display = "none";
 
-  for(const id of ["backlog","progress","review","done"]){
-    document.getElementById(id).innerHTML = buckets[id].map(ticketCard).join("");
-    document.getElementById("c_" + (id === "progress" ? "progress" : id)).textContent = buckets[id].length;
-    if(buckets[id].length === 0){
-      document.getElementById(id).innerHTML = `<div style="color:#bdbdbd;font-size:13px;padding:6px 2px;">No tickets.</div>`;
+  const selectedProject = projects.find(p => p.key === projectKey);
+  document.getElementById("projectInfo").textContent = selectedProject
+    ? `Project: ${selectedProject.key} • ${selectedProject.name}`
+    : "Project: None";
+
+  const sprints = getSprints().filter(s => s.projectKey === projectKey);
+  const selectedSprint = sprints.find(s => s.id === sprintId);
+
+  if(!selectedSprint){
+    emptySprints.style.display = "block";
+    boardWrap.style.display = "none";
+    myTasksWrap.style.display = "none";
+    document.getElementById("sprintInfo").textContent = "Sprint: None";
+    return;
+  }
+
+  emptySprints.style.display = "none";
+  document.getElementById("sprintInfo").textContent =
+    `Sprint: ${selectedSprint.name} • ${formatDateRange(selectedSprint.start, selectedSprint.end)}`;
+
+  let tickets = getTickets()
+    .filter(t => t.projectKey === projectKey && t.sprintId === sprintId)
+    .filter(t => (t.key + " " + t.summary + " " + t.tag + " " + (t.assignee || "")).toLowerCase().includes(q));
+
+  if(viewMode === "mytasks" && selectedPerson !== "All"){
+    tickets = tickets.filter(t => (t.assignee || "Unassigned") === selectedPerson);
+  }
+
+  if(viewMode === "board"){
+    boardWrap.style.display = "grid";
+    myTasksWrap.style.display = "none";
+
+    const groups = {
+      backlog: tickets.filter(t => t.state === "backlog"),
+      progress: tickets.filter(t => t.state === "progress"),
+      review: tickets.filter(t => t.state === "review"),
+      done: tickets.filter(t => t.state === "done")
+    };
+
+    document.getElementById("backlog").innerHTML = groups.backlog.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
+    document.getElementById("progress").innerHTML = groups.progress.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
+    document.getElementById("review").innerHTML = groups.review.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
+    document.getElementById("done").innerHTML = groups.done.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
+
+    document.getElementById("c_backlog").textContent = groups.backlog.length;
+    document.getElementById("c_progress").textContent = groups.progress.length;
+    document.getElementById("c_review").textContent = groups.review.length;
+    document.getElementById("c_done").textContent = groups.done.length;
+  } else {
+    boardWrap.style.display = "none";
+    myTasksWrap.style.display = "grid";
+
+    if(selectedPerson === "All"){
+      myTasksWrap.innerHTML = `<div class="emptyState">Choose a person in the person selector to view that person’s tasks.</div>`;
+      return;
     }
+
+    myTasksWrap.innerHTML = tickets.map(myTaskRow).join("") || `<div class="emptyState">No tasks assigned to ${escapeHtml(selectedPerson)} in this sprint.</div>`;
   }
 }
 
+fillProjectSelect();
 fillSprintSelect();
+fillPersonSelect();
+setViewMode(getViewMode());
 document.getElementById("q").addEventListener("input", render);
 render();
 </script>
