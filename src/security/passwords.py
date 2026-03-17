@@ -1,1 +1,8 @@
-# We should move password hashing and verification logic to this file for better organization and separation of concerns.
+import bcrypt 
+
+def hash_password(plain_password: str) -> str:
+    return bcrypt.hashpw(plain_password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+# Checks if the password the user typed matches the scrambled one
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))

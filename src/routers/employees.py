@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from src.database import SessionLocal
 from src import models, schemas
+from src.security.passwords import hash_password
 
 router = APIRouter(prefix="/employees", tags=["employees"])
 
@@ -13,10 +14,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-# Scrambles the password before saving
-def hash_password(plain_password: str) -> str:
-    return bcrypt.hashpw(plain_password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
 @router.post("", response_model=schemas.EmployeeRead, status_code=status.HTTP_201_CREATED)
 def create_employee(employee_in: schemas.EmployeeCreate, db: Session = Depends(get_db)):

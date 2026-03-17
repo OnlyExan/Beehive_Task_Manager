@@ -4,6 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from . import models, schemas
 from .database import SessionLocal, engine
+from src.security.passwords import verify_password, hash_password
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -16,13 +17,7 @@ def get_db():
     finally:
         db.close()
 
-# Scrambles the password before it gets saved
-def hash_password(plain_password: str) -> str:
-    return bcrypt.hashpw(plain_password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
 
-# Checks if the password the user typed matches the scrambled one
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return bcrypt.checkpw(plain_password.encode("utf-8"), hashed_password.encode("utf-8"))
 
 @app.get("/")
 def home():
