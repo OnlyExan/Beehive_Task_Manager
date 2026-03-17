@@ -15,3 +15,4 @@ class Employee(Base):
         server_default=text("NOW()"),
         nullable=False,
     )
+    hashed_password = Column(Text, nullable=False) #new added line
