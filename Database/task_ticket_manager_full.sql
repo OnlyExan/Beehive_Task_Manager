@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict a6xxiCXdskTMWy9L2yDc23ZVatP6PgRAWfEuffD2mcLdXkADQLplOkm98dRYgBO
+
 
 -- Dumped from database version 18.3
 -- Dumped by pg_dump version 18.3
@@ -914,5 +914,5 @@ ALTER TABLE ONLY public.tasks
 -- PostgreSQL database dump complete
 --
 
-\unrestrict a6xxiCXdskTMWy9L2yDc23ZVatP6PgRAWfEuffD2mcLdXkADQLplOkm98dRYgBO
+
 

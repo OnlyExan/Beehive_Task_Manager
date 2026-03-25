@@ -10,6 +10,7 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="BeeHive TTM API")
 
+
 def get_db():
     db = SessionLocal()
     try:
@@ -18,10 +19,10 @@ def get_db():
         db.close()
 
 
-
 @app.get("/")
 def home():
     return {"message": "TTM API is running"}
+
 
 @app.post("/employees", response_model=schemas.EmployeeRead, status_code=status.HTTP_201_CREATED)
 def create_employee(employee_in: schemas.EmployeeCreate, db: Session = Depends(get_db)):
@@ -33,12 +34,13 @@ def create_employee(employee_in: schemas.EmployeeCreate, db: Session = Depends(g
         full_name=employee_in.full_name,
         email=employee_in.email,
         role=employee_in.role,
-        hashed_password=hash_password(employee_in.password)  # scramble before saving
+        hashed_password=hash_password(employee_in.password),  # scramble before saving
     )
     db.add(employee)
     db.commit()
     db.refresh(employee)
     return employee
+
 
 @app.put("/employees/{employee_id}", response_model=schemas.EmployeeRead)
 def update_employee(employee_id: int, employee_in: schemas.EmployeeUpdate, db: Session = Depends(get_db)):
@@ -57,6 +59,7 @@ def update_employee(employee_id: int, employee_in: schemas.EmployeeUpdate, db: S
     db.refresh(employee)
     return employee
 
+
 @app.get("/employees/{employee_id}", response_model=schemas.EmployeeRead)
 def get_employee(employee_id: int, db: Session = Depends(get_db)):
     employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
@@ -64,10 +67,43 @@ def get_employee(employee_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Employee not found")
     return employee
 
+
 @app.get("/employees", response_model=list[schemas.EmployeeRead])
 def list_employees(db: Session = Depends(get_db)):
     employees = db.query(models.Employee).all()
     return employees
+
+
+@app.post("/projects", response_model=schemas.ProjectRead, status_code=status.HTTP_201_CREATED)
+def create_project(project_in: schemas.ProjectCreate, db: Session = Depends(get_db)):
+    project = models.Project(**project_in.model_dump())
+    db.add(project)
+    db.commit()
+    db.refresh(project)
+    return project
+
+
+@app.put("/projects/{project_id}", response_model=schemas.ProjectRead)
+@app.patch("/projects/{project_id}", response_model=schemas.ProjectRead)
+def update_project(project_id: int, project_in: schemas.ProjectUpdate, db: Session = Depends(get_db)):
+    project = db.query(models.Project).filter(models.Project.id == project_id).first()
+    if not project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
+
+    update_data = project_in.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(project, field, value)
+
+    if project.start_date and project.end_date and project.end_date < project.start_date:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="end_date cannot be before start_date",
+        )
+
+    db.commit()
+    db.refresh(project)
+    return project
+
 
 # NEW: Login endpoint
 @app.post("/login")
@@ -82,7 +118,7 @@ def login(credentials: schemas.LoginRequest, db: Session = Depends(get_db)):
         "id": employee.id,
         "full_name": employee.full_name,
         "email": employee.email,
-        "role": employee.role
+        "role": employee.role,
     }
 
 #employee skills endpoint
