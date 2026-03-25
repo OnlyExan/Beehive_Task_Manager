@@ -89,3 +89,15 @@ class ProjectRead(ProjectBase):
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
+
+class EmployeeSkillCreate(BaseModel):
+    skill: str
+
+
+class EmployeeSkillRead(BaseModel):
+    id: int
+    employee_id: int
+    skill: str
+
+    class Config:
+        from_attributes = True

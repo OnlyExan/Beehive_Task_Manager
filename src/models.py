@@ -1,5 +1,5 @@
 # models.py
-from sqlalchemy import BigInteger, Column, Date, TIMESTAMP, text, Text
+from sqlalchemy import BigInteger, Column, Integer, String, Boolean, TIMESTAMP, text, Text, ForeignKey, Date
 from src.database import Base
 
 
@@ -17,6 +17,17 @@ class Employee(Base):
         nullable=False,
     )
 
+class EmployeeSkill(Base):
+    __tablename__ = "employee_skills"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    employee_id = Column(BigInteger, ForeignKey("employees.id"), nullable=False)
+    skill = Column(Text, nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True),
+        server_default=text("NOW()"),
+        nullable=False,
+    )
 
 class Project(Base):
     __tablename__ = "projects"
