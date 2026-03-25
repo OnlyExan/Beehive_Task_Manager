@@ -1,5 +1,5 @@
 # models.py
-from sqlalchemy import BigInteger, Column, Integer, String, Boolean, TIMESTAMP, text, Text, Foreignkey
+from sqlalchemy import BigInteger, Column, Integer, String, Boolean, TIMESTAMP, text, Text, ForeignKey
 from src.database import Base
 
 class Employee(Base):
