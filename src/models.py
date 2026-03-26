@@ -39,9 +39,8 @@ class Project(Base):
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True)
 
-    ##tasks = relationship("Task", back_populates="project")
-    ##sprints = relationship("Sprint", back_populates="project")
-    ##components = relationship("Component", back_populates="project")
+    tasks = relationship("Task", back_populates="project")
+    sprints = relationship("Sprint", back_populates="project")
 
 class Task(Base):
     __tablename__ = "tasks"
@@ -50,8 +49,6 @@ class Task(Base):
 
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
     sprint_id = Column(Integer, ForeignKey("sprints.id"), nullable=True)       # nullable
-    component_id = Column(Integer, ForeignKey("components.id"), nullable=True) # nullable
-
     title = Column(Text, nullable=False)
     status = Column(Text, nullable=False, default="To-Do")
     priority = Column(Text, nullable=False, default="Medium")
@@ -68,16 +65,17 @@ class Task(Base):
         onupdate=text("NOW()"),
     )
 
-    ##project = relationship("Project", back_populates="tasks")
-    ##sprint = relationship("Sprint", back_populates="tasks")
-    ##component = relationship("Component", back_populates="tasks")
+    project = relationship("Project", back_populates="tasks")
+    sprint = relationship("Sprint", back_populates="tasks")
 
-class Component(Base):
-    __tablename__ = "components"
+class Sprint(Base):
+    __tablename__ = "sprints"
 
     id = Column(Integer, primary_key=True, index=True)
     project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
     name = Column(Text, nullable=False)
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=False)
 
-    ##project = relationship("Project", back_populates="components")
-    ##tasks = relationship("Task", back_populates="component")
+    project = relationship("Project", back_populates="sprints")
+    tasks = relationship("Task", back_populates="sprint")

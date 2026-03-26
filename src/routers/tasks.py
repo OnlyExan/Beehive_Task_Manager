@@ -25,11 +25,6 @@ def create_task(task_in: schemas.TaskCreate, db: Session = Depends(get_db)):
         if not sprint:
             raise HTTPException(status_code=404, detail="Sprint not found")
 
-    if task_in.component_id is not None:
-        component = db.query(models.Component).filter(models.Component.id == task_in.component_id).first()
-        if not component:
-            raise HTTPException(status_code=404, detail="Component not found")
-
     task = models.Task(**task_in.model_dump())
     db.add(task)
     db.commit()

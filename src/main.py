@@ -4,7 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from . import models, schemas
 from .database import SessionLocal, engine
-from src.routers import tasks, components, employees
+from src.routers import tasks, employees, sprints
 from src.security.passwords import verify_password, hash_password
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -19,8 +19,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(tasks.router)
-app.include_router(components.router)
 app.include_router(employees.router)
+app.include_router(sprints.router)
 
 def get_db():
     db = SessionLocal()

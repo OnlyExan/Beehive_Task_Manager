@@ -121,8 +121,6 @@ class ComponentRead(ComponentBase):
 class TaskBase(BaseModel):
     project_id: int
     sprint_id: int | None = None
-    component_id: int | None = None
-
     title: str
     status: str = "To-Do"      # To-Do, In-Progress, Review, Done
     priority: str = "Medium"   # Low, Medium, High
@@ -132,12 +130,44 @@ class TaskCreate(TaskBase):
 
 class TaskUpdate(BaseModel):
     sprint_id: int | None = None
-    component_id: int | None = None
     title: str | None = None
     status: str | None = None
     priority: str | None = None
 
 class TaskRead(TaskBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+# ----- Sprint -----
+class SprintBase(BaseModel):
+    project_id: int
+    name: str
+    start_date: date
+    end_date: date
+
+    @model_validator(mode="after")
+    def check_dates(self):
+        if self.end_date < self.start_date:
+            raise ValueError("end_date cannot be before start_date")
+        return self
+
+class SprintCreate(SprintBase):
+    pass
+
+class SprintUpdate(BaseModel):
+    name: str | None = None
+    start_date: date | None = None
+    end_date: date | None = None
+
+    @model_validator(mode="after")
+    def check_dates(self):
+        if self.start_date and self.end_date and self.end_date < self.start_date:
+            raise ValueError("end_date cannot be before start_date")
+        return self
+
+class SprintRead(SprintBase):
     id: int
 
     class Config:
