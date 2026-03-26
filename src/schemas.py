@@ -101,3 +101,44 @@ class EmployeeSkillRead(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+# ----- Component -----
+class ComponentBase(BaseModel):
+    project_id: int
+    name: str
+
+class ComponentCreate(ComponentBase):
+    pass
+
+class ComponentRead(ComponentBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+# ----- Task -----
+class TaskBase(BaseModel):
+    project_id: int
+    sprint_id: int | None = None
+    component_id: int | None = None
+
+    title: str
+    status: str = "To-Do"      # To-Do, In-Progress, Review, Done
+    priority: str = "Medium"   # Low, Medium, High
+
+class TaskCreate(TaskBase):
+    pass
+
+class TaskUpdate(BaseModel):
+    sprint_id: int | None = None
+    component_id: int | None = None
+    title: str | None = None
+    status: str | None = None
+    priority: str | None = None
+
+class TaskRead(TaskBase):
+    id: int
+
+    class Config:
+        from_attributes = True

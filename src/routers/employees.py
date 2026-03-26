@@ -66,7 +66,3 @@ def get_employee(employee_id: int, db: Session = Depends(get_db)):
 def list_employees(db: Session = Depends(get_db)):
     employees = db.query(models.Employee).all()
     return employees
-
-@router.get("/debug")
-def debug_employees(db: Session = Depends(get_db)):
-    return db.query(models.Employee).all()

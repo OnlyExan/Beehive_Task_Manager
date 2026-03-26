@@ -500,7 +500,7 @@ function openModal(show){
   }
 }
 
-function createProject(){
+async function createProject(){
   const name = document.getElementById("pname").value.trim();
   const key = document.getElementById("pkey").value.trim().toUpperCase();
   const owner = document.getElementById("powner").value.trim() || "Unassigned";
@@ -540,6 +540,31 @@ function createProject(){
 
   openModal(false);
   render();
+
+  const payload = {
+    name: name,
+    description: `${key} • Owner: ${owner} • Status: ${status}`, // or leave null and add real fields later
+    start_date: null,
+    end_date: null,
+  };
+
+  const res = await fetch("http://127.0.0.1:8000/projects", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+
+  if (res.ok) {
+    const project = await res.json();
+    alert("Created project: " + project.name);
+    openModal(false);    // close modal
+    // TODO: update project list UI (or reload)
+    // location.reload();
+  } else {
+    const err = await res.json();
+    alert("Error creating project: " + err.detail);
+  }
+  
 }
 
 function deleteProject(key){
