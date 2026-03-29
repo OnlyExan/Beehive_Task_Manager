@@ -1,6 +1,6 @@
 import bcrypt
-from src.database import SessionLocal
-from src.models import Employee
+from database import SessionLocal
+from models import Employee
 
 
 def hash_password(plain_password: str) -> str:
