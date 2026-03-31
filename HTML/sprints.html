@@ -92,7 +92,6 @@ body{
   background:var(--accent);
   box-shadow: 0 0 0 4px rgba(247,181,0,.12);
 }
-
 .main{
   display:flex;
   flex-direction:column;
@@ -108,9 +107,6 @@ body{
   position:sticky;
   top:0;
   gap:12px;
-}
-.content{
-  padding: 30px 18px 18px;
 }
 .leftTop{
   display:flex;
@@ -208,8 +204,12 @@ body{
   padding:20px;
   color:var(--muted);
 }
-.board{
+.boardLayout{
   margin-top:14px;
+  display:grid;
+  gap:16px;
+}
+.board{
   display:grid;
   grid-template-columns: repeat(4, minmax(220px, 1fr));
   gap:12px;
@@ -255,15 +255,67 @@ body{
   gap:10px;
   align-content:start;
   flex:1;
+  min-height:200px;
+}
+.backlogSection{
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow:hidden;
+}
+.backlogHead{
+  padding:14px 16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background: rgba(255,255,255,.02);
+  border-bottom:1px solid var(--border);
+}
+.backlogHead .title{
+  font-weight:900;
+  font-size:18px;
+}
+.backlogBody{
+  padding:14px;
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap:12px;
+  min-height:220px;
+}
+.dropzone{
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.dropzone.dragOver{
+  border-color: rgba(247,181,0,.65);
+  background: rgba(247,181,0,.06);
+  box-shadow: inset 0 0 0 1px rgba(247,181,0,.2);
 }
 .ticket{
   background: var(--card2);
   border:1px solid var(--border);
   border-radius:14px;
   padding:10px;
+  cursor:grab;
+}
+.ticket:active{
+  cursor:grabbing;
+}
+.ticket.dragging{
+  opacity:.45;
+  border-color: rgba(247,181,0,.5);
 }
 .ticket:hover{
   border-color: rgba(247,181,0,.35);
+}
+.ticket.clickable,
+.taskRow.clickable{
+  cursor:pointer;
+}
+.ticket.clickable:hover,
+.taskRow.clickable:hover{
+  border-color: rgba(247,181,0,.45);
+  box-shadow: 0 0 0 1px rgba(247,181,0,.12);
 }
 .tTop{
   display:flex;
@@ -357,11 +409,6 @@ body{
   color:var(--muted);
   font-size:13px;
 }
-.footer{
-  margin-top:12px;
-  color: var(--muted);
-  font-size:12px;
-}
 .modalBack{
   position:fixed;
   inset:0;
@@ -417,6 +464,20 @@ textarea{
   justify-content:flex-end;
   gap:10px;
   margin-top:12px;
+}
+.taskDetailBody{
+  margin-top:10px;
+  color:var(--text);
+  line-height:1.5;
+  white-space:pre-wrap;
+}
+.taskDetailMeta{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:12px;
+  color:var(--muted);
+  font-size:13px;
 }
 </style>
 </head>
@@ -482,28 +543,36 @@ textarea{
         This project has no sprints yet. Create one to get started.
       </div>
 
-      <section id="boardWrap" class="board" style="display:none;">
-        <div class="col">
-          <div class="colHead"><div class="title">Backlog</div><div class="count" id="c_backlog">0</div></div>
-          <div class="colBody" id="backlog"></div>
+      <section id="boardWrap" class="boardLayout" style="display:none;">
+        <div class="board">
+          <div class="col">
+            <div class="colHead"><div class="title">To-Do</div><div class="count" id="c_todo">0</div></div>
+            <div class="colBody dropzone" id="todo" data-state="todo"></div>
+          </div>
+          <div class="col">
+            <div class="colHead"><div class="title">In Progress</div><div class="count" id="c_progress">0</div></div>
+            <div class="colBody dropzone" id="progress" data-state="progress"></div>
+          </div>
+          <div class="col">
+            <div class="colHead"><div class="title">Review</div><div class="count" id="c_review">0</div></div>
+            <div class="colBody dropzone" id="review" data-state="review"></div>
+          </div>
+          <div class="col">
+            <div class="colHead"><div class="title">Done</div><div class="count" id="c_done">0</div></div>
+            <div class="colBody dropzone" id="done" data-state="done"></div>
+          </div>
         </div>
-        <div class="col">
-          <div class="colHead"><div class="title">In Progress</div><div class="count" id="c_progress">0</div></div>
-          <div class="colBody" id="progress"></div>
-        </div>
-        <div class="col">
-          <div class="colHead"><div class="title">Review</div><div class="count" id="c_review">0</div></div>
-          <div class="colBody" id="review"></div>
-        </div>
-        <div class="col">
-          <div class="colHead"><div class="title">Done</div><div class="count" id="c_done">0</div></div>
-          <div class="colBody" id="done"></div>
+
+        <div class="backlogSection">
+          <div class="backlogHead">
+            <div class="title">Backlog</div>
+            <div class="count" id="c_backlog">0</div>
+          </div>
+          <div class="backlogBody dropzone" id="backlog" data-state="backlog"></div>
         </div>
       </section>
 
       <section id="myTasksWrap" class="tasksList" style="display:none;"></section>
-
-      
     </main>
   </section>
 </div>
@@ -583,6 +652,7 @@ textarea{
         <label for="tstate">Column</label>
         <select id="tstate">
           <option value="backlog">Backlog</option>
+          <option value="todo">To-Do</option>
           <option value="progress">In Progress</option>
           <option value="review">Review</option>
           <option value="done">Done</option>
@@ -603,6 +673,30 @@ textarea{
     <div class="modalActions">
       <button class="btn" onclick="openTicketModal(false)">Cancel</button>
       <button class="btn primary" onclick="addTicket()">Add Ticket</button>
+    </div>
+  </div>
+</div>
+
+<!-- Task Detail Modal -->
+<div id="taskDetailModalBack" class="modalBack" role="dialog" aria-modal="true">
+  <div class="modal">
+    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+      <h2 id="taskDetailTitle" style="margin:0;">Task Details</h2>
+      <button class="btn" onclick="closeTaskDetail()">Close</button>
+    </div>
+
+    <div class="taskDetailMeta">
+      <span class="key" id="taskDetailKey"></span>
+      <span class="tag" id="taskDetailTag"></span>
+      <span id="taskDetailPriority"></span>
+      <span id="taskDetailState"></span>
+      <span class="assignee" id="taskDetailAssignee"></span>
+    </div>
+
+    <div class="taskDetailBody" id="taskDetailDescription"></div>
+
+    <div class="modalActions">
+      <button class="btn" onclick="closeTaskDetail()">Close</button>
     </div>
   </div>
 </div>
@@ -757,6 +851,17 @@ function formatDateRange(start, end){
   return `${start} → ${end}`;
 }
 
+function formatStateLabel(state){
+  const labels = {
+    backlog: "Backlog",
+    todo: "To-Do",
+    progress: "In Progress",
+    review: "Review",
+    done: "Done"
+  };
+  return labels[state] || state;
+}
+
 function openSprintModal(show){
   document.getElementById("sprintModalBack").style.display = show ? "flex" : "none";
   if(show){
@@ -775,6 +880,34 @@ function openTicketModal(show){
     }
     document.getElementById("tkey").focus();
   }
+}
+
+function openTaskDetail(key){
+  const projectKey = document.getElementById("projectSelect").value;
+  const sprintId = document.getElementById("sprintSelect").value;
+
+  const ticket = getTickets().find(
+    t => t.projectKey === projectKey && t.sprintId === sprintId && t.key === key
+  );
+
+  if(!ticket) return;
+
+  document.getElementById("taskDetailTitle").textContent = ticket.summary || "Task Details";
+  document.getElementById("taskDetailKey").textContent = ticket.key || "";
+  document.getElementById("taskDetailTag").textContent = ticket.tag || "general";
+  document.getElementById("taskDetailPriority").textContent = ticket.priority || "";
+  document.getElementById("taskDetailState").textContent = `Status: ${formatStateLabel(ticket.state)}`;
+  document.getElementById("taskDetailAssignee").textContent = ticket.assignee || "Unassigned";
+  document.getElementById("taskDetailDescription").textContent =
+    ticket.description && ticket.description.trim()
+      ? ticket.description
+      : "No description provided for this task.";
+
+  document.getElementById("taskDetailModalBack").style.display = "flex";
+}
+
+function closeTaskDetail(){
+  document.getElementById("taskDetailModalBack").style.display = "none";
 }
 
 function createSprint(){
@@ -877,31 +1010,12 @@ function addTicket(){
   document.getElementById("tsum").value = "";
   document.getElementById("ttag").value = "";
   document.getElementById("tpri").value = "P3 - Normal";
-  document.getElementById("tstate").value = "backlog";
+  document.getElementById("tstate").value = "todo";
   document.getElementById("tassignee").value = "";
   document.getElementById("tdesc").value = "";
 
   fillPersonSelect();
   openTicketModal(false);
-  render();
-}
-
-function moveTicket(key, dir){
-  const projectKey = document.getElementById("projectSelect").value;
-  const sprintId = document.getElementById("sprintSelect").value;
-  const order = ["backlog", "progress", "review", "done"];
-
-  const tickets = getTickets();
-  const ticket = tickets.find(
-    t => t.projectKey === projectKey && t.sprintId === sprintId && t.key === key
-  );
-  if(!ticket) return;
-
-  const currentIndex = order.indexOf(ticket.state);
-  const nextIndex = Math.max(0, Math.min(order.length - 1, currentIndex + dir));
-  ticket.state = order[nextIndex];
-
-  save(LS_TICKETS, tickets);
   render();
 }
 
@@ -920,9 +1034,25 @@ function deleteTicket(key){
   render();
 }
 
+function moveTicketToState(key, nextState){
+  const projectKey = document.getElementById("projectSelect").value;
+  const sprintId = document.getElementById("sprintSelect").value;
+
+  const tickets = getTickets();
+  const ticket = tickets.find(
+    t => t.projectKey === projectKey && t.sprintId === sprintId && t.key === key
+  );
+
+  if(!ticket) return;
+
+  ticket.state = nextState;
+  save(LS_TICKETS, tickets);
+  render();
+}
+
 function ticketCard(t){
   return `
-    <div class="ticket">
+    <div class="ticket clickable" draggable="true" data-key="${escapeHtml(t.key)}" onclick="openTaskDetail('${escapeHtml(t.key)}')">
       <div class="tTop">
         <div class="key">${escapeHtml(t.key)}</div>
         <div class="pri">${escapeHtml(t.priority)}</div>
@@ -933,11 +1063,9 @@ function ticketCard(t){
         <span class="assignee">${escapeHtml(t.assignee || "Unassigned")}</span>
       </div>
       <div class="meta" style="margin-top:8px;">
-        <span>${escapeHtml(t.state)}</span>
+        <span>${escapeHtml(formatStateLabel(t.state))}</span>
         <span class="ticketActions">
-          <button class="iconBtn" onclick="moveTicket('${escapeHtml(t.key)}', -1)">←</button>
-          <button class="iconBtn" onclick="moveTicket('${escapeHtml(t.key)}', 1)">→</button>
-          <button class="iconBtn" onclick="deleteTicket('${escapeHtml(t.key)}')">✕</button>
+          <button class="iconBtn" onclick="event.stopPropagation(); deleteTicket('${escapeHtml(t.key)}')">✕</button>
         </span>
       </div>
     </div>
@@ -946,7 +1074,7 @@ function ticketCard(t){
 
 function myTaskRow(t){
   return `
-    <div class="taskRow">
+    <div class="taskRow clickable" onclick="openTaskDetail('${escapeHtml(t.key)}')">
       <div class="taskTop">
         <div>
           <div class="key">${escapeHtml(t.key)}</div>
@@ -957,15 +1085,58 @@ function myTaskRow(t){
       <div class="taskMeta">
         <span class="tag">${escapeHtml(t.tag)}</span>
         <span>${escapeHtml(t.priority)}</span>
-        <span>Status: ${escapeHtml(t.state)}</span>
+        <span>Status: ${escapeHtml(formatStateLabel(t.state))}</span>
       </div>
       <div class="taskMeta" style="margin-top:12px;">
-        <button class="iconBtn" onclick="moveTicket('${escapeHtml(t.key)}', -1)">Move Left</button>
-        <button class="iconBtn" onclick="moveTicket('${escapeHtml(t.key)}', 1)">Move Right</button>
-        <button class="iconBtn" onclick="deleteTicket('${escapeHtml(t.key)}')">Delete</button>
+        <button class="iconBtn" onclick="event.stopPropagation(); deleteTicket('${escapeHtml(t.key)}')">Delete</button>
       </div>
     </div>
   `;
+}
+
+function attachDragAndDrop(){
+  const tickets = document.querySelectorAll(".ticket[draggable='true']");
+  const dropzones = document.querySelectorAll(".dropzone");
+
+  tickets.forEach(ticket => {
+    ticket.addEventListener("dragstart", e => {
+      const key = ticket.dataset.key;
+      e.dataTransfer.setData("text/plain", key);
+      e.dataTransfer.effectAllowed = "move";
+      ticket.classList.add("dragging");
+    });
+
+    ticket.addEventListener("dragend", () => {
+      ticket.classList.remove("dragging");
+      dropzones.forEach(zone => zone.classList.remove("dragOver"));
+    });
+  });
+
+  dropzones.forEach(zone => {
+    zone.addEventListener("dragover", e => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = "move";
+      zone.classList.add("dragOver");
+    });
+
+    zone.addEventListener("dragleave", e => {
+      if(!zone.contains(e.relatedTarget)){
+        zone.classList.remove("dragOver");
+      }
+    });
+
+    zone.addEventListener("drop", e => {
+      e.preventDefault();
+      zone.classList.remove("dragOver");
+
+      const key = e.dataTransfer.getData("text/plain");
+      const nextState = zone.dataset.state;
+
+      if(key && nextState){
+        moveTicketToState(key, nextState);
+      }
+    });
+  });
 }
 
 function render(){
@@ -1027,20 +1198,25 @@ function render(){
 
     const groups = {
       backlog: tickets.filter(t => t.state === "backlog"),
+      todo: tickets.filter(t => t.state === "todo"),
       progress: tickets.filter(t => t.state === "progress"),
       review: tickets.filter(t => t.state === "review"),
       done: tickets.filter(t => t.state === "done")
     };
 
     document.getElementById("backlog").innerHTML = groups.backlog.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
+    document.getElementById("todo").innerHTML = groups.todo.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
     document.getElementById("progress").innerHTML = groups.progress.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
     document.getElementById("review").innerHTML = groups.review.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
     document.getElementById("done").innerHTML = groups.done.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
 
     document.getElementById("c_backlog").textContent = groups.backlog.length;
+    document.getElementById("c_todo").textContent = groups.todo.length;
     document.getElementById("c_progress").textContent = groups.progress.length;
     document.getElementById("c_review").textContent = groups.review.length;
     document.getElementById("c_done").textContent = groups.done.length;
+
+    attachDragAndDrop();
   } else {
     boardWrap.style.display = "none";
     myTasksWrap.style.display = "grid";
@@ -1059,6 +1235,11 @@ fillSprintSelect();
 fillPersonSelect();
 setViewMode(getViewMode());
 document.getElementById("q").addEventListener("input", render);
+document.getElementById("taskDetailModalBack").addEventListener("click", (e) => {
+  if(e.target.id === "taskDetailModalBack"){
+    closeTaskDetail();
+  }
+});
 render();
 </script>
 </body>
