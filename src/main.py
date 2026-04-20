@@ -65,6 +65,27 @@ def update_project(project_id: int, project_in: schemas.ProjectUpdate, db: Sessi
     db.refresh(project)
     return project
 
+@app.delete("/projects/{project_id}", status_code=status.HTTP_200_OK)
+def delete_project(project_id: int, db: Session = Depends(get_db)):
+    project = db.query(models.Project).filter(models.Project.id == project_id).first()
+
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Project not found"
+        )
+
+    if project.tasks or project.sprints:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Cannot delete project with existing tasks or sprints"
+        )
+
+    db.delete(project)
+    db.commit()
+
+    return {"message": "Project deleted successfully"}
+
 
 # NEW: Login endpoint
 @app.post("/login")
