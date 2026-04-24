@@ -79,3 +79,19 @@ class Sprint(Base):
 
     project = relationship("Project", back_populates="sprints")
     tasks = relationship("Task", back_populates="sprint")
+
+class Comment(Base):
+    __tablename__ = "comments"
+
+    id = Column(BigInteger, primary_key=True, index=True)
+    task_id = Column(BigInteger, ForeignKey("tasks.id"), nullable=False)
+    employee_id = Column(BigInteger, ForeignKey("employees.id"), nullable=False)
+    comment_text = Column(Text, nullable=False)
+    created_at = Column(
+        TIMESTAMP(timezone=True),
+        server_default=text("NOW()"),
+        nullable=False,
+    )
+
+    task = relationship("Task", back_populates="comments")
+    employee = relationship("Employee", back_populates="comments")
