@@ -39,16 +39,28 @@ class Project(Base):
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True)
 
-    tasks = relationship("Task", back_populates="project")
-    sprints = relationship("Sprint", back_populates="project")
+    ## relationship with tasks and sprints
+    tasks = relationship(
+        "Task",
+        back_populates="project",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+
+    sprints = relationship(
+        "Sprint",
+        back_populates="project",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
 
 class Task(Base):
     __tablename__ = "tasks"
 
     id = Column(Integer, primary_key=True, index=True)
 
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
-    sprint_id = Column(Integer, ForeignKey("sprints.id"), nullable=True)       # nullable
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False), nullable=False
+    sprint_id = Column(Integer, ForeignKey("sprints.id"), ondelete="SET NULL", nullable=True), nullable=True       # nullable
     title = Column(Text, nullable=False)
     status = Column(Text, nullable=False, default="To-Do")
     priority = Column(Text, nullable=False, default="Medium")
@@ -67,25 +79,42 @@ class Task(Base):
 
     project = relationship("Project", back_populates="tasks")
     sprint = relationship("Sprint", back_populates="tasks")
+    comments = relationship(
+        "Comment",
+        back_populates="task",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
 
 class Sprint(Base):
     __tablename__ = "sprints"
 
     id = Column(Integer, primary_key=True, index=True)
-    project_id = Column(Integer, ForeignKey("projects.id"), nullable=False)
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
     name = Column(Text, nullable=False)
     start_date = Column(Date, nullable=False)
     end_date = Column(Date, nullable=False)
 
     project = relationship("Project", back_populates="sprints")
-    tasks = relationship("Task", back_populates="sprint")
+
+    name = Column(Text, nullable=False)
+    start_date = Column(Date, nullable=False)
+    end_date = Column(Date, nullable=False)
+
+    project = relationship("Project", back_populates="sprints")
+
+    tasks = relationship(
+        "Task",
+        back_populates="sprint",
+        passive_deletes=True,
+    )
 
 class Comment(Base):
     __tablename__ = "comments"
 
     id = Column(BigInteger, primary_key=True, index=True)
-    task_id = Column(BigInteger, ForeignKey("tasks.id"), nullable=False)
-    employee_id = Column(BigInteger, ForeignKey("employees.id"), nullable=False)
+    task_id = Column(BigInteger, ForeignKey("tasks.id", ondelete="CASCADE"), nullable=False)
+    employee_id = Column(BigInteger, ForeignKey("employees.id", ondelete="CASCADE"), nullable=False)
     comment_text = Column(Text, nullable=False)
     created_at = Column(
         TIMESTAMP(timezone=True),

@@ -75,11 +75,8 @@ def delete_project(project_id: int, db: Session = Depends(get_db)):
             detail="Project not found"
         )
 
-    if project.tasks or project.sprints:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Cannot delete project with existing tasks or sprints"
-        )
+
+
 
     db.delete(project)
     db.commit()
@@ -165,3 +162,55 @@ def remove_employee_skill(employee_id: int, skill_name: str, db: Session = Depen
     db.commit()
 
     return {"message": "Skill removed"}
+
+
+## for the tasks comments
+
+@app.get("/tasks/{task_id}/comments", response_model=list[schemas.CommentRead])
+def list_task_comments(task_id: int, db: Session = Depends(get_db)):
+    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    comments = (
+        db.query(models.Comment)
+        .filter(models.Comment.task_id == task_id)
+        .order_by(models.Comment.created_at.asc())
+        .all()
+    )
+
+    return comments
+
+@app.post("/tasks/{task_id}/comments", response_model=schemas.CommentRead, status_code=status.HTTP_201_CREATED)
+def add_task_comment(task_id: int, comment_in: schemas.CommentCreate, db: Session = Depends(get_db)):
+    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    employee = db.query(models.Employee).filter(models.Employee.id == comment_in.employee_id).first()
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
+
+    new_comment = models.Comment(
+        task_id=task_id,
+        employee_id=comment_in.employee_id,
+        comment_text=comment_in.comment_text
+    )
+
+    db.add(new_comment)
+    db.commit()
+    db.refresh(new_comment)
+
+    return new_comment
+
+@app.delete("/comments/{comment_id}")
+def delete_comment(comment_id: int, db: Session = Depends(get_db)):
+    comment = db.query(models.Comment).filter(models.Comment.id == comment_id).first()
+
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+
+    db.delete(comment)
+    db.commit()
+
+    return {"message": "Comment deleted successfully"}
