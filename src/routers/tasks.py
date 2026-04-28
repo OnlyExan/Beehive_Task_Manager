@@ -32,20 +32,35 @@ def create_task(task_in: schemas.TaskCreate, db: Session = Depends(get_db)):
     db.refresh(task)
     return task
 
+#new filters
 @router.get("", response_model=list[schemas.TaskRead])
 def list_tasks(
     project_id: int | None = None,
     sprint_id: int | None = None,
     search: str | None = None,
+    status: str | None = None,
+    employee_id: int | None = None,
+    priority: str | None = None,
     db: Session = Depends(get_db),
 ):
     q = db.query(models.Task)
 
+
     if project_id is not None:
         q = q.filter(models.Task.project_id == project_id)
 
+
     if sprint_id is not None:
         q = q.filter(models.Task.sprint_id == sprint_id)
+
+    if status is not None:
+        q = q.filter(models.Task.status == status)
+
+    if employee_id is not None:
+        q = q.filter(models.Task.employee_id == employee_id)
+
+    if priority is not None:
+        q = q.filter(models.Task.priority == priority)
 
     if search:
         term = f"%{search.strip()}%"
