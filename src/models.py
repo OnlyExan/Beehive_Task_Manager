@@ -1,4 +1,4 @@
-# models.py
+# src/models.py
 from sqlalchemy import BigInteger, Column, Integer, String, Boolean, TIMESTAMP, text, Text, ForeignKey, Date
 from sqlalchemy.orm import relationship
 from src.database import Base
@@ -10,13 +10,18 @@ class Employee(Base):
     id = Column(BigInteger, primary_key=True, index=True)
     full_name = Column(Text, nullable=False)
     email = Column(Text, nullable=False)
-    hashed_password = Column(Text, nullable=False)  # new added line
+    hashed_password = Column(Text, nullable=False)
     role = Column(Text, nullable=False)
     created_at = Column(
         TIMESTAMP(timezone=True),
         server_default=text("NOW()"),
         nullable=False,
     )
+
+    # Required because Comment.employee uses back_populates="employee"
+    # and Employee needs the matching side of that relationship
+    comments = relationship("Comment", back_populates="employee")
+
 
 class EmployeeSkill(Base):
     __tablename__ = "employee_skills"
@@ -30,6 +35,7 @@ class EmployeeSkill(Base):
         nullable=False,
     )
 
+
 class Project(Base):
     __tablename__ = "projects"
 
@@ -39,7 +45,6 @@ class Project(Base):
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True)
 
-    ## relationship with tasks and sprints
     tasks = relationship(
         "Task",
         back_populates="project",
@@ -54,13 +59,13 @@ class Project(Base):
         passive_deletes=True,
     )
 
+
 class Task(Base):
     __tablename__ = "tasks"
 
     id = Column(Integer, primary_key=True, index=True)
-
-    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False), nullable=False
-    sprint_id = Column(Integer, ForeignKey("sprints.id"), ondelete="SET NULL", nullable=True), nullable=True       # nullable
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    sprint_id = Column(Integer, ForeignKey("sprints.id", ondelete="SET NULL"), nullable=True)
     title = Column(Text, nullable=False)
     status = Column(Text, nullable=False, default="To-Do")
     priority = Column(Text, nullable=False, default="Medium")
@@ -86,6 +91,7 @@ class Task(Base):
         passive_deletes=True,
     )
 
+
 class Sprint(Base):
     __tablename__ = "sprints"
 
@@ -96,18 +102,12 @@ class Sprint(Base):
     end_date = Column(Date, nullable=False)
 
     project = relationship("Project", back_populates="sprints")
-
-    name = Column(Text, nullable=False)
-    start_date = Column(Date, nullable=False)
-    end_date = Column(Date, nullable=False)
-
-    project = relationship("Project", back_populates="sprints")
-
     tasks = relationship(
         "Task",
         back_populates="sprint",
         passive_deletes=True,
     )
+
 
 class Comment(Base):
     __tablename__ = "comments"

@@ -1,9 +1,12 @@
+# src/routers/sprints.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from src.database import SessionLocal
 from src import models, schemas
+from src.security.roles import require_roles
 
 router = APIRouter(prefix="/sprints", tags=["sprints"])
+
 
 def get_db():
     db = SessionLocal()
@@ -12,8 +15,13 @@ def get_db():
     finally:
         db.close()
 
+
 @router.post("", response_model=schemas.SprintRead, status_code=status.HTTP_201_CREATED)
-def create_sprint(sprint_in: schemas.SprintCreate, db: Session = Depends(get_db)):
+def create_sprint(
+    sprint_in: schemas.SprintCreate,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin", "employee")), 
+):
     project = db.query(models.Project).filter(models.Project.id == sprint_in.project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
@@ -24,23 +32,39 @@ def create_sprint(sprint_in: schemas.SprintCreate, db: Session = Depends(get_db)
     db.refresh(sprint)
     return sprint
 
+
 @router.get("", response_model=list[schemas.SprintRead])
-def list_sprints(project_id: int | None = None, db: Session = Depends(get_db)):
+def list_sprints(
+    project_id: int | None = None,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin", "employee")),  # both roles
+):
     q = db.query(models.Sprint)
     if project_id is not None:
         q = q.filter(models.Sprint.project_id == project_id)
     return q.all()
 
+
 @router.get("/{sprint_id}", response_model=schemas.SprintRead)
-def get_sprint(sprint_id: int, db: Session = Depends(get_db)):
+def get_sprint(
+    sprint_id: int,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin", "employee")),  # both roles
+):
     sprint = db.query(models.Sprint).filter(models.Sprint.id == sprint_id).first()
     if not sprint:
         raise HTTPException(status_code=404, detail="Sprint not found")
     return sprint
 
+
 @router.put("/{sprint_id}", response_model=schemas.SprintRead)
 @router.patch("/{sprint_id}", response_model=schemas.SprintRead)
-def update_sprint(sprint_id: int, sprint_in: schemas.SprintUpdate, db: Session = Depends(get_db)):
+def update_sprint(
+    sprint_id: int,
+    sprint_in: schemas.SprintUpdate,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin")),              # admin only
+):
     sprint = db.query(models.Sprint).filter(models.Sprint.id == sprint_id).first()
     if not sprint:
         raise HTTPException(status_code=404, detail="Sprint not found")

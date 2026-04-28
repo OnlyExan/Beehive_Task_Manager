@@ -1,11 +1,13 @@
-# routers/tasks.py
+# src/routers/tasks.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from src.database import SessionLocal
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 from src import models, schemas
+from src.security.roles import require_roles
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
+
 
 def get_db():
     db = SessionLocal()
@@ -14,9 +16,13 @@ def get_db():
     finally:
         db.close()
 
+
 @router.post("", response_model=schemas.TaskRead, status_code=status.HTTP_201_CREATED)
-def create_task(task_in: schemas.TaskCreate, db: Session = Depends(get_db)):
-    # optional: validate foreign keys exist
+def create_task(
+    task_in: schemas.TaskCreate,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin", "employee")),  # both roles
+):
     project = db.query(models.Project).filter(models.Project.id == task_in.project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
@@ -32,7 +38,7 @@ def create_task(task_in: schemas.TaskCreate, db: Session = Depends(get_db)):
     db.refresh(task)
     return task
 
-#new filters
+
 @router.get("", response_model=list[schemas.TaskRead])
 def list_tasks(
     project_id: int | None = None,
@@ -42,13 +48,12 @@ def list_tasks(
     employee_id: int | None = None,
     priority: str | None = None,
     db: Session = Depends(get_db),
+    _=Depends(require_roles("admin", "employee")),  # both roles
 ):
     q = db.query(models.Task)
 
-
     if project_id is not None:
         q = q.filter(models.Task.project_id == project_id)
-
 
     if sprint_id is not None:
         q = q.filter(models.Task.sprint_id == sprint_id)
@@ -74,9 +79,15 @@ def list_tasks(
 
     return q.all()
 
+
 @router.put("/{task_id}", response_model=schemas.TaskRead)
 @router.patch("/{task_id}", response_model=schemas.TaskRead)
-def update_task(task_id: int, task_in: schemas.TaskUpdate, db: Session = Depends(get_db)):
+def update_task(
+    task_id: int,
+    task_in: schemas.TaskUpdate,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin", "employee")),  # both roles
+):
     task = db.query(models.Task).filter(models.Task.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
@@ -89,8 +100,13 @@ def update_task(task_id: int, task_in: schemas.TaskUpdate, db: Session = Depends
     db.refresh(task)
     return task
 
+
 @router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_task(task_id: int, db: Session = Depends(get_db)):
+def delete_task(
+    task_id: int,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin")),              # admin only
+):
     task = db.query(models.Task).filter(models.Task.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")

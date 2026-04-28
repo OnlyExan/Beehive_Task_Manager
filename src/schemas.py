@@ -1,5 +1,5 @@
+# src/schemas.py
 from datetime import date, datetime
-
 from pydantic import BaseModel, EmailStr, field_validator, model_validator
 
 
@@ -10,10 +10,21 @@ class EmployeeBase(BaseModel):
 
 
 class EmployeeCreate(EmployeeBase):
-    password: str  # password will come from the user
+    password: str
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, value: str) -> str:
+        if len(value) < 8:
+            raise ValueError("Password must be at least 8 characters")
+        if not any(c.isdigit() for c in value):
+            raise ValueError("Password must contain at least one number")
+        if not any(c.isalpha() for c in value):
+            raise ValueError("Password must contain at least one letter")
+        return value
 
 
-class EmployeeUpdate(EmployeeBase):
+class EmployeeUpdate(BaseModel):
     full_name: str | None = None
     email: EmailStr | None = None
     role: str | None = None
@@ -62,7 +73,6 @@ class ProjectUpdate(BaseModel):
     def validate_name(cls, value: str | None) -> str | None:
         if value is None:
             return value
-
         value = value.strip()
         if not value:
             raise ValueError("name must not be empty")
@@ -72,7 +82,6 @@ class ProjectUpdate(BaseModel):
     def validate_project_update(self):
         if "name" in self.model_fields_set and self.name is None:
             raise ValueError("name cannot be null")
-
         if self.start_date and self.end_date and self.end_date < self.start_date:
             raise ValueError("end_date cannot be before start_date")
         return self
@@ -85,10 +94,10 @@ class ProjectRead(ProjectBase):
         from_attributes = True
 
 
-# New schema for the login endpoint
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
+
 
 class EmployeeSkillCreate(BaseModel):
     skill: str
@@ -117,13 +126,14 @@ class ComponentRead(ComponentBase):
     class Config:
         from_attributes = True
 
+
 # ----- Task -----
 class TaskBase(BaseModel):
     project_id: int
     sprint_id: int | None = None
     title: str
-    status: str = "To-Do"      # To-Do, In-Progress, Review, Done
-    priority: str = "Medium"   # Low, Medium, High
+    status: str = "To-Do"
+    priority: str = "Medium"
 
 class TaskCreate(TaskBase):
     pass
@@ -139,6 +149,7 @@ class TaskRead(TaskBase):
 
     class Config:
         from_attributes = True
+
 
 # ----- Sprint -----
 class SprintBase(BaseModel):
@@ -173,7 +184,8 @@ class SprintRead(SprintBase):
     class Config:
         from_attributes = True
 
-#-----comments-----
+
+# ----- Comments -----
 class CommentBase(BaseModel):
     employee_id: int
     comment_text: str
