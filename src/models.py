@@ -1,7 +1,7 @@
 # models.py
 from sqlalchemy import BigInteger, Column, Integer, String, Boolean, TIMESTAMP, text, Text, ForeignKey, Date
 from sqlalchemy.orm import relationship
-from database import Base
+from src.database import Base
 
 
 class Employee(Base):

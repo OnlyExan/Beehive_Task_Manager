@@ -2,6 +2,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from src.database import SessionLocal
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from src import models, schemas
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
@@ -36,6 +37,7 @@ def create_task(task_in: schemas.TaskCreate, db: Session = Depends(get_db)):
 def list_tasks(
     project_id: int | None = None,
     sprint_id: int | None = None,
+    search: str | None = None,
     status: str | None = None,
     employee_id: int | None = None,
     priority: str | None = None,
@@ -43,8 +45,10 @@ def list_tasks(
 ):
     q = db.query(models.Task)
 
+
     if project_id is not None:
         q = q.filter(models.Task.project_id == project_id)
+
 
     if sprint_id is not None:
         q = q.filter(models.Task.sprint_id == sprint_id)
@@ -57,6 +61,16 @@ def list_tasks(
 
     if priority is not None:
         q = q.filter(models.Task.priority == priority)
+
+    if search:
+        term = f"%{search.strip()}%"
+        q = q.filter(
+            or_(
+                models.Task.title.ilike(term),
+                models.Task.status.ilike(term),
+                models.Task.priority.ilike(term),
+            )
+        )
 
     return q.all()
 
@@ -75,3 +89,11 @@ def update_task(task_id: int, task_in: schemas.TaskUpdate, db: Session = Depends
     db.refresh(task)
     return task
 
+@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_task(task_id: int, db: Session = Depends(get_db)):
+    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    db.delete(task)
+    db.commit()
