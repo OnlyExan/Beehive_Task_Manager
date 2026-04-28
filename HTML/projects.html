@@ -58,14 +58,8 @@ a{color:inherit}
   color:#1a1300;
   font-weight:900;
 }
-.brand .name{
-  font-weight:800;
-}
-.nav{
-  display:grid;
-  gap:8px;
-  padding:8px;
-}
+.brand .name{font-weight:800;}
+.nav{display:grid;gap:8px;padding:8px;}
 .nav a{
   text-decoration:none;
   display:flex;
@@ -76,26 +70,25 @@ a{color:inherit}
   color:var(--muted);
   border:1px solid transparent;
 }
-.nav a:hover{
-  background: var(--card);
-  border-color: var(--border);
-  color: var(--text);
-}
-.nav a.active{
-  background: var(--accentSoft);
-  border-color: rgba(247,181,0,.35);
-  color: var(--text);
-}
+.nav a:hover{background:var(--card);border-color:var(--border);color:var(--text);}
+.nav a.active{background:var(--accentSoft);border-color:rgba(247,181,0,.35);color:var(--text);}
 .nav .dot{
-  width:10px;
-  height:10px;
-  border-radius:999px;
+  width:10px;height:10px;border-radius:999px;
   background:var(--accent);
-  box-shadow: 0 0 0 4px rgba(247,181,0,.12);
+  box-shadow:0 0 0 4px rgba(247,181,0,.12);
+}
+.demo-banner{
+  background:rgba(247,181,0,.12);
+  border-bottom:1px solid rgba(247,181,0,.35);
+  color:var(--accent);
+  text-align:center;
+  padding:8px 16px;
+  font-size:13px;
+  font-weight:700;
 }
 .main{
   display:grid;
-  grid-template-rows: 64px 1fr;
+  grid-template-rows: auto 64px 1fr;
 }
 .topbar{
   display:flex;
@@ -120,18 +113,10 @@ a{color:inherit}
   width:min(520px, 100%);
 }
 .search input{
-  width:100%;
-  border:0;
-  outline:0;
-  background:transparent;
-  color:var(--text);
-  font-size:14px;
+  width:100%;border:0;outline:0;
+  background:transparent;color:var(--text);font-size:14px;
 }
-.actions{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
+.actions{display:flex;align-items:center;gap:10px;}
 .btn{
   border:1px solid var(--border);
   background: var(--card);
@@ -141,21 +126,14 @@ a{color:inherit}
   cursor:pointer;
   font-weight:700;
 }
-.btn:hover{
-  border-color: rgba(247,181,0,.35);
-}
+.btn:hover{border-color: rgba(247,181,0,.35);}
 .btn.primary{
   background: linear-gradient(180deg, #ffd66b, var(--accent));
-  border:0;
-  color:#1a1300;
+  border:0;color:#1a1300;
 }
-.btn.danger{
-  border-color:var(--danger);
-  color:var(--danger);
-}
-.btn.danger:hover{
-  background:rgba(255,107,107,.12);
-}
+.btn.danger{border-color:var(--danger);color:var(--danger);}
+.btn.danger:hover{background:rgba(255,107,107,.12);}
+.btn.small{padding:6px 10px;font-size:12px;}
 .userpill{
   border:1px solid var(--border);
   background: var(--card);
@@ -164,9 +142,7 @@ a{color:inherit}
   color: var(--muted);
   font-size:13px;
 }
-.content{
-  padding:18px;
-}
+.content{padding:18px;}
 .header{
   display:flex;
   align-items:flex-start;
@@ -174,20 +150,9 @@ a{color:inherit}
   gap:14px;
   margin-bottom:14px;
 }
-.hgroup h1{
-  margin:0;
-  color:var(--accent);
-  font-size:22px;
-}
-.hgroup p{
-  margin:6px 0 0;
-  color:var(--muted);
-}
-.grid{
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:14px;
-}
+.hgroup h1{margin:0;color:var(--accent);font-size:22px;}
+.hgroup p{margin:6px 0 0;color:var(--muted);}
+.grid{display:grid;grid-template-columns: 1fr;gap:14px;}
 .panel{
   background: var(--card);
   border:1px solid var(--border);
@@ -195,191 +160,271 @@ a{color:inherit}
   box-shadow: var(--shadow);
   overflow:visible;
 }
-.tablewrap{
-  overflow:visible;
-}
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width: 1000px;
-}
+.tablewrap{overflow:visible;}
+table{width:100%;border-collapse:collapse;min-width:1000px;}
 th, td{
   padding:12px 14px;
   border-bottom:1px solid var(--border);
-  text-align:left;
-  font-size:14px;
+  text-align:left;font-size:14px;
 }
-th{
-  color: var(--accent);
-  font-weight:800;
-  background: rgba(255,255,255,.02);
-}
-td{
-  color: var(--muted);
-}
-tr:hover td{
-  background: rgba(255,255,255,.02);
-  color: var(--text);
-}
+th{color:var(--accent);font-weight:800;background:rgba(255,255,255,.02);}
+td{color:var(--muted);}
+tr:hover td{background:rgba(255,255,255,.02);color:var(--text);}
+tr:last-child td{border-bottom:0;}
 .badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:800;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;
   border:1px solid rgba(247,181,0,.35);
-  background: var(--accentSoft);
-  color: var(--accent);
+  background:var(--accentSoft);color:var(--accent);
 }
-.k{
-  display:inline-grid;
-  place-items:center;
-  width:22px;
-  height:22px;
-  border-radius:8px;
-  background: rgba(247,181,0,.18);
-  border:1px solid rgba(247,181,0,.35);
-  color: var(--accent);
-  font-weight:900;
-  font-size:12px;
+.statusbadge{
+  display:inline-block;padding:4px 10px;
+  border-radius:999px;font-size:12px;font-weight:700;
 }
-.small{
-  font-size:12px;
-  color: var(--muted);
-}
-.link{
-  color: var(--text);
-  text-decoration:none;
-  font-weight:800;
-}
-.link:hover{
-  text-decoration:underline;
-}
-.footer{
-  padding:14px 4px 0;
-  color: var(--muted);
-  font-size:12px;
-}
-
-.projectMenu{
-  position:relative;
-  display:inline-block;
-}
+.statusbadge.active{background:rgba(46,204,113,.12);color:#2ecc71;border:1px solid rgba(46,204,113,.3);}
+.statusbadge.planned{background:rgba(100,180,255,.12);color:#6ab4ff;border:1px solid rgba(100,180,255,.25);}
+.statusbadge.on-hold{background:rgba(247,181,0,.12);color:var(--accent);border:1px solid rgba(247,181,0,.25);}
+.statusbadge.archived{background:rgba(150,150,150,.12);color:#999;border:1px solid rgba(150,150,150,.25);}
+.small{font-size:12px;color:var(--muted);}
+.link{color:var(--text);text-decoration:none;font-weight:800;}
+.link:hover{text-decoration:underline;}
+.footer{padding:14px 4px 0;color:var(--muted);font-size:12px;}
+.projectMenu{position:relative;display:inline-block;}
 .menuBtn{
-  background: var(--card2);
-  color: var(--text);
+  background:var(--card2);color:var(--text);
   border:1px solid var(--border);
-  padding:6px 10px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:900;
-  font-size:16px;
+  padding:6px 10px;border-radius:10px;
+  cursor:pointer;font-weight:900;font-size:16px;
 }
-.menuBtn:hover{
-  border-color: rgba(247,181,0,.35);
-}
+.menuBtn:hover{border-color:rgba(247,181,0,.35);}
 .menuDropdown{
-  position:absolute;
-  right:0;
-  top:36px;
-  min-width:190px;
-  background: var(--card2);
-  border:1px solid var(--border);
-  border-radius:12px;
-  box-shadow: var(--shadow);
-  display:none;
-  z-index:9999;
-  overflow:hidden;
+  position:absolute;right:0;top:36px;min-width:190px;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:12px;box-shadow:var(--shadow);
+  display:none;z-index:9999;overflow:hidden;
 }
 .menuDropdown button{
-  width:100%;
-  background:transparent;
-  border:0;
-  color:var(--text);
-  padding:10px 12px;
-  text-align:left;
-  cursor:pointer;
-  font-weight:700;
+  width:100%;background:transparent;border:0;
+  color:var(--text);padding:10px 12px;
+  text-align:left;cursor:pointer;font-weight:700;
 }
-.menuDropdown button:hover{
-  background:rgba(255,255,255,.06);
-}
-.menuDropdown .dangerItem{
-  color:var(--danger);
-}
+.menuDropdown button:hover{background:rgba(255,255,255,.06);}
+.menuDropdown .dangerItem{color:var(--danger);}
 
 /* Modal */
 .modalBack{
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,.65);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:100;
+  position:fixed;inset:0;background:rgba(0,0,0,.65);
+  display:none;align-items:center;justify-content:center;
+  padding:18px;z-index:100;
 }
 .modal{
-  width:min(560px, 100%);
-  background: var(--card2);
-  border:1px solid var(--border);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  padding:16px;
+  width:min(560px,100%);
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:18px;box-shadow:var(--shadow);padding:16px;
+  max-height:90vh;overflow-y:auto;
 }
-.modal h2{
-  margin:6px 0 10px;
-  color:var(--accent);
+.modal h2{margin:6px 0 10px;color:var(--accent);}
+.formRow{display:grid;gap:6px;margin:10px 0;}
+.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:560px){.formGrid{grid-template-columns:1fr}}
+label{color:var(--muted);font-size:13px;}
+input,textarea,select{
+  width:100%;padding:10px 12px;border-radius:14px;
+  border:1px solid var(--border);background:#0c0c0c;
+  color:var(--text);outline:none;
 }
-.formRow{
-  display:grid;
-  gap:6px;
-  margin:10px 0;
+textarea{min-height:80px;resize:vertical;}
+.modalActions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px;}
+.sectionLabel{
+  font-size:11px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.8px;color:var(--muted);margin:16px 0 8px;
 }
-label{
-  color: var(--muted);
-  font-size:13px;
+.memberList{display:grid;gap:8px;}
+.memberItem{
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;padding:8px 12px;border:1px solid var(--border);
+  border-radius:10px;background:#0c0c0c;font-size:13px;
 }
-input, textarea, select{
-  width:100%;
-  padding:10px 12px;
-  border-radius: 14px;
-  border:1px solid var(--border);
-  background: #0c0c0c;
-  color: var(--text);
-  outline: none;
+.chipList{display:flex;flex-wrap:wrap;gap:8px;min-height:28px;}
+.chip{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:999px;
+  background:var(--accentSoft);border:1px solid rgba(247,181,0,.25);
+  color:var(--accent);font-size:12px;font-weight:700;
 }
-textarea{
-  min-height:90px;
-  resize:vertical;
+.chip button{
+  background:none;border:none;color:var(--accent);
+  cursor:pointer;padding:0;font-size:14px;line-height:1;
 }
-.modalActions{
-  display:flex;
-  justify-content:flex-end;
-  gap:10px;
-  margin-top:12px;
+.chip button:hover{color:#fff;}
+.addRow{display:flex;gap:8px;margin-top:8px;}
+.addRow input,.addRow select{flex:1;}
+.errorMsg{
+  padding:10px 14px;border-radius:10px;
+  background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.35);
+  color:var(--danger);font-size:13px;margin-bottom:10px;display:none;
 }
-.employeeList{
-  display:grid;
-  gap:8px;
-  margin-top:10px;
+.successMsg{
+  padding:10px 14px;border-radius:10px;
+  background:rgba(46,204,113,.12);border:1px solid rgba(46,204,113,.35);
+  color:#2ecc71;font-size:13px;margin-bottom:10px;display:none;
 }
-.employeeItem{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  background:#0c0c0c;
-}
+hr{border:0;border-top:1px solid var(--border);margin:14px 0;}
 </style>
 </head>
 
 <body>
+
+<script>
+// ── DEMO MODE ───────────────────────────────────────────────────────────────
+// Set to true to run without the API (for demos, presentations, etc.)
+// Set to false when the API is running normally
+const DEMO_MODE = false;
+
+const DEMO_USER = {
+  token: "demo_token",
+  id: 1,
+  full_name: "Demo Admin",
+  role: "admin", // change to "employee" to demo employee view
+};
+
+if (DEMO_MODE) {
+  localStorage.setItem("bh_token", DEMO_USER.token);
+  localStorage.setItem("bh_user_id", DEMO_USER.id);
+  localStorage.setItem("bh_user_name", DEMO_USER.full_name);
+  localStorage.setItem("bh_user_role", DEMO_USER.role);
+}
+
+// ── Mock data ────────────────────────────────────────────────────────────────
+let mockProjects = [
+  { id: 1, name: "Beehive App", description: "Main task manager project", start_date: "2026-01-01", end_date: "2026-12-31", status: "Active" },
+  { id: 2, name: "Marketing Site", description: "Company landing page", start_date: null, end_date: null, status: "Planned" },
+  { id: 3, name: "Internal Tools", description: "Admin utilities", start_date: "2026-02-01", end_date: "2026-06-30", status: "On hold" },
+];
+let mockNextProjectId = 4;
+
+let mockMembers = {
+  1: [
+    { id: 1, project_id: 1, employee_id: 1, full_name: "Demo Admin", member_role: "Lead" },
+    { id: 2, project_id: 1, employee_id: 2, full_name: "Alice Dev", member_role: "Developer" },
+  ],
+  2: [],
+  3: [{ id: 3, project_id: 3, employee_id: 3, full_name: "Bob Tester", member_role: "QA" }],
+};
+
+let mockComponents = {
+  1: [{ id: 1, project_id: 1, name: "Frontend" }, { id: 2, project_id: 1, name: "Backend" }],
+  2: [], 3: [],
+};
+
+let mockLabels = {
+  1: [{ id: 1, project_id: 1, name: "bug" }, { id: 2, project_id: 1, name: "feature" }, { id: 3, project_id: 1, name: "ui" }],
+  2: [], 3: [],
+};
+
+let mockEmployees = [
+  { id: 1, full_name: "Demo Admin", email: "admin@example.com", role: "admin" },
+  { id: 2, full_name: "Alice Dev", email: "alice@example.com", role: "employee" },
+  { id: 3, full_name: "Bob Tester", email: "bob@example.com", role: "employee" },
+  { id: 4, full_name: "Carol Manager", email: "carol@example.com", role: "employee" },
+];
+
+function mockResponse(url, options = {}) {
+  const method = (options.method || "GET").toUpperCase();
+  const body = options.body ? JSON.parse(options.body) : null;
+
+  if (method === "DELETE" && url.match(/\/projects\/\d+\/members\/\d+$/)) {
+    const parts = url.split("/");
+    const empId = parseInt(parts.pop());
+    const projId = parseInt(parts[parts.length - 2]);
+    if (mockMembers[projId]) mockMembers[projId] = mockMembers[projId].filter(m => m.employee_id !== empId);
+    return fakeOk({}, 204);
+  }
+  if (method === "POST" && url.match(/\/projects\/\d+\/members$/)) {
+    const projId = parseInt(url.split("/").slice(-2)[0]);
+    const emp = mockEmployees.find(e => e.id === body.employee_id);
+    const newMember = { id: Date.now(), project_id: projId, employee_id: body.employee_id, full_name: emp?.full_name || "Unknown", member_role: body.member_role || null };
+    if (!mockMembers[projId]) mockMembers[projId] = [];
+    mockMembers[projId].push(newMember);
+    return fakeOk(newMember);
+  }
+  if (method === "GET" && url.match(/\/projects\/\d+\/members$/)) {
+    const projId = parseInt(url.split("/").slice(-2)[0]);
+    return fakeOk(mockMembers[projId] || []);
+  }
+  if (method === "DELETE" && url.match(/\/projects\/\d+\/components\/\d+$/)) {
+    const parts = url.split("/");
+    const compId = parseInt(parts.pop());
+    const projId = parseInt(parts[parts.length - 2]);
+    if (mockComponents[projId]) mockComponents[projId] = mockComponents[projId].filter(c => c.id !== compId);
+    return fakeOk({}, 204);
+  }
+  if (method === "POST" && url.match(/\/projects\/\d+\/components$/)) {
+    const projId = parseInt(url.split("/").slice(-2)[0]);
+    const newComp = { id: Date.now(), project_id: projId, name: body.name };
+    if (!mockComponents[projId]) mockComponents[projId] = [];
+    mockComponents[projId].push(newComp);
+    return fakeOk(newComp);
+  }
+  if (method === "GET" && url.match(/\/projects\/\d+\/components$/)) {
+    const projId = parseInt(url.split("/").slice(-2)[0]);
+    return fakeOk(mockComponents[projId] || []);
+  }
+  if (method === "DELETE" && url.match(/\/projects\/\d+\/labels\/\d+$/)) {
+    const parts = url.split("/");
+    const labelId = parseInt(parts.pop());
+    const projId = parseInt(parts[parts.length - 2]);
+    if (mockLabels[projId]) mockLabels[projId] = mockLabels[projId].filter(l => l.id !== labelId);
+    return fakeOk({}, 204);
+  }
+  if (method === "POST" && url.match(/\/projects\/\d+\/labels$/)) {
+    const projId = parseInt(url.split("/").slice(-2)[0]);
+    const newLabel = { id: Date.now(), project_id: projId, name: body.name };
+    if (!mockLabels[projId]) mockLabels[projId] = [];
+    mockLabels[projId].push(newLabel);
+    return fakeOk(newLabel);
+  }
+  if (method === "GET" && url.match(/\/projects\/\d+\/labels$/)) {
+    const projId = parseInt(url.split("/").slice(-2)[0]);
+    return fakeOk(mockLabels[projId] || []);
+  }
+  if (method === "DELETE" && url.match(/\/projects\/\d+$/)) {
+    const id = parseInt(url.split("/").pop());
+    mockProjects = mockProjects.filter(p => p.id !== id);
+    return fakeOk({}, 200);
+  }
+  if ((method === "PUT" || method === "PATCH") && url.match(/\/projects\/\d+$/)) {
+    const id = parseInt(url.split("/").pop());
+    const idx = mockProjects.findIndex(p => p.id === id);
+    if (idx !== -1) mockProjects[idx] = { ...mockProjects[idx], ...body };
+    return fakeOk(mockProjects[idx]);
+  }
+  if (method === "POST" && url.endsWith("/projects")) {
+    const newProj = { id: mockNextProjectId++, status: "Active", ...body };
+    mockProjects.push(newProj);
+    mockMembers[newProj.id] = [];
+    mockComponents[newProj.id] = [];
+    mockLabels[newProj.id] = [];
+    return fakeOk(newProj, 201);
+  }
+  if (method === "GET" && url.endsWith("/projects")) {
+    return fakeOk([...mockProjects]);
+  }
+  if (method === "GET" && url.endsWith("/employees")) {
+    return fakeOk([...mockEmployees]);
+  }
+  return fakeOk({});
+}
+
+function fakeOk(data, status = 200) {
+  return { ok: status < 400, status, json: async () => data };
+}
+</script>
+
+<div class="demo-banner" id="demo-banner" style="display:none;">
+  Demo mode — running without API. Set DEMO_MODE = false to connect to the backend.
+</div>
+
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
@@ -389,24 +434,22 @@ textarea{
         <div class="small">Ticket & Task Management</div>
       </div>
     </div>
-
     <nav class="nav">
       <a href="dashboard.html"><span class="dot"></span>Dashboard</a>
       <a class="active" href="projects.html"><span class="dot"></span>Projects</a>
       <a href="sprints.html"><span class="dot"></span>Sprints</a>
-      <a href="index.html"><span class="dot"></span>Logout</a>
+      <a href="#" onclick="logout()"><span class="dot"></span>Logout</a>
     </nav>
   </aside>
 
   <section class="main">
     <header class="topbar">
-      <div class="search" title="Front-end search filters the table">
-        🔎 <input id="q" type="text" placeholder="Search projects by name or key (e.g., BEE)" />
+      <div class="search" title="Search filters the table">
+        🔎 <input id="q" type="text" placeholder="Search projects by name or status" oninput="filterTable()" />
       </div>
       <div class="actions">
-        <button class="btn" onclick="resetProjects()">Reset Projects</button>
-        <button class="btn primary" onclick="openCreateModal(true)">+ Create project</button>
-        <div class="userpill">Signed in • Guest</div>
+        <button class="btn primary admin-only" id="create-btn" onclick="openCreateModal()" style="display:none;">+ Create project</button>
+        <div class="userpill" id="user-pill">Loading...</div>
       </div>
     </header>
 
@@ -424,18 +467,19 @@ textarea{
             <table>
               <thead>
                 <tr>
-                  <th>Key</th>
                   <th>Project</th>
-                  <th>Owner</th>
-                  <th>Employees</th>
+                  <th>Description</th>
+                  <th>Members</th>
+                  <th>Start date</th>
+                  <th>End date</th>
                   <th>Status</th>
-                  <th>Last updated</th>
                   <th>Actions</th>
                 </tr>
               </thead>
               <tbody id="rows"></tbody>
             </table>
           </div>
+          <div class="footer" id="table-footer"></div>
         </div>
       </div>
     </main>
@@ -445,26 +489,30 @@ textarea{
 <!-- Create Project Modal -->
 <div id="modalBack" class="modalBack" role="dialog" aria-modal="true">
   <div class="modal">
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
       <h2 style="margin:0;">Create Project</h2>
-      <button class="btn" onclick="openCreateModal(false)">Close</button>
+      <button class="btn" onclick="closeCreateModal()">Close</button>
     </div>
+    <div class="errorMsg" id="createError"></div>
 
     <div class="formRow">
       <label for="pname">Project name</label>
       <input id="pname" placeholder="e.g., Beehive Web App" />
     </div>
-
     <div class="formRow">
-      <label for="pkey">Project key 2–6 letters</label>
-      <input id="pkey" placeholder="e.g., BEE" maxlength="6" />
+      <label for="pdesc">Description</label>
+      <textarea id="pdesc" placeholder="What is this project about?"></textarea>
     </div>
-
-    <div class="formRow">
-      <label for="powner">Owner</label>
-      <input id="powner" placeholder="e.g., Nathan" />
+    <div class="formGrid">
+      <div class="formRow">
+        <label for="pstart">Start date</label>
+        <input id="pstart" type="date" />
+      </div>
+      <div class="formRow">
+        <label for="pend">End date</label>
+        <input id="pend" type="date" />
+      </div>
     </div>
-
     <div class="formRow">
       <label for="pstatus">Status</label>
       <select id="pstatus">
@@ -476,7 +524,7 @@ textarea{
     </div>
 
     <div class="modalActions">
-      <button class="btn" onclick="openCreateModal(false)">Cancel</button>
+      <button class="btn" onclick="closeCreateModal()">Cancel</button>
       <button class="btn primary" onclick="createProject()">Create</button>
     </div>
   </div>
@@ -485,32 +533,75 @@ textarea{
 <!-- Settings Modal -->
 <div id="settingsBack" class="modalBack" role="dialog" aria-modal="true">
   <div class="modal">
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
       <h2 id="settingsTitle" style="margin:0;">Project Settings</h2>
       <button class="btn" onclick="closeSettings()">Close</button>
     </div>
 
-    <input id="settingsProjectKey" type="hidden" />
+    <input id="settingsProjectId" type="hidden" />
+    <div class="errorMsg" id="settingsError"></div>
+    <div class="successMsg" id="settingsSuccess"></div>
 
+    <!-- Details -->
+    <div class="sectionLabel">Project details</div>
     <div class="formRow">
-      <label for="newProjectName">Change project name</label>
+      <label for="newProjectName">Project name</label>
       <input id="newProjectName" placeholder="Enter new project name" />
-      <button class="btn primary" onclick="changeProjectName()">Save New Name</button>
+    </div>
+    <div class="formRow">
+      <label for="newProjectDesc">Description</label>
+      <textarea id="newProjectDesc" placeholder="Project description"></textarea>
+    </div>
+    <div class="formGrid">
+      <div class="formRow">
+        <label for="newProjectStart">Start date</label>
+        <input id="newProjectStart" type="date" />
+      </div>
+      <div class="formRow">
+        <label for="newProjectEnd">End date</label>
+        <input id="newProjectEnd" type="date" />
+      </div>
+    </div>
+    <div class="formRow">
+      <label for="newProjectStatus">Status</label>
+      <select id="newProjectStatus">
+        <option>Active</option>
+        <option>Planned</option>
+        <option>On hold</option>
+        <option>Archived</option>
+      </select>
+    </div>
+    <button class="btn primary" style="width:100%;margin-top:4px;" onclick="saveProjectDetails()">Save details</button>
+
+    <hr />
+
+    <!-- Members -->
+    <div class="sectionLabel">Members</div>
+    <div id="memberList" class="memberList"></div>
+    <div class="addRow" style="margin-top:10px;">
+      <select id="empSelect"></select>
+      <input id="memberRoleInput" type="text" placeholder="Role (optional)" />
+      <button class="btn primary" onclick="addMember()">Add</button>
     </div>
 
-    <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+    <hr />
 
-    <div class="formRow">
-      <label for="employeeName">Add employee</label>
-      <input id="employeeName" placeholder="e.g., Nathan Moore" />
-      <button class="btn primary" onclick="addEmployee()">Add Employee</button>
+    <!-- Components -->
+    <div class="sectionLabel">Components</div>
+    <div id="componentList" class="chipList"></div>
+    <div class="addRow">
+      <input id="compInput" type="text" placeholder="e.g. Frontend" />
+      <button class="btn primary" onclick="addComponent()">Add</button>
     </div>
 
-    <hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+    <hr />
 
-    <div class="formRow">
-      <label>Remove employee</label>
-      <div id="employeeList" class="employeeList"></div>
+    <!-- Labels -->
+    <div class="sectionLabel">Labels</div>
+    <div id="labelList" class="chipList"></div>
+    <div class="addRow">
+      <input id="labelInput" type="text" placeholder="e.g. bug" />
+      <button class="btn primary" onclick="addLabel()">Add</button>
     </div>
 
     <div class="modalActions">
@@ -520,407 +611,348 @@ textarea{
 </div>
 
 <script>
-const LS_KEY = "beehive_projects_v1";
+  const API = "http://127.0.0.1:8000";
+  const token = localStorage.getItem("bh_token");
+  const userRole = localStorage.getItem("bh_user_role");
+  const userName = localStorage.getItem("bh_user_name");
 
-function nowStamp(){
-  const d = new Date();
-  return d.toLocaleString(undefined, {
-    year:"numeric",
-    month:"short",
-    day:"2-digit"
-  });
-}
+  // ── Auth guard ────────────────────────────────────────────────────────────
+  if (!token) window.location.href = "index.html";
 
-function loadProjects(){
-  try {
-    const projects = JSON.parse(localStorage.getItem(LS_KEY)) || [];
-
-    return projects.map(p => ({
-      ...p,
-      employees: Array.isArray(p.employees) ? p.employees : []
-    }));
-  } catch {
-    return [];
+  if (DEMO_MODE) {
+    document.getElementById("demo-banner").style.display = "block";
   }
-}
 
-function saveProjects(items){
-  localStorage.setItem(LS_KEY, JSON.stringify(items));
-}
+  document.getElementById("user-pill").textContent = userName || "User";
 
-function render(){
-  const q = (document.getElementById("q").value || "").trim().toLowerCase();
-  const rows = document.getElementById("rows");
+  // Show admin-only elements
+  if (userRole === "admin") {
+    document.getElementById("create-btn").style.display = "inline-flex";
+  }
 
-  const items = loadProjects()
-    .filter(p => {
-      const employees = Array.isArray(p.employees) ? p.employees.join(" ") : "";
-      return (p.name + " " + p.key + " " + p.owner + " " + employees).toLowerCase().includes(q);
-    })
-    .sort((a,b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
+  // ── API helper ─────────────────────────────────────────────────────────────
+  async function apiFetch(url, options = {}) {
+    if (DEMO_MODE) return mockResponse(url, options);
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        ...(options.headers || {}),
+      },
+    });
+    if (res.status === 401) { localStorage.clear(); window.location.href = "index.html"; }
+    return res;
+  }
 
-  rows.innerHTML = items.map(p => `
-    <tr>
-      <td>
-        <span class="badge">
-          <span class="k">${escapeHtml(p.key)}</span>
-          ${escapeHtml(p.key)}
-        </span>
-      </td>
+  // ── Load & render projects ─────────────────────────────────────────────────
+  let allProjects = [];
 
-      <td>
-        <a class="link" href="sprints.html" title="Go to Sprints">
-          ${escapeHtml(p.name)}
-        </a>
-      </td>
+  async function loadProjects() {
+    const tbody = document.getElementById("rows");
+    try {
+      const res = await apiFetch(`${API}/projects`);
+      if (!res.ok) { tbody.innerHTML = `<tr><td colspan="7" style="padding:20px;color:var(--muted);">Failed to load projects.</td></tr>`; return; }
+      allProjects = await res.json();
+      renderTable(allProjects);
+    } catch {
+      tbody.innerHTML = `<tr><td colspan="7" style="padding:20px;color:var(--muted);">Could not connect to the server.</td></tr>`;
+    }
+  }
 
-      <td>${escapeHtml(p.owner)}</td>
+  function renderTable(projects) {
+    const tbody = document.getElementById("rows");
+    const footer = document.getElementById("table-footer");
 
-      <td>
-        ${
-          p.employees && p.employees.length
-            ? escapeHtml(p.employees.join(", "))
-            : `<span class="small">No employees</span>`
-        }
-      </td>
+    if (projects.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="7" style="color:var(--muted);padding:18px;">No projects yet. Click <b style="color:var(--accent);">+ Create project</b> to get started.</td></tr>`;
+      footer.textContent = "";
+      return;
+    }
 
-      <td>${escapeHtml(p.status)}</td>
-      <td>${escapeHtml(p.updatedAt)}</td>
+    tbody.innerHTML = projects.map(p => {
+      const members = mockMembers[p.id] || [];
+      const statusKey = (p.status || "active").toLowerCase().replace(" ", "-");
 
-      <td>
+      const adminMenu = userRole === "admin" ? `
         <div class="projectMenu">
-          <button class="menuBtn" onclick="toggleProjectMenu(event, '${escapeHtml(p.key)}')">⋯</button>
-
-          <div class="menuDropdown" id="menu-${escapeHtml(p.key)}">
-            <button onclick="openSettings('${escapeHtml(p.key)}')">Settings</button>
-            <button class="dangerItem" onclick="confirmDeleteProject('${escapeHtml(p.key)}')">Delete</button>
+          <button class="menuBtn" onclick="toggleProjectMenu(event, ${p.id})">⋯</button>
+          <div class="menuDropdown" id="menu-${p.id}">
+            <button onclick="openSettings(${p.id})">Settings</button>
+            <button class="dangerItem" onclick="confirmDeleteProject(${p.id}, '${escapeHtml(p.name)}')">Delete</button>
           </div>
-        </div>
-      </td>
-    </tr>
-  `).join("");
+        </div>` : `<span style="color:var(--muted)">—</span>`;
 
-  if(items.length === 0){
-    rows.innerHTML = `
-      <tr>
-        <td colspan="7" style="color:#bdbdbd;padding:18px;">
-          No projects yet. Click <b style="color:#f7b500;">Create project</b> to get started.
-        </td>
-      </tr>
-    `;
+      return `
+        <tr>
+          <td>
+            <a class="link" href="sprints.html">${escapeHtml(p.name)}</a>
+          </td>
+          <td>${escapeHtml(p.description || "—")}</td>
+          <td>
+            ${members.length > 0
+              ? `<span class="badge">${members.length} member${members.length !== 1 ? "s" : ""}</span>`
+              : `<span class="small">None</span>`}
+          </td>
+          <td>${p.start_date || "—"}</td>
+          <td>${p.end_date || "—"}</td>
+          <td><span class="statusbadge ${statusKey}">${escapeHtml(p.status || "Active")}</span></td>
+          <td>${adminMenu}</td>
+        </tr>
+      `;
+    }).join("");
   }
-}
 
-function openCreateModal(show){
-  document.getElementById("modalBack").style.display = show ? "flex" : "none";
+  function filterTable() {
+    const q = (document.getElementById("q").value || "").trim().toLowerCase();
+    if (!q) { renderTable(allProjects); return; }
+    renderTable(allProjects.filter(p =>
+      (p.name || "").toLowerCase().includes(q) ||
+      (p.description || "").toLowerCase().includes(q) ||
+      (p.status || "").toLowerCase().includes(q)
+    ));
+  }
 
-  if(show){
+  // ── Create project ─────────────────────────────────────────────────────────
+  function openCreateModal() {
+    document.getElementById("pname").value = "";
+    document.getElementById("pdesc").value = "";
+    document.getElementById("pstart").value = "";
+    document.getElementById("pend").value = "";
+    document.getElementById("pstatus").value = "Active";
+    document.getElementById("createError").style.display = "none";
+    document.getElementById("modalBack").style.display = "flex";
     document.getElementById("pname").focus();
   }
-}
 
-async function createProject(){
-  const name = document.getElementById("pname").value.trim();
-  const key = document.getElementById("pkey").value.trim().toUpperCase();
-  const owner = document.getElementById("powner").value.trim() || "Unassigned";
-  const status = document.getElementById("pstatus").value;
-
-  if(!name){
-    alert("Project name is required.");
-    return;
+  function closeCreateModal() {
+    document.getElementById("modalBack").style.display = "none";
   }
 
-  if(key.length < 2){
-    alert("Project key should be 2–6 letters.");
-    return;
-  }
+  async function createProject() {
+    const errorEl = document.getElementById("createError");
+    errorEl.style.display = "none";
 
-  const items = loadProjects();
+    const name = document.getElementById("pname").value.trim();
+    if (!name) { errorEl.textContent = "Project name is required."; errorEl.style.display = "block"; return; }
 
-  if(items.some(p => p.key === key)){
-    alert("That project key already exists.");
-    return;
-  }
-
-  items.push({
-    key,
-    name,
-    owner,
-    employees: [],
-    status,
-    updatedAt: nowStamp()
-  });
-
-  saveProjects(items);
-
-  document.getElementById("pname").value = "";
-  document.getElementById("pkey").value = "";
-  document.getElementById("powner").value = "";
-  document.getElementById("pstatus").value = "Active";
-
-  openCreateModal(false);
-  render();
-
-  try{
     const payload = {
-      name: name,
-      description: `${key} • Owner: ${owner} • Status: ${status}`,
-      start_date: null,
-      end_date: null,
+      name,
+      description: document.getElementById("pdesc").value.trim() || null,
+      start_date: document.getElementById("pstart").value || null,
+      end_date: document.getElementById("pend").value || null,
+      status: document.getElementById("pstatus").value,
     };
 
-    const res = await fetch("http://127.0.0.1:8000/projects", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
+    try {
+      const res = await apiFetch(`${API}/projects`, { method: "POST", body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (res.ok) { closeCreateModal(); loadProjects(); }
+      else { errorEl.textContent = data.detail || "Failed to create project."; errorEl.style.display = "block"; }
+    } catch { errorEl.textContent = "Could not connect to the server."; errorEl.style.display = "block"; }
+  }
+
+  // ── Delete project ─────────────────────────────────────────────────────────
+  function toggleProjectMenu(event, id) {
+    event.stopPropagation();
+    document.querySelectorAll(".menuDropdown").forEach(m => { if (m.id !== `menu-${id}`) m.style.display = "none"; });
+    const menu = document.getElementById(`menu-${id}`);
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+  }
+
+  async function confirmDeleteProject(id, name) {
+    document.querySelectorAll(".menuDropdown").forEach(m => m.style.display = "none");
+    if (!confirm(`Delete "${name}"?\n\nAll sprints, tasks and data for this project will be removed.`)) return;
+    try {
+      const res = await apiFetch(`${API}/projects/${id}`, { method: "DELETE" });
+      if (res.ok) { loadProjects(); }
+      else { const d = await res.json(); alert(d.detail || "Failed to delete project."); }
+    } catch { alert("Could not connect to the server."); }
+  }
+
+  // ── Settings modal ─────────────────────────────────────────────────────────
+  let settingsProjectId = null;
+
+  async function openSettings(id) {
+    document.querySelectorAll(".menuDropdown").forEach(m => m.style.display = "none");
+    settingsProjectId = id;
+    const project = allProjects.find(p => p.id === id);
+    if (!project) return;
+
+    document.getElementById("settingsProjectId").value = id;
+    document.getElementById("settingsTitle").textContent = `Settings • ${project.name}`;
+    document.getElementById("newProjectName").value = project.name;
+    document.getElementById("newProjectDesc").value = project.description || "";
+    document.getElementById("newProjectStart").value = project.start_date || "";
+    document.getElementById("newProjectEnd").value = project.end_date || "";
+    document.getElementById("newProjectStatus").value = project.status || "Active";
+    document.getElementById("settingsError").style.display = "none";
+    document.getElementById("settingsSuccess").style.display = "none";
+
+    document.getElementById("settingsBack").style.display = "flex";
+    await loadSettingsData(id);
+  }
+
+  async function loadSettingsData(id) {
+    const [membersRes, compsRes, labelsRes, empsRes] = await Promise.all([
+      apiFetch(`${API}/projects/${id}/members`),
+      apiFetch(`${API}/projects/${id}/components`),
+      apiFetch(`${API}/projects/${id}/labels`),
+      apiFetch(`${API}/employees`),
+    ]);
+    const members = await membersRes.json();
+    const components = await compsRes.json();
+    const labels = await labelsRes.json();
+    const employees = await empsRes.json();
+
+    renderMemberList(members, id);
+    renderComponentList(components, id);
+    renderLabelList(labels, id);
+    renderEmployeeSelect(employees, members);
+  }
+
+  function renderMemberList(members, projectId) {
+    const el = document.getElementById("memberList");
+    if (members.length === 0) { el.innerHTML = `<div style="color:var(--muted);font-size:13px;">No members yet.</div>`; return; }
+    el.innerHTML = members.map(m => `
+      <div class="memberItem">
+        <div>
+          <span style="color:#fff;font-weight:700;">${escapeHtml(m.full_name || "Employee " + m.employee_id)}</span>
+          ${m.member_role ? `<span style="color:var(--muted);margin-left:8px;">${escapeHtml(m.member_role)}</span>` : ""}
+        </div>
+        <button class="btn small danger" onclick="removeMember(${projectId}, ${m.employee_id})">Remove</button>
+      </div>
+    `).join("");
+  }
+
+  function renderComponentList(components, projectId) {
+    const el = document.getElementById("componentList");
+    if (components.length === 0) { el.innerHTML = `<span style="color:var(--muted);font-size:13px;">No components yet.</span>`; return; }
+    el.innerHTML = components.map(c => `
+      <div class="chip">${escapeHtml(c.name)}<button onclick="removeComponent(${projectId}, ${c.id})">✕</button></div>
+    `).join("");
+  }
+
+  function renderLabelList(labels, projectId) {
+    const el = document.getElementById("labelList");
+    if (labels.length === 0) { el.innerHTML = `<span style="color:var(--muted);font-size:13px;">No labels yet.</span>`; return; }
+    el.innerHTML = labels.map(l => `
+      <div class="chip">${escapeHtml(l.name)}<button onclick="removeLabel(${projectId}, ${l.id})">✕</button></div>
+    `).join("");
+  }
+
+  function renderEmployeeSelect(employees, currentMembers) {
+    const memberIds = currentMembers.map(m => m.employee_id);
+    const available = employees.filter(e => !memberIds.includes(e.id));
+    const sel = document.getElementById("empSelect");
+    if (available.length === 0) { sel.innerHTML = `<option value="">All employees are members</option>`; return; }
+    sel.innerHTML = available.map(e => `<option value="${e.id}">${escapeHtml(e.full_name)}</option>`).join("");
+  }
+
+  function closeSettings() {
+    document.getElementById("settingsBack").style.display = "none";
+    settingsProjectId = null;
+    loadProjects();
+  }
+
+  async function saveProjectDetails() {
+    const errorEl = document.getElementById("settingsError");
+    const successEl = document.getElementById("settingsSuccess");
+    errorEl.style.display = "none";
+    successEl.style.display = "none";
+
+    const id = settingsProjectId;
+    const name = document.getElementById("newProjectName").value.trim();
+    if (!name) { errorEl.textContent = "Project name cannot be empty."; errorEl.style.display = "block"; return; }
+
+    const payload = {
+      name,
+      description: document.getElementById("newProjectDesc").value.trim() || null,
+      start_date: document.getElementById("newProjectStart").value || null,
+      end_date: document.getElementById("newProjectEnd").value || null,
+      status: document.getElementById("newProjectStatus").value,
+    };
+
+    try {
+      const res = await apiFetch(`${API}/projects/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (res.ok) {
+        successEl.textContent = "Project details saved.";
+        successEl.style.display = "block";
+        document.getElementById("settingsTitle").textContent = `Settings • ${name}`;
+        const idx = allProjects.findIndex(p => p.id === id);
+        if (idx !== -1) allProjects[idx] = { ...allProjects[idx], ...payload };
+        setTimeout(() => { successEl.style.display = "none"; }, 2000);
+      } else {
+        errorEl.textContent = data.detail || "Failed to save.";
+        errorEl.style.display = "block";
+      }
+    } catch { errorEl.textContent = "Could not connect to the server."; errorEl.style.display = "block"; }
+  }
+
+  // ── Members ────────────────────────────────────────────────────────────────
+  async function addMember() {
+    const empId = parseInt(document.getElementById("empSelect").value);
+    const memberRole = document.getElementById("memberRoleInput").value.trim() || null;
+    if (!empId) return;
+    const res = await apiFetch(`${API}/projects/${settingsProjectId}/members`, {
+      method: "POST", body: JSON.stringify({ employee_id: empId, member_role: memberRole }),
     });
-
-    if(res.ok){
-      const project = await res.json();
-      console.log("Created project in backend:", project);
-    } else {
-      console.warn("Project saved locally, but backend create failed.");
-    }
-  } catch(error){
-    console.warn("Project saved locally. Backend not running or unavailable.", error);
+    if (res.ok) { document.getElementById("memberRoleInput").value = ""; await loadSettingsData(settingsProjectId); }
   }
-}
 
-function toggleProjectMenu(event, key){
-  event.stopPropagation();
+  async function removeMember(projectId, empId) {
+    if (!confirm("Remove this member from the project?")) return;
+    const res = await apiFetch(`${API}/projects/${projectId}/members/${empId}`, { method: "DELETE" });
+    if (res.ok) await loadSettingsData(projectId);
+  }
 
-  document.querySelectorAll(".menuDropdown").forEach(menu => {
-    if(menu.id !== `menu-${key}`){
-      menu.style.display = "none";
-    }
+  // ── Components ─────────────────────────────────────────────────────────────
+  async function addComponent() {
+    const name = document.getElementById("compInput").value.trim();
+    if (!name) return;
+    const res = await apiFetch(`${API}/projects/${settingsProjectId}/components`, {
+      method: "POST", body: JSON.stringify({ project_id: settingsProjectId, name }),
+    });
+    if (res.ok) { document.getElementById("compInput").value = ""; await loadSettingsData(settingsProjectId); }
+  }
+
+  async function removeComponent(projectId, compId) {
+    const res = await apiFetch(`${API}/projects/${projectId}/components/${compId}`, { method: "DELETE" });
+    if (res.ok) await loadSettingsData(projectId);
+  }
+
+  // ── Labels ─────────────────────────────────────────────────────────────────
+  async function addLabel() {
+    const name = document.getElementById("labelInput").value.trim();
+    if (!name) return;
+    const res = await apiFetch(`${API}/projects/${settingsProjectId}/labels`, {
+      method: "POST", body: JSON.stringify({ project_id: settingsProjectId, name }),
+    });
+    if (res.ok) { document.getElementById("labelInput").value = ""; await loadSettingsData(settingsProjectId); }
+  }
+
+  async function removeLabel(projectId, labelId) {
+    const res = await apiFetch(`${API}/projects/${projectId}/labels/${labelId}`, { method: "DELETE" });
+    if (res.ok) await loadSettingsData(projectId);
+  }
+
+  // ── Logout ─────────────────────────────────────────────────────────────────
+  function logout() { localStorage.clear(); window.location.href = "index.html"; }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  function escapeHtml(s) {
+    return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
+  }
+
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".menuDropdown").forEach(m => m.style.display = "none");
   });
 
-  const menu = document.getElementById(`menu-${key}`);
-  menu.style.display = menu.style.display === "block" ? "none" : "block";
-}
+  document.getElementById("modalBack").addEventListener("click", e => { if (e.target.id === "modalBack") closeCreateModal(); });
+  document.getElementById("settingsBack").addEventListener("click", e => { if (e.target.id === "settingsBack") closeSettings(); });
 
-function openSettings(key){
-  document.querySelectorAll(".menuDropdown").forEach(menu => {
-    menu.style.display = "none";
-  });
-
-  const projects = loadProjects();
-  const project = projects.find(p => p.key === key);
-
-  if(!project){
-    alert("Project not found.");
-    return;
-  }
-
-  document.getElementById("settingsProjectKey").value = key;
-  document.getElementById("settingsTitle").textContent = `Settings • ${project.name}`;
-  document.getElementById("newProjectName").value = project.name;
-  document.getElementById("employeeName").value = "";
-
-  renderEmployeeList(project);
-
-  document.getElementById("settingsBack").style.display = "flex";
-}
-
-function closeSettings(){
-  document.getElementById("settingsBack").style.display = "none";
-}
-
-function changeProjectName(){
-  const key = document.getElementById("settingsProjectKey").value;
-  const newName = document.getElementById("newProjectName").value.trim();
-
-  if(!newName){
-    alert("Project name cannot be empty.");
-    return;
-  }
-
-  const projects = loadProjects();
-  const project = projects.find(p => p.key === key);
-
-  if(!project){
-    alert("Project not found.");
-    return;
-  }
-
-  project.name = newName;
-  project.updatedAt = nowStamp();
-
-  saveProjects(projects);
-  document.getElementById("settingsTitle").textContent = `Settings • ${project.name}`;
-  render();
-  alert("Project name updated.");
-}
-
-function addEmployee(){
-  const key = document.getElementById("settingsProjectKey").value;
-  const employeeName = document.getElementById("employeeName").value.trim();
-
-  if(!employeeName){
-    alert("Employee name is required.");
-    return;
-  }
-
-  const projects = loadProjects();
-  const project = projects.find(p => p.key === key);
-
-  if(!project){
-    alert("Project not found.");
-    return;
-  }
-
-  if(!Array.isArray(project.employees)){
-    project.employees = [];
-  }
-
-  const alreadyExists = project.employees.some(emp => {
-    return emp.toLowerCase() === employeeName.toLowerCase();
-  });
-
-  if(alreadyExists){
-    alert("That employee is already on this project.");
-    return;
-  }
-
-  project.employees.push(employeeName);
-  project.updatedAt = nowStamp();
-
-  saveProjects(projects);
-  document.getElementById("employeeName").value = "";
-
-  renderEmployeeList(project);
-  render();
-}
-
-function removeEmployee(employeeName){
-  const key = document.getElementById("settingsProjectKey").value;
-  const projects = loadProjects();
-  const project = projects.find(p => p.key === key);
-
-  if(!project){
-    alert("Project not found.");
-    return;
-  }
-
-  const confirmed = confirm(`Remove ${employeeName} from this project?`);
-  if(!confirmed) return;
-
-  project.employees = project.employees.filter(emp => emp !== employeeName);
-  project.updatedAt = nowStamp();
-
-  saveProjects(projects);
-  renderEmployeeList(project);
-  render();
-}
-
-function renderEmployeeList(project){
-  const employeeList = document.getElementById("employeeList");
-
-  if(!project.employees || project.employees.length === 0){
-    employeeList.innerHTML = `<div class="small">No employees assigned to this project.</div>`;
-    return;
-  }
-
-  employeeList.innerHTML = project.employees.map(emp => `
-    <div class="employeeItem">
-      <span>${escapeHtml(emp)}</span>
-      <button class="btn danger" onclick="removeEmployee('${escapeHtml(emp)}')">Remove</button>
-    </div>
-  `).join("");
-}
-
-function confirmDeleteProject(key){
-  document.querySelectorAll(".menuDropdown").forEach(menu => {
-    menu.style.display = "none";
-  });
-
-  const confirmed = confirm(
-    `Are you sure you want to delete this project?\n\nAll tickets/tasks associated with project ${key} will be removed.`
-  );
-
-  if(!confirmed) return;
-
-  deleteProject(key);
-}
-
-function deleteProject(key){
-  let projects = loadProjects();
-  projects = projects.filter(p => p.key !== key);
-  saveProjects(projects);
-
-  deleteTicketsForProject(key);
-
-  render();
-}
-
-function deleteTicketsForProject(projectKey){
-  const possibleTicketKeys = [
-    "beehive_tickets_v1",
-    "beehive_tasks_v1",
-    "beehive_sprints_v1",
-    "beehive_board_v1"
-  ];
-
-  possibleTicketKeys.forEach(storageKey => {
-    const raw = localStorage.getItem(storageKey);
-    if(!raw) return;
-
-    try{
-      const data = JSON.parse(raw);
-
-      if(Array.isArray(data)){
-        const filtered = data.filter(item => {
-          return item.projectKey !== projectKey &&
-                 item.project !== projectKey &&
-                 item.key !== projectKey;
-        });
-
-        localStorage.setItem(storageKey, JSON.stringify(filtered));
-      }
-
-      else if(typeof data === "object" && data !== null){
-        Object.keys(data).forEach(groupKey => {
-          if(Array.isArray(data[groupKey])){
-            data[groupKey] = data[groupKey].filter(item => {
-              return item.projectKey !== projectKey &&
-                     item.project !== projectKey &&
-                     item.key !== projectKey;
-            });
-          }
-        });
-
-        localStorage.setItem(storageKey, JSON.stringify(data));
-      }
-
-    } catch(error){
-      console.warn(`Could not clean tickets from ${storageKey}`, error);
-    }
-  });
-}
-
-function resetProjects(){
-  localStorage.removeItem("beehive_projects_v1");
-  render();
-}
-
-function escapeHtml(s){
-  return String(s ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
-document.getElementById("q").addEventListener("input", render);
-
-document.addEventListener("click", () => {
-  document.querySelectorAll(".menuDropdown").forEach(menu => {
-    menu.style.display = "none";
-  });
-});
-
-render();
+  loadProjects();
 </script>
 </body>
 </html>

@@ -4,7 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from . import models, schemas
 from .database import SessionLocal, engine
-from src.routers import tasks, employees, sprints, auth, setup
+from src.routers import tasks, employees, sprints, auth, setup, projects
 from src.security.roles import require_roles
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,9 +12,6 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="BeeHive TTM API")
 
-# Pull allowed origins from .env
-# Example .env entry:  ALLOWED_ORIGINS=http://127.0.0.1:5500
-# Multiple origins:    ALLOWED_ORIGINS=http://127.0.0.1:5500,http://localhost:5500
 ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://127.0.0.1:5500").split(",")
 
 app.add_middleware(
@@ -25,12 +22,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routers
-app.include_router(setup.router)       
+# Routers — setup first since it requires no auth
+app.include_router(setup.router)
 app.include_router(auth.router)
+app.include_router(projects.router)
 app.include_router(tasks.router)
 app.include_router(employees.router)
 app.include_router(sprints.router)
+
 
 def get_db():
     db = SessionLocal()
@@ -45,63 +44,6 @@ def home():
     return {"message": "TTM API is running"}
 
 
-# ── Projects ──────────────────────────────────────────────────────────────────
-
-@app.post("/projects", response_model=schemas.ProjectRead, status_code=status.HTTP_201_CREATED)
-def create_project(
-    project_in: schemas.ProjectCreate,
-    db: Session = Depends(get_db),
-    _=Depends(require_roles("admin")),
-):
-    project = models.Project(**project_in.model_dump())
-    db.add(project)
-    db.commit()
-    db.refresh(project)
-    return project
-
-
-@app.put("/projects/{project_id}", response_model=schemas.ProjectRead)
-@app.patch("/projects/{project_id}", response_model=schemas.ProjectRead)
-def update_project(
-    project_id: int,
-    project_in: schemas.ProjectUpdate,
-    db: Session = Depends(get_db),
-    _=Depends(require_roles("admin")),
-):
-    project = db.query(models.Project).filter(models.Project.id == project_id).first()
-    if not project:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
-
-    update_data = project_in.model_dump(exclude_unset=True)
-    for field, value in update_data.items():
-        setattr(project, field, value)
-
-    if project.start_date and project.end_date and project.end_date < project.start_date:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="end_date cannot be before start_date",
-        )
-
-    db.commit()
-    db.refresh(project)
-    return project
-
-
-@app.delete("/projects/{project_id}", status_code=status.HTTP_200_OK)
-def delete_project(
-    project_id: int,
-    db: Session = Depends(get_db),
-    _=Depends(require_roles("admin")),
-):
-    project = db.query(models.Project).filter(models.Project.id == project_id).first()
-    if not project:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
-
-    db.delete(project)
-    db.commit()
-    return {"message": "Project deleted successfully"}
-
-
 # ── Employee Skills ───────────────────────────────────────────────────────────
 
 @app.get("/employees/{employee_id}/skills", response_model=list[schemas.EmployeeSkillRead])
@@ -113,17 +55,10 @@ def list_employee_skills(
     employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
     if not employee:
         raise HTTPException(status_code=404, detail="Employee not found")
-
-    return db.query(models.EmployeeSkill).filter(
-        models.EmployeeSkill.employee_id == employee_id
-    ).all()
+    return db.query(models.EmployeeSkill).filter(models.EmployeeSkill.employee_id == employee_id).all()
 
 
-@app.post(
-    "/employees/{employee_id}/skills",
-    response_model=schemas.EmployeeSkillRead,
-    status_code=status.HTTP_201_CREATED,
-)
+@app.post("/employees/{employee_id}/skills", response_model=schemas.EmployeeSkillRead, status_code=status.HTTP_201_CREATED)
 def add_employee_skill(
     employee_id: int,
     skill_in: schemas.EmployeeSkillCreate,
@@ -187,19 +122,32 @@ def list_task_comments(
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
 
-    return (
+    comments = (
         db.query(models.Comment)
         .filter(models.Comment.task_id == task_id)
         .order_by(models.Comment.created_at.asc())
         .all()
     )
 
+    # Enrich each comment with the employee name
+    result = []
+    for comment in comments:
+        employee = db.query(models.Employee).filter(
+            models.Employee.id == comment.employee_id
+        ).first()
+        comment_dict = {
+            "id": comment.id,
+            "task_id": comment.task_id,
+            "employee_id": comment.employee_id,
+            "comment_text": comment.comment_text,
+            "created_at": comment.created_at,
+            "employee_name": employee.full_name if employee else "Unknown",
+        }
+        result.append(comment_dict)
 
-@app.post(
-    "/tasks/{task_id}/comments",
-    response_model=schemas.CommentRead,
-    status_code=status.HTTP_201_CREATED,
-)
+    return result
+
+@app.post("/tasks/{task_id}/comments", response_model=schemas.CommentRead, status_code=status.HTTP_201_CREATED)
 def add_task_comment(
     task_id: int,
     comment_in: schemas.CommentCreate,
@@ -234,7 +182,6 @@ def delete_comment(
     comment = db.query(models.Comment).filter(models.Comment.id == comment_id).first()
     if not comment:
         raise HTTPException(status_code=404, detail="Comment not found")
-
     db.delete(comment)
     db.commit()
     return {"message": "Comment deleted successfully"}

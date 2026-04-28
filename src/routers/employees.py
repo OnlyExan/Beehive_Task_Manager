@@ -25,7 +25,6 @@ def create_employee(
     db: Session = Depends(get_db),
     _=Depends(require_roles("admin")),
 ):
-    # Validate role is one of the allowed values
     if employee_in.role not in VALID_ROLES:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -34,10 +33,7 @@ def create_employee(
 
     existing = db.query(models.Employee).filter(models.Employee.email == employee_in.email).first()
     if existing:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email already exists",
-        )
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already exists")
 
     employee = models.Employee(
         full_name=employee_in.full_name,
@@ -78,7 +74,6 @@ def update_employee(
     db: Session = Depends(get_db),
     _=Depends(require_roles("admin")),
 ):
-    # Validate role if it's being changed
     if employee_in.role is not None and employee_in.role not in VALID_ROLES:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -87,10 +82,7 @@ def update_employee(
 
     employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
     if not employee:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Employee not found",
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employee not found")
 
     if employee_in.full_name is not None:
         employee.full_name = employee_in.full_name
@@ -103,6 +95,7 @@ def update_employee(
     db.refresh(employee)
     return employee
 
+
 @router.delete("/{employee_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_employee(
     employee_id: int,
@@ -111,6 +104,6 @@ def delete_employee(
 ):
     employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
     if not employee:
-        raise HTTPException(status_code=404, detail="Employee not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Employee not found")
     db.delete(employee)
     db.commit()

@@ -40,449 +40,397 @@ body{
   border-right:1px solid var(--border);
   padding:18px 14px;
 }
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 10px 16px;
-}
+.brand{display:flex;align-items:center;gap:10px;padding:10px 10px 16px;}
 .logo{
-  width:38px;
-  height:38px;
-  border-radius:14px;
+  width:38px;height:38px;border-radius:14px;
   background: radial-gradient(circle at 30% 30%, #ffd66b, var(--accent));
-  display:grid;
-  place-items:center;
-  color:#1a1300;
-  font-weight:900;
+  display:grid;place-items:center;color:#1a1300;font-weight:900;
 }
-.small{
-  font-size:12px;
-  color:var(--muted);
-}
-.nav{
-  display:grid;
-  gap:8px;
-  padding:8px;
-}
+.small{font-size:12px;color:var(--muted);}
+.nav{display:grid;gap:8px;padding:8px;}
 .nav a{
-  text-decoration:none;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:10px 12px;
-  border-radius:14px;
-  color:var(--muted);
-  border:1px solid transparent;
+  text-decoration:none;display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:14px;color:var(--muted);border:1px solid transparent;
 }
-.nav a:hover{
-  background: var(--card);
-  border-color: var(--border);
-  color: var(--text);
-}
-.nav a.active{
-  background: var(--accentSoft);
-  border-color: rgba(247,181,0,.35);
-  color: var(--text);
-}
+.nav a:hover{background:var(--card);border-color:var(--border);color:var(--text);}
+.nav a.active{background:var(--accentSoft);border-color:rgba(247,181,0,.35);color:var(--text);}
 .nav .dot{
-  width:10px;
-  height:10px;
-  border-radius:999px;
-  background:var(--accent);
-  box-shadow: 0 0 0 4px rgba(247,181,0,.12);
+  width:10px;height:10px;border-radius:999px;
+  background:var(--accent);box-shadow:0 0 0 4px rgba(247,181,0,.12);
 }
-.main{
-  display:flex;
-  flex-direction:column;
+.demo-banner{
+  background:rgba(247,181,0,.12);
+  border-bottom:1px solid rgba(247,181,0,.35);
+  color:var(--accent);text-align:center;
+  padding:8px 16px;font-size:13px;font-weight:700;
 }
+.main{display:flex;flex-direction:column;}
 .topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:16px 18px;
-  border-bottom:1px solid var(--border);
-  background: rgba(0,0,0,.55);
-  backdrop-filter: blur(10px);
-  position:sticky;
-  top:0;
-  gap:12px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px;border-bottom:1px solid var(--border);
+  background: rgba(0,0,0,.55);backdrop-filter: blur(10px);
+  position:sticky;top:0;gap:12px;flex-wrap:wrap;
 }
-.leftTop{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
+.leftTop{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
 .select{
-  background: var(--card);
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:10px 12px;
-  border-radius:14px;
-  min-width:170px;
+  background:var(--card);border:1px solid var(--border);
+  color:var(--text);padding:10px 12px;border-radius:14px;min-width:170px;
 }
 .btn{
-  border:1px solid var(--border);
-  background: var(--card);
-  color: var(--text);
-  padding:10px 12px;
-  border-radius:14px;
-  cursor:pointer;
-  font-weight:700;
+  border:1px solid var(--border);background:var(--card);
+  color:var(--text);padding:10px 12px;border-radius:14px;
+  cursor:pointer;font-weight:700;
 }
-.btn:hover{
-  border-color: rgba(247,181,0,.35);
-}
+.btn:hover{border-color:rgba(247,181,0,.35);}
 .btn.primary{
-  background: linear-gradient(180deg, #ffd66b, var(--accent));
-  border:0;
-  color:#1a1300;
+  background:linear-gradient(180deg,#ffd66b,var(--accent));
+  border:0;color:#1a1300;
 }
 .btn.activeView{
-  background: var(--accentSoft);
-  border-color: rgba(247,181,0,.35);
-  color: var(--accent);
+  background:var(--accentSoft);
+  border-color:rgba(247,181,0,.35);color:var(--accent);
 }
+.btn.danger{border-color:#ff6b6b;color:#ff6b6b;}
+.btn.danger:hover{background:rgba(255,107,107,.12);}
+.btn.small{padding:6px 10px;font-size:12px;}
 .search{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  background: var(--card);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:10px 12px;
-  width:min(420px, 100%);
+  display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:10px 12px;width:min(420px,100%);
 }
-.search input{
-  width:100%;
-  border:0;
-  outline:0;
-  background:transparent;
-  color:var(--text);
-  font-size:14px;
-}
+.search input{width:100%;border:0;outline:0;background:transparent;color:var(--text);font-size:14px;}
 .userpill{
-  border:1px solid var(--border);
-  background: var(--card);
-  padding:10px 12px;
-  border-radius:999px;
-  color: var(--muted);
-  font-size:13px;
+  border:1px solid var(--border);background:var(--card);
+  padding:10px 12px;border-radius:999px;color:var(--muted);font-size:13px;
 }
-.content{
-  padding:18px;
-}
-.hgroup h1{
-  margin:0;
-  color:var(--accent);
-  font-size:22px;
-}
-.hgroup p{
-  margin:6px 0 0;
-  color:var(--muted);
-}
-.sprintInfo{
-  margin-top:12px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
+.content{padding:18px;}
+.hgroup h1{margin:0;color:var(--accent);font-size:22px;}
+.hgroup p{margin:6px 0 0;color:var(--muted);}
+.sprintInfo{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;}
 .infoChip{
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background:var(--card);
-  color:var(--muted);
-  font-size:13px;
+  padding:8px 12px;border-radius:999px;
+  border:1px solid var(--border);background:var(--card);
+  color:var(--muted);font-size:13px;
 }
 .emptyState{
-  margin-top:16px;
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:20px;
-  color:var(--muted);
+  margin-top:16px;background:var(--card);
+  border:1px solid var(--border);border-radius:16px;
+  padding:20px;color:var(--muted);
 }
-.boardLayout{
-  margin-top:14px;
-  display:grid;
-  gap:16px;
-}
+.boardLayout{margin-top:14px;display:grid;gap:16px;}
 .board{
   display:grid;
   grid-template-columns: repeat(4, minmax(220px, 1fr));
   gap:12px;
 }
-@media (max-width: 1100px){
-  .board{grid-template-columns: repeat(2, minmax(220px, 1fr))}
-}
-@media (max-width: 640px){
-  .board{grid-template-columns: 1fr}
-}
+@media (max-width: 1100px){.board{grid-template-columns: repeat(2, minmax(220px,1fr))}}
+@media (max-width: 640px){.board{grid-template-columns: 1fr}}
 .col{
-  background: var(--card);
-  border:1px solid var(--border);
-  border-radius: var(--radius);
-  overflow:hidden;
-  box-shadow: var(--shadow);
-  min-height: 360px;
-  display:flex;
-  flex-direction:column;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  box-shadow:var(--shadow);min-height:360px;display:flex;flex-direction:column;
 }
 .colHead{
-  padding:12px 14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background: rgba(255,255,255,.02);
-  border-bottom:1px solid var(--border);
+  padding:12px 14px;display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,.02);border-bottom:1px solid var(--border);
 }
-.colHead .title{
-  font-weight:900;
-}
+.colHead .title{font-weight:900;}
 .count{
-  font-size:12px;
-  color: var(--muted);
-  padding:6px 10px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background: rgba(0,0,0,.25);
+  font-size:12px;color:var(--muted);padding:6px 10px;
+  border-radius:999px;border:1px solid var(--border);background:rgba(0,0,0,.25);
 }
 .colBody{
-  padding:12px;
-  display:grid;
-  gap:10px;
-  align-content:start;
-  flex:1;
-  min-height:200px;
+  padding:12px;display:grid;gap:10px;align-content:start;flex:1;min-height:200px;
 }
 .backlogSection{
-  background: var(--card);
-  border:1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow:hidden;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;
 }
 .backlogHead{
-  padding:14px 16px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  background: rgba(255,255,255,.02);
-  border-bottom:1px solid var(--border);
+  padding:14px 16px;display:flex;justify-content:space-between;align-items:center;
+  background:rgba(255,255,255,.02);border-bottom:1px solid var(--border);
 }
-.backlogHead .title{
-  font-weight:900;
-  font-size:18px;
-}
+.backlogHead .title{font-weight:900;font-size:18px;}
 .backlogBody{
-  padding:14px;
-  display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap:12px;
-  min-height:220px;
+  padding:14px;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:12px;min-height:220px;
 }
-.dropzone{
-  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
-}
+.dropzone{transition:border-color .15s ease,background .15s ease,box-shadow .15s ease;}
 .dropzone.dragOver{
-  border-color: rgba(247,181,0,.65);
-  background: rgba(247,181,0,.06);
-  box-shadow: inset 0 0 0 1px rgba(247,181,0,.2);
+  border-color:rgba(247,181,0,.65);
+  background:rgba(247,181,0,.06);
+  box-shadow:inset 0 0 0 1px rgba(247,181,0,.2);
 }
 .ticket{
-  background: var(--card2);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:10px;
-  cursor:grab;
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:14px;padding:10px;cursor:grab;
 }
-.ticket:active{
-  cursor:grabbing;
+.ticket:active{cursor:grabbing;}
+.ticket.dragging{opacity:.45;border-color:rgba(247,181,0,.5);}
+.ticket:hover{border-color:rgba(247,181,0,.35);}
+.ticket.clickable,.taskRow.clickable{cursor:pointer;}
+.ticket.clickable:hover,.taskRow.clickable:hover{
+  border-color:rgba(247,181,0,.45);
+  box-shadow:0 0 0 1px rgba(247,181,0,.12);
 }
-.ticket.dragging{
-  opacity:.45;
-  border-color: rgba(247,181,0,.5);
-}
-.ticket:hover{
-  border-color: rgba(247,181,0,.35);
-}
-.ticket.clickable,
-.taskRow.clickable{
-  cursor:pointer;
-}
-.ticket.clickable:hover,
-.taskRow.clickable:hover{
-  border-color: rgba(247,181,0,.45);
-  box-shadow: 0 0 0 1px rgba(247,181,0,.12);
-}
-.tTop{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:flex-start;
-}
-.key{
-  font-weight:900;
-  color: var(--accent);
-  font-size:12px;
-}
-.pri{
-  font-size:12px;
-  color: var(--muted);
-}
-.summary{
-  margin:6px 0 10px;
-  color: var(--text);
-  font-weight:800;
-}
+.tTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;}
+.key{font-weight:900;color:var(--accent);font-size:12px;}
+.pri{font-size:12px;color:var(--muted);}
+.summary{margin:6px 0 10px;color:var(--text);font-weight:800;}
 .meta{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  font-size:12px;
-  color: var(--muted);
-  flex-wrap:wrap;
+  display:flex;justify-content:space-between;align-items:center;
+  gap:10px;font-size:12px;color:var(--muted);flex-wrap:wrap;
 }
 .tag{
-  padding:4px 8px;
-  border-radius:999px;
-  border:1px solid rgba(247,181,0,.35);
-  background: var(--accentSoft);
-  color: var(--accent);
-  font-weight:800;
+  padding:4px 8px;border-radius:999px;
+  border:1px solid rgba(247,181,0,.35);background:var(--accentSoft);
+  color:var(--accent);font-weight:800;
 }
-.assignee{
-  padding:4px 8px;
-  border-radius:999px;
-  border:1px solid var(--border);
-  background:#0c0c0c;
-  color:var(--text);
-  font-weight:700;
-}
-.ticketActions{
-  display:flex;
-  gap:6px;
-}
+.ticketActions{display:flex;gap:6px;}
 .iconBtn{
-  border:1px solid var(--border);
-  background:#0c0c0c;
-  color:var(--text);
-  border-radius:10px;
-  padding:6px 8px;
-  cursor:pointer;
+  border:1px solid var(--border);background:#0c0c0c;
+  color:var(--text);border-radius:10px;padding:6px 8px;cursor:pointer;
 }
-.iconBtn:hover{
-  border-color: rgba(247,181,0,.35);
-}
-.tasksList{
-  margin-top:14px;
-  display:grid;
-  gap:12px;
-}
+.iconBtn:hover{border-color:rgba(247,181,0,.35);}
+.tasksList{margin-top:14px;display:grid;gap:12px;}
 .taskRow{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:16px;
-  box-shadow: var(--shadow);
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;padding:16px;box-shadow:var(--shadow);
 }
-.taskTop{
-  display:flex;
-  justify-content:space-between;
-  gap:12px;
-  flex-wrap:wrap;
-  align-items:center;
-}
-.taskTitle{
-  font-weight:900;
-  color:var(--text);
-  margin-top:8px;
-}
-.taskMeta{
-  margin-top:10px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  color:var(--muted);
-  font-size:13px;
-}
+.taskTop{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;}
+.taskTitle{font-weight:900;color:var(--text);margin-top:8px;}
+.taskMeta{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px;}
 .modalBack{
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,.65);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
+  position:fixed;inset:0;background:rgba(0,0,0,.65);
+  display:none;align-items:center;justify-content:center;padding:18px;z-index:100;
 }
 .modal{
-  width:min(680px, 100%);
-  background: var(--card2);
-  border:1px solid var(--border);
-  border-radius:18px;
-  box-shadow: var(--shadow);
-  padding:16px;
+  width:min(680px,100%);background:var(--card2);
+  border:1px solid var(--border);border-radius:18px;
+  box-shadow:var(--shadow);padding:16px;
+  max-height:90vh;overflow-y:auto;
 }
-.modal h2{
-  margin:6px 0 10px;
-  color:var(--accent);
+.modal h2{margin:6px 0 10px;color:var(--accent);}
+.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media (max-width: 640px){.formGrid{grid-template-columns:1fr}}
+.formRow{display:grid;gap:6px;}
+label{color:var(--muted);font-size:13px;}
+input,textarea,select{
+  width:100%;padding:10px 12px;border-radius:14px;
+  border:1px solid var(--border);background:#0c0c0c;
+  color:var(--text);outline:none;
 }
-.formGrid{
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:10px;
+textarea{min-height:80px;resize:vertical;}
+.modalActions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px;}
+.errorMsg{
+  padding:10px 14px;border-radius:10px;
+  background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.35);
+  color:#ff6b6b;font-size:13px;margin-bottom:10px;display:none;
 }
-@media (max-width: 640px){
-  .formGrid{grid-template-columns: 1fr}
+.sectionLabel{
+  font-size:11px;font-weight:800;text-transform:uppercase;
+  letter-spacing:.8px;color:var(--muted);margin:16px 0 8px;
 }
-.formRow{
-  display:grid;
-  gap:6px;
-}
-label{
-  color: var(--muted);
-  font-size:13px;
-}
-input, textarea, select{
-  width:100%;
-  padding:10px 12px;
-  border-radius:14px;
-  border:1px solid var(--border);
-  background: #0c0c0c;
-  color: var(--text);
-  outline: none;
-}
-textarea{
-  min-height:90px;
-  resize:vertical;
-}
-.modalActions{
-  display:flex;
-  justify-content:flex-end;
-  gap:10px;
-  margin-top:12px;
-}
-.taskDetailBody{
-  margin-top:10px;
-  color:var(--text);
-  line-height:1.5;
-  white-space:pre-wrap;
-}
+hr{border:0;border-top:1px solid var(--border);margin:14px 0;}
+
+/* Task detail specific */
 .taskDetailMeta{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:12px;
-  color:var(--muted);
-  font-size:13px;
+  display:flex;gap:10px;flex-wrap:wrap;
+  margin-bottom:12px;font-size:13px;color:var(--muted);
+}
+.taskDetailDesc{
+  background:#0c0c0c;border:1px solid var(--border);
+  border-radius:12px;padding:12px;
+  color:var(--muted);font-size:14px;line-height:1.6;
+  white-space:pre-wrap;min-height:60px;
+}
+.taskDetailDesc.empty{font-style:italic;}
+
+/* Comments */
+.commentList{display:grid;gap:10px;margin-top:8px;}
+.commentItem{
+  background:#0c0c0c;border:1px solid var(--border);
+  border-radius:12px;padding:12px;
+}
+.commentHeader{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:6px;font-size:12px;color:var(--muted);
+}
+.commentAuthor{font-weight:700;color:var(--accent);}
+.commentText{font-size:14px;line-height:1.5;color:var(--text);}
+.commentEmpty{color:var(--muted);font-size:13px;font-style:italic;}
+.commentInputRow{display:flex;gap:8px;margin-top:10px;}
+.commentInputRow textarea{
+  flex:1;min-height:60px;resize:vertical;
 }
 </style>
 </head>
 
 <body>
+
+<script>
+// ── DEMO MODE ───────────────────────────────────────────────────────────────
+const DEMO_MODE = false;
+
+const DEMO_USER = {
+  token: "demo_token",
+  id: 1,
+  full_name: "Demo Admin",
+  role: "admin",
+};
+
+if (DEMO_MODE) {
+  localStorage.setItem("bh_token", DEMO_USER.token);
+  localStorage.setItem("bh_user_id", DEMO_USER.id);
+  localStorage.setItem("bh_user_name", DEMO_USER.full_name);
+  localStorage.setItem("bh_user_role", DEMO_USER.role);
+}
+
+// ── Mock data ────────────────────────────────────────────────────────────────
+let mockProjects = [
+  { id: 1, name: "Beehive App", description: "Main task manager", start_date: "2026-01-01", end_date: "2026-12-31", status: "Active" },
+  { id: 2, name: "Marketing Site", description: "Company landing page", start_date: null, end_date: null, status: "Planned" },
+];
+
+let mockSprints = [
+  { id: 1, project_id: 1, name: "Sprint 1", start_date: "2026-01-01", end_date: "2026-01-14" },
+  { id: 2, project_id: 1, name: "Sprint 2", start_date: "2026-01-15", end_date: "2026-01-28" },
+  { id: 3, project_id: 2, name: "Sprint 1", start_date: "2026-02-01", end_date: "2026-02-14" },
+];
+let mockNextSprintId = 4;
+
+let mockTasks = [
+  { id: 1, project_id: 1, sprint_id: 1, title: "Build login page", status: "Done", priority: "High", description: "Create the login form with email and password fields, connect to the auth API.", components_id: null },
+  { id: 2, project_id: 1, sprint_id: 1, title: "Set up database", status: "In-Progress", priority: "High", description: "Configure PostgreSQL, create tables, set up migrations.", components_id: null },
+  { id: 3, project_id: 1, sprint_id: 1, title: "Write unit tests", status: "To-Do", priority: "Medium", description: null, components_id: null },
+  { id: 4, project_id: 1, sprint_id: 1, title: "Fix nav bug", status: "Review", priority: "Low", description: "Sidebar nav link flickers on hover in Firefox.", components_id: null },
+  { id: 5, project_id: 1, sprint_id: null, title: "Update docs", status: "To-Do", priority: "Low", description: "Update the README with setup instructions.", components_id: null },
+  { id: 6, project_id: 2, sprint_id: 3, title: "Design homepage", status: "To-Do", priority: "High", description: null, components_id: null },
+];
+let mockNextTaskId = 7;
+
+let mockComments = {
+  1: [
+    { id: 1, task_id: 1, employee_id: 1, employee_name: "Demo Admin", comment_text: "Login form is done, waiting for backend review.", created_at: "2026-01-05T10:00:00Z" },
+    { id: 2, task_id: 1, employee_id: 2, employee_name: "Alice Dev", comment_text: "Looks good, approved!", created_at: "2026-01-06T14:30:00Z" },
+  ],
+  2: [
+    { id: 3, task_id: 2, employee_id: 1, employee_name: "Demo Admin", comment_text: "Still working on the migrations.", created_at: "2026-01-07T09:00:00Z" }
+  ],
+};
+let mockNextCommentId = 4;
+
+function mockResponse(url, options = {}) {
+  const method = (options.method || "GET").toUpperCase();
+  const body = options.body ? JSON.parse(options.body) : null;
+
+  // DELETE /comments/{id}
+  if (method === "DELETE" && url.match(/\/comments\/\d+$/)) {
+    const id = parseInt(url.split("/").pop());
+    Object.keys(mockComments).forEach(taskId => {
+      mockComments[taskId] = mockComments[taskId].filter(c => c.id !== id);
+    });
+    return fakeOk({}, 200);
+  }
+
+  // POST /tasks/{id}/comments
+  if (method === "POST" && url.match(/\/tasks\/\d+\/comments$/)) {
+    const taskId = parseInt(url.split("/").slice(-2)[0]);
+    const newComment = {
+      id: mockNextCommentId++,
+      task_id: taskId,
+      employee_id: body.employee_id,
+      employee_name: body.employee_name,
+      comment_text: body.comment_text,
+      created_at: new Date().toISOString(),
+    };
+    if (!mockComments[taskId]) mockComments[taskId] = [];
+    mockComments[taskId].push(newComment);
+    return fakeOk(newComment, 201);
+  }
+
+  // GET /tasks/{id}/comments
+  if (method === "GET" && url.match(/\/tasks\/\d+\/comments$/)) {
+    const taskId = parseInt(url.split("/").slice(-2)[0]);
+    return fakeOk(mockComments[taskId] || []);
+  }
+
+  // PATCH/PUT /tasks/{id}
+  if ((method === "PATCH" || method === "PUT") && url.match(/\/tasks\/\d+$/)) {
+    const id = parseInt(url.split("/").pop());
+    const idx = mockTasks.findIndex(t => t.id === id);
+    if (idx !== -1) mockTasks[idx] = { ...mockTasks[idx], ...body };
+    return fakeOk(mockTasks[idx]);
+  }
+
+  // DELETE /tasks/{id}
+  if (method === "DELETE" && url.match(/\/tasks\/\d+$/)) {
+    const id = parseInt(url.split("/").pop());
+    mockTasks = mockTasks.filter(t => t.id !== id);
+    return fakeOk({}, 204);
+  }
+
+  // POST /tasks
+  if (method === "POST" && url.endsWith("/tasks")) {
+    const newTask = { id: mockNextTaskId++, status: "To-Do", priority: "Medium", description: null, components_id: null, ...body };
+    mockTasks.push(newTask);
+    return fakeOk(newTask, 201);
+  }
+
+  // GET /tasks
+  if (method === "GET" && url.includes("/tasks")) {
+    const params = new URLSearchParams(url.split("?")[1] || "");
+    let tasks = [...mockTasks];
+    if (params.get("project_id")) tasks = tasks.filter(t => t.project_id === parseInt(params.get("project_id")));
+    if (params.get("sprint_id")) tasks = tasks.filter(t => t.sprint_id === parseInt(params.get("sprint_id")));
+    if (params.get("search")) {
+      const q = params.get("search").toLowerCase();
+      tasks = tasks.filter(t => t.title.toLowerCase().includes(q) || (t.status || "").toLowerCase().includes(q));
+    }
+    return fakeOk(tasks);
+  }
+
+  // DELETE /sprints/{id}
+  if (method === "DELETE" && url.match(/\/sprints\/\d+$/)) {
+    const id = parseInt(url.split("/").pop());
+    mockSprints = mockSprints.filter(s => s.id !== id);
+    mockTasks = mockTasks.map(t => t.sprint_id === id ? { ...t, sprint_id: null } : t);
+    return fakeOk({}, 204);
+  }
+
+  // POST /sprints
+  if (method === "POST" && url.endsWith("/sprints")) {
+    const newSprint = { id: mockNextSprintId++, ...body };
+    mockSprints.push(newSprint);
+    return fakeOk(newSprint, 201);
+  }
+
+  // GET /sprints
+  if (method === "GET" && url.includes("/sprints")) {
+    const params = new URLSearchParams(url.split("?")[1] || "");
+    let sprints = [...mockSprints];
+    if (params.get("project_id")) sprints = sprints.filter(s => s.project_id === parseInt(params.get("project_id")));
+    return fakeOk(sprints);
+  }
+
+  // GET /projects
+  if (method === "GET" && url.endsWith("/projects")) {
+    return fakeOk([...mockProjects]);
+  }
+
+  return fakeOk({});
+}
+
+function fakeOk(data, status = 200) {
+  return { ok: status < 400, status, json: async () => data };
+}
+</script>
+
+<div class="demo-banner" id="demo-banner" style="display:none;">
+  Demo mode — running without API. Set DEMO_MODE = false to connect to the backend.
+</div>
+
 <div class="app">
   <aside class="sidebar">
     <div class="brand">
@@ -492,12 +440,11 @@ textarea{
         <div class="small">Sprints & Tasks</div>
       </div>
     </div>
-
     <nav class="nav">
       <a href="dashboard.html"><span class="dot"></span>Dashboard</a>
       <a href="projects.html"><span class="dot"></span>Projects</a>
       <a class="active" href="sprints.html"><span class="dot"></span>Sprints</a>
-      <a href="index.html"><span class="dot"></span>Logout</a>
+      <a href="#" onclick="logout()"><span class="dot"></span>Logout</a>
     </nav>
   </aside>
 
@@ -513,13 +460,14 @@ textarea{
 
         <button class="btn" onclick="openSprintModal(true)">+ Create sprint</button>
         <button class="btn primary" onclick="openTicketModal(true)">+ Add ticket</button>
+        <button id="deleteSprintBtn" class="btn danger admin-only" onclick="confirmDeleteSprint()" style="display:none;">Delete sprint</button>
       </div>
 
-      <div style="display:flex; align-items:center; gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;">
         <div class="search">
           🔎 <input id="q" type="text" placeholder="Search tickets" />
         </div>
-        <div class="userpill">Signed in • Guest</div>
+        <div class="userpill" id="user-pill">Loading...</div>
       </div>
     </header>
 
@@ -536,30 +484,30 @@ textarea{
       </div>
 
       <div id="emptyProjects" class="emptyState" style="display:none;">
-        No projects found yet. Create a project first.
+        No projects found yet. <a href="projects.html" style="color:var(--accent);">Create a project first.</a>
       </div>
 
       <div id="emptySprints" class="emptyState" style="display:none;">
-        This project has no sprints yet. Create one to get started.
+        This project has no sprints yet. Click <b style="color:var(--accent);">+ Create sprint</b> to get started.
       </div>
 
       <section id="boardWrap" class="boardLayout" style="display:none;">
         <div class="board">
           <div class="col">
             <div class="colHead"><div class="title">To-Do</div><div class="count" id="c_todo">0</div></div>
-            <div class="colBody dropzone" id="todo" data-state="todo"></div>
+            <div class="colBody dropzone" id="col_todo" data-status="To-Do"></div>
           </div>
           <div class="col">
             <div class="colHead"><div class="title">In Progress</div><div class="count" id="c_progress">0</div></div>
-            <div class="colBody dropzone" id="progress" data-state="progress"></div>
+            <div class="colBody dropzone" id="col_progress" data-status="In-Progress"></div>
           </div>
           <div class="col">
             <div class="colHead"><div class="title">Review</div><div class="count" id="c_review">0</div></div>
-            <div class="colBody dropzone" id="review" data-state="review"></div>
+            <div class="colBody dropzone" id="col_review" data-status="Review"></div>
           </div>
           <div class="col">
             <div class="colHead"><div class="title">Done</div><div class="count" id="c_done">0</div></div>
-            <div class="colBody dropzone" id="done" data-state="done"></div>
+            <div class="colBody dropzone" id="col_done" data-status="Done"></div>
           </div>
         </div>
 
@@ -568,7 +516,7 @@ textarea{
             <div class="title">Backlog</div>
             <div class="count" id="c_backlog">0</div>
           </div>
-          <div class="backlogBody dropzone" id="backlog" data-state="backlog"></div>
+          <div class="backlogBody dropzone" id="col_backlog" data-status="Backlog"></div>
         </div>
       </section>
 
@@ -580,33 +528,29 @@ textarea{
 <!-- Create Sprint Modal -->
 <div id="sprintModalBack" class="modalBack" role="dialog" aria-modal="true">
   <div class="modal">
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
       <h2 style="margin:0;">Create Sprint</h2>
       <button class="btn" onclick="openSprintModal(false)">Close</button>
     </div>
-
+    <div class="errorMsg" id="sprintError"></div>
     <div class="formGrid" style="margin-top:10px;">
       <div class="formRow">
-        <label for="sprintName">Sprint name</label>
+        <label>Sprint name</label>
         <input id="sprintName" placeholder="e.g., Sprint 1" />
       </div>
-
       <div class="formRow">
-        <label for="sprintProject">Project</label>
+        <label>Project</label>
         <select id="sprintProject"></select>
       </div>
-
       <div class="formRow">
-        <label for="sprintStart">Start date</label>
+        <label>Start date</label>
         <input id="sprintStart" type="date" />
       </div>
-
       <div class="formRow">
-        <label for="sprintEnd">End date</label>
+        <label>End date</label>
         <input id="sprintEnd" type="date" />
       </div>
     </div>
-
     <div class="modalActions">
       <button class="btn" onclick="openSprintModal(false)">Cancel</button>
       <button class="btn primary" onclick="createSprint()">Create Sprint</button>
@@ -617,59 +561,38 @@ textarea{
 <!-- Add Ticket Modal -->
 <div id="ticketModalBack" class="modalBack" role="dialog" aria-modal="true">
   <div class="modal">
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
       <h2 style="margin:0;">Add Ticket</h2>
       <button class="btn" onclick="openTicketModal(false)">Close</button>
     </div>
-
+    <div class="errorMsg" id="ticketError"></div>
     <div class="formGrid" style="margin-top:10px;">
-      <div class="formRow">
-        <label for="tkey">Ticket key</label>
-        <input id="tkey" placeholder="e.g., BEE-101" />
+      <div class="formRow" style="grid-column:1 / -1;">
+        <label>Title</label>
+        <input id="tTitle" placeholder="e.g., Build project settings page" />
       </div>
-
       <div class="formRow">
-        <label for="tpri">Priority</label>
-        <select id="tpri">
-          <option>P3 - Normal</option>
-          <option>P2 - High</option>
-          <option>P1 - Urgent</option>
-          <option>P4 - Low</option>
+        <label>Priority</label>
+        <select id="tPriority">
+          <option value="Low">Low</option>
+          <option value="Medium" selected>Medium</option>
+          <option value="High">High</option>
         </select>
       </div>
-
-      <div class="formRow" style="grid-column: 1 / -1;">
-        <label for="tsum">Summary</label>
-        <input id="tsum" placeholder="e.g., Build project settings page" />
-      </div>
-
       <div class="formRow">
-        <label for="ttag">Tag</label>
-        <input id="ttag" placeholder="e.g., ui" />
-      </div>
-
-      <div class="formRow">
-        <label for="tstate">Column</label>
-        <select id="tstate">
-          <option value="backlog">Backlog</option>
-          <option value="todo">To-Do</option>
-          <option value="progress">In Progress</option>
-          <option value="review">Review</option>
-          <option value="done">Done</option>
+        <label>Status</label>
+        <select id="tStatus">
+          <option value="To-Do">To-Do</option>
+          <option value="In-Progress">In Progress</option>
+          <option value="Review">Review</option>
+          <option value="Done">Done</option>
         </select>
       </div>
-
-      <div class="formRow">
-        <label for="tassignee">Assignee</label>
-        <input id="tassignee" placeholder="e.g., Nathan" />
-      </div>
-
-      <div class="formRow" style="grid-column: 1 / -1;">
-        <label for="tdesc">Description (optional)</label>
-        <textarea id="tdesc" placeholder="Notes..."></textarea>
+      <div class="formRow" style="grid-column:1 / -1;">
+        <label>Description (optional)</label>
+        <textarea id="tDesc" placeholder="What needs to be done?"></textarea>
       </div>
     </div>
-
     <div class="modalActions">
       <button class="btn" onclick="openTicketModal(false)">Cancel</button>
       <button class="btn primary" onclick="addTicket()">Add Ticket</button>
@@ -680,20 +603,36 @@ textarea{
 <!-- Task Detail Modal -->
 <div id="taskDetailModalBack" class="modalBack" role="dialog" aria-modal="true">
   <div class="modal">
-    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-      <h2 id="taskDetailTitle" style="margin:0;">Task Details</h2>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+      <h2 id="taskDetailTitle" style="margin:0;color:var(--accent);">Task Details</h2>
       <button class="btn" onclick="closeTaskDetail()">Close</button>
     </div>
 
+    <!-- Meta -->
     <div class="taskDetailMeta">
-      <span class="key" id="taskDetailKey"></span>
-      <span class="tag" id="taskDetailTag"></span>
-      <span id="taskDetailPriority"></span>
-      <span id="taskDetailState"></span>
-      <span class="assignee" id="taskDetailAssignee"></span>
+      <span class="tag" id="taskDetailPriority"></span>
+      <span id="taskDetailStatus"></span>
+      <span id="taskDetailId" style="color:var(--muted);"></span>
     </div>
 
-    <div class="taskDetailBody" id="taskDetailDescription"></div>
+    <!-- Description -->
+    <div class="sectionLabel">Description</div>
+    <div class="taskDetailDesc" id="taskDetailDesc"></div>
+
+    <hr />
+
+    <!-- Comments -->
+    <div class="sectionLabel">Comments</div>
+    <div id="commentList" class="commentList">
+      <div class="commentEmpty">Loading comments...</div>
+    </div>
+
+    <!-- Add comment -->
+    <div class="commentInputRow">
+      <textarea id="commentInput" placeholder="Add a comment..."></textarea>
+      <button class="btn primary" onclick="submitComment()" style="align-self:flex-end;">Post</button>
+    </div>
+    <div class="errorMsg" id="commentError"></div>
 
     <div class="modalActions">
       <button class="btn" onclick="closeTaskDetail()">Close</button>
@@ -702,564 +641,573 @@ textarea{
 </div>
 
 <script>
-const LS_PROJECTS = "beehive_projects_v1";
-const LS_SPRINTS = "beehive_sprints_v2";
-const LS_TICKETS = "beehive_tickets_v3";
-const LS_SELECTED_PROJECT = "beehive_selected_project";
-const LS_SELECTED_SPRINT = "beehive_selected_sprint";
-const LS_SELECTED_PERSON = "beehive_selected_person";
-const LS_VIEW_MODE = "beehive_view_mode";
+  const API = "http://127.0.0.1:8000";
+  const token = localStorage.getItem("bh_token");
+  const userRole = localStorage.getItem("bh_user_role");
+  const userName = localStorage.getItem("bh_user_name");
+  const userId = parseInt(localStorage.getItem("bh_user_id") || "0");
 
-function load(key){
-  try{
-    return JSON.parse(localStorage.getItem(key)) || [];
-  }catch{
-    return [];
-  }
-}
-function save(key, value){
-  localStorage.setItem(key, JSON.stringify(value));
-}
-function escapeHtml(s){
-  return String(s ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-function getProjects(){ return load(LS_PROJECTS); }
-function getSprints(){ return load(LS_SPRINTS); }
-function getTickets(){ return load(LS_TICKETS); }
+  // ── Auth guard ────────────────────────────────────────────────────────────
+  if (!token) window.location.href = "index.html";
 
-function getViewMode(){
-  return localStorage.getItem(LS_VIEW_MODE) || "board";
-}
-function setViewMode(mode){
-  localStorage.setItem(LS_VIEW_MODE, mode);
-  document.getElementById("boardViewBtn").classList.toggle("activeView", mode === "board");
-  document.getElementById("myTasksBtn").classList.toggle("activeView", mode === "mytasks");
-  document.getElementById("viewInfo").textContent = mode === "board" ? "View: Board" : "View: My Tasks";
-  render();
-}
+  if (DEMO_MODE) document.getElementById("demo-banner").style.display = "block";
+  document.getElementById("user-pill").textContent = userName || "User";
 
-function fillProjectSelect(){
-  const projectSelect = document.getElementById("projectSelect");
-  const sprintProject = document.getElementById("sprintProject");
-  const projects = getProjects();
-
-  projectSelect.innerHTML = "";
-  sprintProject.innerHTML = "";
-
-  projects.forEach(project => {
-    const option1 = document.createElement("option");
-    option1.value = project.key;
-    option1.textContent = `${project.key} • ${project.name}`;
-    projectSelect.appendChild(option1);
-
-    const option2 = document.createElement("option");
-    option2.value = project.key;
-    option2.textContent = `${project.key} • ${project.name}`;
-    sprintProject.appendChild(option2);
-  });
-
-  const savedProject = localStorage.getItem(LS_SELECTED_PROJECT);
-  if(savedProject && projects.some(p => p.key === savedProject)){
-    projectSelect.value = savedProject;
-  }
-  if(projects.length > 0 && !projectSelect.value){
-    projectSelect.value = projects[0].key;
+  if (userRole === "admin") {
+    document.querySelectorAll(".admin-only").forEach(el => el.style.display = "inline-flex");
   }
 
-  if(projectSelect.value){
-    sprintProject.value = projectSelect.value;
+  // ── API helper ────────────────────────────────────────────────────────────
+  async function apiFetch(url, options = {}) {
+    if (DEMO_MODE) return mockResponse(url, options);
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        ...(options.headers || {}),
+      },
+    });
+    if (res.status === 401) { localStorage.clear(); window.location.href = "index.html"; }
+    return res;
   }
 
-  projectSelect.addEventListener("change", () => {
-    localStorage.setItem(LS_SELECTED_PROJECT, projectSelect.value);
-    fillSprintSelect();
-    fillPersonSelect();
-    render();
-  });
-}
+  // ── State ─────────────────────────────────────────────────────────────────
+  let allProjects = [];
+  let allSprints = [];
+  let currentTasks = [];
+  let backlogTasks = [];
+  let viewMode = "board";
+  let selectedProjectId = null;
+  let selectedSprintId = null;
+  let activeTaskId = null;
 
-function fillSprintSelect(){
-  const sprintSelect = document.getElementById("sprintSelect");
-  const projectKey = document.getElementById("projectSelect").value;
-  const sprints = getSprints().filter(s => s.projectKey === projectKey);
-
-  sprintSelect.innerHTML = "";
-
-  sprints.forEach(sprint => {
-    const option = document.createElement("option");
-    option.value = sprint.id;
-    option.textContent = `${sprint.name} • ${formatDateRange(sprint.start, sprint.end)}`;
-    sprintSelect.appendChild(option);
-  });
-
-  const savedSprint = localStorage.getItem(LS_SELECTED_SPRINT);
-  if(savedSprint && sprints.some(s => s.id === savedSprint)){
-    sprintSelect.value = savedSprint;
-  }
-  if(sprints.length > 0 && !sprintSelect.value){
-    sprintSelect.value = sprints[0].id;
+  // ── Init ──────────────────────────────────────────────────────────────────
+  async function init() {
+    await loadProjects();
   }
 
-  sprintSelect.onchange = () => {
-    localStorage.setItem(LS_SELECTED_SPRINT, sprintSelect.value);
-    fillPersonSelect();
-    render();
-  };
-}
+  // ── Projects ──────────────────────────────────────────────────────────────
+  async function loadProjects() {
+    try {
+      const res = await apiFetch(`${API}/projects`);
+      if (!res.ok) return;
+      allProjects = await res.json();
 
-function fillPersonSelect(){
-  const personSelect = document.getElementById("personSelect");
-  const projectKey = document.getElementById("projectSelect").value;
-  const sprintId = document.getElementById("sprintSelect").value;
+      const sel = document.getElementById("projectSelect");
+      const sprintProjSel = document.getElementById("sprintProject");
 
-  const tickets = getTickets().filter(t => t.projectKey === projectKey && t.sprintId === sprintId);
-  const people = [...new Set(tickets.map(t => (t.assignee || "Unassigned").trim()).filter(Boolean))];
+      if (allProjects.length === 0) {
+        document.getElementById("emptyProjects").style.display = "block";
+        document.getElementById("boardWrap").style.display = "none";
+        document.getElementById("myTasksWrap").style.display = "none";
+        sel.innerHTML = `<option value="">No projects</option>`;
+        return;
+      }
 
-  personSelect.innerHTML = "";
-  const allOption = document.createElement("option");
-  allOption.value = "All";
-  allOption.textContent = "All People";
-  personSelect.appendChild(allOption);
+      document.getElementById("emptyProjects").style.display = "none";
+      sel.innerHTML = allProjects.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join("");
+      sprintProjSel.innerHTML = sel.innerHTML;
+      selectedProjectId = parseInt(sel.value);
 
-  people.forEach(person => {
-    const option = document.createElement("option");
-    option.value = person;
-    option.textContent = person;
-    personSelect.appendChild(option);
-  });
+      sel.addEventListener("change", () => {
+        selectedProjectId = parseInt(sel.value);
+        sprintProjSel.value = sel.value;
+        loadSprints();
+      });
 
-  const savedPerson = localStorage.getItem(LS_SELECTED_PERSON);
-  if(savedPerson && [...people, "All"].includes(savedPerson)){
-    personSelect.value = savedPerson;
-  } else {
-    personSelect.value = "All";
+      await loadSprints();
+    } catch (err) { console.error("Failed to load projects", err); }
   }
 
-  personSelect.onchange = () => {
-    localStorage.setItem(LS_SELECTED_PERSON, personSelect.value);
-    render();
-  };
-}
+  // ── Sprints ───────────────────────────────────────────────────────────────
+  async function loadSprints() {
+    if (!selectedProjectId) return;
+    try {
+      const res = await apiFetch(`${API}/sprints?project_id=${selectedProjectId}`);
+      if (!res.ok) return;
+      allSprints = await res.json();
 
-function formatDateRange(start, end){
-  if(!start || !end) return "No dates";
-  return `${start} → ${end}`;
-}
+      const sel = document.getElementById("sprintSelect");
 
-function formatStateLabel(state){
-  const labels = {
-    backlog: "Backlog",
-    todo: "To-Do",
-    progress: "In Progress",
-    review: "Review",
-    done: "Done"
-  };
-  return labels[state] || state;
-}
+      if (allSprints.length === 0) {
+        document.getElementById("emptySprints").style.display = "block";
+        document.getElementById("boardWrap").style.display = "none";
+        document.getElementById("myTasksWrap").style.display = "none";
+        sel.innerHTML = `<option value="">No sprints</option>`;
+        document.getElementById("sprintInfo").textContent = "Sprint: None";
+        return;
+      }
 
-function openSprintModal(show){
-  document.getElementById("sprintModalBack").style.display = show ? "flex" : "none";
-  if(show){
-    const currentProject = document.getElementById("projectSelect").value;
-    document.getElementById("sprintProject").value = currentProject || "";
-    document.getElementById("sprintName").focus();
+      document.getElementById("emptySprints").style.display = "none";
+      sel.innerHTML = allSprints.map(s =>
+        `<option value="${s.id}">${escapeHtml(s.name)} • ${s.start_date} → ${s.end_date}</option>`
+      ).join("");
+      selectedSprintId = parseInt(sel.value);
+
+      sel.onchange = () => {
+        selectedSprintId = parseInt(sel.value);
+        render();
+      };
+
+      updateInfoChips();
+      await render();
+    } catch (err) { console.error("Failed to load sprints", err); }
   }
-}
 
-function openTicketModal(show){
-  document.getElementById("ticketModalBack").style.display = show ? "flex" : "none";
-  if(show){
-    const selectedPerson = localStorage.getItem(LS_SELECTED_PERSON);
-    if(selectedPerson && selectedPerson !== "All"){
-      document.getElementById("tassignee").value = selectedPerson;
+  // ── Render ────────────────────────────────────────────────────────────────
+  async function render() {
+    if (!selectedProjectId || !selectedSprintId) return;
+
+    const q = document.getElementById("q").value.trim();
+    const sprintParams = new URLSearchParams();
+    sprintParams.set("project_id", selectedProjectId);
+    sprintParams.set("sprint_id", selectedSprintId);
+    if (q) sprintParams.set("search", q);
+
+    try {
+      const [sprintRes, allProjRes] = await Promise.all([
+        apiFetch(`${API}/tasks?${sprintParams}`),
+        apiFetch(`${API}/tasks?project_id=${selectedProjectId}`),
+      ]);
+
+      currentTasks = sprintRes.ok ? await sprintRes.json() : [];
+      const allProjTasks = allProjRes.ok ? await allProjRes.json() : [];
+      backlogTasks = allProjTasks.filter(t => !t.sprint_id);
+    } catch { return; }
+
+    updateInfoChips();
+    fillPersonSelect(currentTasks);
+
+    if (viewMode === "board") {
+      renderBoard(currentTasks, backlogTasks);
+    } else {
+      renderMyTasks(currentTasks);
     }
-    document.getElementById("tkey").focus();
-  }
-}
-
-function openTaskDetail(key){
-  const projectKey = document.getElementById("projectSelect").value;
-  const sprintId = document.getElementById("sprintSelect").value;
-
-  const ticket = getTickets().find(
-    t => t.projectKey === projectKey && t.sprintId === sprintId && t.key === key
-  );
-
-  if(!ticket) return;
-
-  document.getElementById("taskDetailTitle").textContent = ticket.summary || "Task Details";
-  document.getElementById("taskDetailKey").textContent = ticket.key || "";
-  document.getElementById("taskDetailTag").textContent = ticket.tag || "general";
-  document.getElementById("taskDetailPriority").textContent = ticket.priority || "";
-  document.getElementById("taskDetailState").textContent = `Status: ${formatStateLabel(ticket.state)}`;
-  document.getElementById("taskDetailAssignee").textContent = ticket.assignee || "Unassigned";
-  document.getElementById("taskDetailDescription").textContent =
-    ticket.description && ticket.description.trim()
-      ? ticket.description
-      : "No description provided for this task.";
-
-  document.getElementById("taskDetailModalBack").style.display = "flex";
-}
-
-function closeTaskDetail(){
-  document.getElementById("taskDetailModalBack").style.display = "none";
-}
-
-function createSprint(){
-  const name = document.getElementById("sprintName").value.trim();
-  const projectKey = document.getElementById("sprintProject").value;
-  const start = document.getElementById("sprintStart").value;
-  const end = document.getElementById("sprintEnd").value;
-
-  if(!projectKey){
-    alert("Choose a project first.");
-    return;
-  }
-  if(!name){
-    alert("Sprint name is required.");
-    return;
   }
 
-  const sprints = getSprints();
-  const alreadyExists = sprints.some(
-    s => s.projectKey === projectKey && s.name.toLowerCase() === name.toLowerCase()
-  );
-
-  if(alreadyExists){
-    alert("That sprint name already exists in this project.");
-    return;
-  }
-
-  const sprintId = "s" + Date.now();
-  sprints.push({ id: sprintId, projectKey, name, start, end });
-  save(LS_SPRINTS, sprints);
-
-  document.getElementById("sprintName").value = "";
-  document.getElementById("sprintStart").value = "";
-  document.getElementById("sprintEnd").value = "";
-
-  document.getElementById("projectSelect").value = projectKey;
-  localStorage.setItem(LS_SELECTED_PROJECT, projectKey);
-
-  fillSprintSelect();
-  document.getElementById("sprintSelect").value = sprintId;
-  localStorage.setItem(LS_SELECTED_SPRINT, sprintId);
-
-  fillPersonSelect();
-  openSprintModal(false);
-  render();
-}
-
-function addTicket(){
-  const projectKey = document.getElementById("projectSelect").value;
-  const sprintId = document.getElementById("sprintSelect").value;
-  const key = document.getElementById("tkey").value.trim().toUpperCase();
-  const summary = document.getElementById("tsum").value.trim();
-  const tag = document.getElementById("ttag").value.trim() || "general";
-  const priority = document.getElementById("tpri").value;
-  const state = document.getElementById("tstate").value;
-  const assignee = document.getElementById("tassignee").value.trim() || "Unassigned";
-  const description = document.getElementById("tdesc").value.trim();
-
-  if(!projectKey){
-    alert("No project selected.");
-    return;
-  }
-  if(!sprintId){
-    alert("Create a sprint first.");
-    return;
-  }
-  if(!key){
-    alert("Ticket key is required.");
-    return;
-  }
-  if(!summary){
-    alert("Summary is required.");
-    return;
-  }
-
-  const tickets = getTickets();
-  const exists = tickets.some(
-    t => t.projectKey === projectKey && t.sprintId === sprintId && t.key === key
-  );
-  if(exists){
-    alert("That ticket key already exists in this sprint.");
-    return;
-  }
-
-  tickets.push({
-    projectKey,
-    sprintId,
-    key,
-    summary,
-    tag,
-    priority,
-    state,
-    assignee,
-    description
-  });
-
-  save(LS_TICKETS, tickets);
-
-  document.getElementById("tkey").value = "";
-  document.getElementById("tsum").value = "";
-  document.getElementById("ttag").value = "";
-  document.getElementById("tpri").value = "P3 - Normal";
-  document.getElementById("tstate").value = "todo";
-  document.getElementById("tassignee").value = "";
-  document.getElementById("tdesc").value = "";
-
-  fillPersonSelect();
-  openTicketModal(false);
-  render();
-}
-
-function deleteTicket(key){
-  const projectKey = document.getElementById("projectSelect").value;
-  const sprintId = document.getElementById("sprintSelect").value;
-
-  if(!confirm(`Delete ${key}?`)) return;
-
-  const tickets = getTickets().filter(
-    t => !(t.projectKey === projectKey && t.sprintId === sprintId && t.key === key)
-  );
-
-  save(LS_TICKETS, tickets);
-  fillPersonSelect();
-  render();
-}
-
-function moveTicketToState(key, nextState){
-  const projectKey = document.getElementById("projectSelect").value;
-  const sprintId = document.getElementById("sprintSelect").value;
-
-  const tickets = getTickets();
-  const ticket = tickets.find(
-    t => t.projectKey === projectKey && t.sprintId === sprintId && t.key === key
-  );
-
-  if(!ticket) return;
-
-  ticket.state = nextState;
-  save(LS_TICKETS, tickets);
-  render();
-}
-
-function ticketCard(t){
-  return `
-    <div class="ticket clickable" draggable="true" data-key="${escapeHtml(t.key)}" onclick="openTaskDetail('${escapeHtml(t.key)}')">
-      <div class="tTop">
-        <div class="key">${escapeHtml(t.key)}</div>
-        <div class="pri">${escapeHtml(t.priority)}</div>
-      </div>
-      <div class="summary">${escapeHtml(t.summary)}</div>
-      <div class="meta">
-        <span class="tag">${escapeHtml(t.tag)}</span>
-        <span class="assignee">${escapeHtml(t.assignee || "Unassigned")}</span>
-      </div>
-      <div class="meta" style="margin-top:8px;">
-        <span>${escapeHtml(formatStateLabel(t.state))}</span>
-        <span class="ticketActions">
-          <button class="iconBtn" onclick="event.stopPropagation(); deleteTicket('${escapeHtml(t.key)}')">✕</button>
-        </span>
-      </div>
-    </div>
-  `;
-}
-
-function myTaskRow(t){
-  return `
-    <div class="taskRow clickable" onclick="openTaskDetail('${escapeHtml(t.key)}')">
-      <div class="taskTop">
-        <div>
-          <div class="key">${escapeHtml(t.key)}</div>
-          <div class="taskTitle">${escapeHtml(t.summary)}</div>
-        </div>
-        <div class="assignee">${escapeHtml(t.assignee || "Unassigned")}</div>
-      </div>
-      <div class="taskMeta">
-        <span class="tag">${escapeHtml(t.tag)}</span>
-        <span>${escapeHtml(t.priority)}</span>
-        <span>Status: ${escapeHtml(formatStateLabel(t.state))}</span>
-      </div>
-      <div class="taskMeta" style="margin-top:12px;">
-        <button class="iconBtn" onclick="event.stopPropagation(); deleteTicket('${escapeHtml(t.key)}')">Delete</button>
-      </div>
-    </div>
-  `;
-}
-
-function attachDragAndDrop(){
-  const tickets = document.querySelectorAll(".ticket[draggable='true']");
-  const dropzones = document.querySelectorAll(".dropzone");
-
-  tickets.forEach(ticket => {
-    ticket.addEventListener("dragstart", e => {
-      const key = ticket.dataset.key;
-      e.dataTransfer.setData("text/plain", key);
-      e.dataTransfer.effectAllowed = "move";
-      ticket.classList.add("dragging");
-    });
-
-    ticket.addEventListener("dragend", () => {
-      ticket.classList.remove("dragging");
-      dropzones.forEach(zone => zone.classList.remove("dragOver"));
-    });
-  });
-
-  dropzones.forEach(zone => {
-    zone.addEventListener("dragover", e => {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = "move";
-      zone.classList.add("dragOver");
-    });
-
-    zone.addEventListener("dragleave", e => {
-      if(!zone.contains(e.relatedTarget)){
-        zone.classList.remove("dragOver");
-      }
-    });
-
-    zone.addEventListener("drop", e => {
-      e.preventDefault();
-      zone.classList.remove("dragOver");
-
-      const key = e.dataTransfer.getData("text/plain");
-      const nextState = zone.dataset.state;
-
-      if(key && nextState){
-        moveTicketToState(key, nextState);
-      }
-    });
-  });
-}
-
-async function fetchTickets(projectId, sprintId, search = "") {
-  const params = new URLSearchParams();
-  if (projectId) params.set("project_id", projectId);
-  if (sprintId)  params.set("sprint_id", sprintId);
-  if (search)    params.set("search", search);
-
-  const res = await fetch(`http://127.0.0.1:8000/tasks?${params}`);
-  if (!res.ok) return [];
-  return await res.json();
-}
-
-async function render() {
-  const projects = getProjects();
-  const projectKey = document.getElementById("projectSelect").value;
-  const sprintId   = document.getElementById("sprintSelect").value;
-  const selectedPerson = document.getElementById("personSelect").value || "All";
-  const q = (document.getElementById("q").value || "").trim();
-  const viewMode = getViewMode();
-
-  const emptyProjects = document.getElementById("emptyProjects");
-  const emptySprints  = document.getElementById("emptySprints");
-  const boardWrap     = document.getElementById("boardWrap");
-  const myTasksWrap   = document.getElementById("myTasksWrap");
-
-  if (projects.length === 0) {
-    emptyProjects.style.display = "block";
-    emptySprints.style.display  = "none";
-    boardWrap.style.display     = "none";
-    myTasksWrap.style.display   = "none";
-    document.getElementById("projectInfo").textContent = "Project: None";
-    document.getElementById("sprintInfo").textContent  = "Sprint: None";
-    return;
-  }
-
-  emptyProjects.style.display = "none";
-
-  const selectedProject = projects.find(p => p.key === projectKey);
-  document.getElementById("projectInfo").textContent = selectedProject
-    ? `Project: ${selectedProject.key} • ${selectedProject.name}`
-    : "Project: None";
-
-  const sprints = getSprints().filter(s => s.projectKey === projectKey);
-  const selectedSprint = sprints.find(s => s.id === sprintId);
-
-  if (!selectedSprint) {
-    emptySprints.style.display = "block";
-    boardWrap.style.display    = "none";
-    myTasksWrap.style.display  = "none";
-    document.getElementById("sprintInfo").textContent = "Sprint: None";
-    return;
-  }
-
-  emptySprints.style.display = "none";
-  document.getElementById("sprintInfo").textContent =
-    `Sprint: ${selectedSprint.name} • ${formatDateRange(selectedSprint.start, selectedSprint.end)}`;
-
-  // Fetch from backend — search param goes to the API
-  let tickets = await fetchTickets(projectKey, sprintId, q);
-
-  // Person filter still done client-side (backend doesn't know about assignee yet)
-  if (viewMode === "mytasks" && selectedPerson !== "All") {
-    tickets = tickets.filter(t => (t.assignee || "Unassigned") === selectedPerson);
-  }
-
-  if (viewMode === "board") {
-    boardWrap.style.display   = "grid";
-    myTasksWrap.style.display = "none";
+  function renderBoard(sprintTasks, backlog) {
+    document.getElementById("boardWrap").style.display = "grid";
+    document.getElementById("myTasksWrap").style.display = "none";
 
     const groups = {
-      backlog:  tickets.filter(t => t.state === "backlog"),
-      todo:     tickets.filter(t => t.state === "todo"),
-      progress: tickets.filter(t => t.state === "progress"),
-      review:   tickets.filter(t => t.state === "review"),
-      done:     tickets.filter(t => t.state === "done"),
+      "To-Do":       sprintTasks.filter(t => t.status === "To-Do"),
+      "In-Progress": sprintTasks.filter(t => t.status === "In-Progress"),
+      "Review":      sprintTasks.filter(t => t.status === "Review"),
+      "Done":        sprintTasks.filter(t => t.status === "Done"),
     };
 
-    document.getElementById("backlog").innerHTML  = groups.backlog.map(ticketCard).join("")  || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
-    document.getElementById("todo").innerHTML     = groups.todo.map(ticketCard).join("")     || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
-    document.getElementById("progress").innerHTML = groups.progress.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
-    document.getElementById("review").innerHTML   = groups.review.map(ticketCard).join("")   || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
-    document.getElementById("done").innerHTML     = groups.done.map(ticketCard).join("")     || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
+    document.getElementById("col_todo").innerHTML     = groups["To-Do"].map(ticketCard).join("") || emptyCol();
+    document.getElementById("col_progress").innerHTML = groups["In-Progress"].map(ticketCard).join("") || emptyCol();
+    document.getElementById("col_review").innerHTML   = groups["Review"].map(ticketCard).join("") || emptyCol();
+    document.getElementById("col_done").innerHTML     = groups["Done"].map(ticketCard).join("") || emptyCol();
+    document.getElementById("col_backlog").innerHTML  = backlog.map(ticketCard).join("") || emptyCol();
 
-    document.getElementById("c_backlog").textContent  = groups.backlog.length;
-    document.getElementById("c_todo").textContent     = groups.todo.length;
-    document.getElementById("c_progress").textContent = groups.progress.length;
-    document.getElementById("c_review").textContent   = groups.review.length;
-    document.getElementById("c_done").textContent     = groups.done.length;
+    document.getElementById("c_todo").textContent     = groups["To-Do"].length;
+    document.getElementById("c_progress").textContent = groups["In-Progress"].length;
+    document.getElementById("c_review").textContent   = groups["Review"].length;
+    document.getElementById("c_done").textContent     = groups["Done"].length;
+    document.getElementById("c_backlog").textContent  = backlog.length;
 
     attachDragAndDrop();
-  } else {
-    boardWrap.style.display   = "none";
-    myTasksWrap.style.display = "grid";
+  }
 
-    if (selectedPerson === "All") {
-      myTasksWrap.innerHTML = `<div class="emptyState">Choose a person in the person selector to view that person's tasks.</div>`;
+  function renderMyTasks(tasks) {
+    document.getElementById("boardWrap").style.display = "none";
+    const wrap = document.getElementById("myTasksWrap");
+    wrap.style.display = "grid";
+
+    if (tasks.length === 0) {
+      wrap.innerHTML = `<div class="emptyState">No tasks in this sprint.</div>`;
       return;
     }
 
-    myTasksWrap.innerHTML = tickets.map(myTaskRow).join("")
-      || `<div class="emptyState">No tasks assigned to ${escapeHtml(selectedPerson)} in this sprint.</div>`;
+    wrap.innerHTML = tasks.map(t => `
+      <div class="taskRow clickable" onclick="openTaskDetail(${t.id})">
+        <div class="taskTop">
+          <div>
+            <div class="key">#${t.id}</div>
+            <div class="taskTitle">${escapeHtml(t.title)}</div>
+          </div>
+          <span class="tag">${escapeHtml(t.priority)}</span>
+        </div>
+        <div class="taskMeta">
+          <span>Status: ${escapeHtml(t.status)}</span>
+          ${userRole === "admin" ? `<button class="iconBtn" onclick="event.stopPropagation();deleteTicket(${t.id})">Delete</button>` : ""}
+        </div>
+      </div>
+    `).join("");
   }
-}
 
-fillProjectSelect();
-fillSprintSelect();
-fillPersonSelect();
-setViewMode(getViewMode());
-
-// Debounce search so it doesn't fire on every keystroke
-let searchTimeout;
-document.getElementById("q").addEventListener("input", () => {
-  clearTimeout(searchTimeout);
-  searchTimeout = setTimeout(render, 300);
-});
-
-document.getElementById("taskDetailModalBack").addEventListener("click", (e) => {
-  if(e.target.id === "taskDetailModalBack"){
-    closeTaskDetail();
+  function ticketCard(t) {
+    const deleteBtn = userRole === "admin"
+      ? `<button class="iconBtn" onclick="event.stopPropagation();deleteTicket(${t.id})">✕</button>`
+      : "";
+    return `
+      <div class="ticket clickable" draggable="true" data-id="${t.id}" onclick="openTaskDetail(${t.id})">
+        <div class="tTop">
+          <div class="key">#${t.id}</div>
+          <div class="pri">${escapeHtml(t.priority)}</div>
+        </div>
+        <div class="summary">${escapeHtml(t.title)}</div>
+        <div class="meta">
+          <span class="tag">${escapeHtml(t.status)}</span>
+          <span class="ticketActions">${deleteBtn}</span>
+        </div>
+      </div>
+    `;
   }
-});
-render();
+
+  function emptyCol() {
+    return `<div style="color:var(--muted);font-size:13px;">No tickets.</div>`;
+  }
+
+  // ── Person select ─────────────────────────────────────────────────────────
+  function fillPersonSelect(tasks) {
+    const sel = document.getElementById("personSelect");
+    sel.innerHTML = `<option value="All">All Tasks</option>` +
+      tasks.map(t => `<option value="${t.id}">#${t.id} ${escapeHtml(t.title).substring(0, 20)}</option>`).join("");
+    sel.onchange = () => { if (viewMode === "mytasks") renderMyTasks(currentTasks); };
+  }
+
+  // ── Info chips ────────────────────────────────────────────────────────────
+  function updateInfoChips() {
+    const project = allProjects.find(p => p.id === selectedProjectId);
+    const sprint = allSprints.find(s => s.id === selectedSprintId);
+    document.getElementById("projectInfo").textContent = project ? `Project: ${project.name}` : "Project: None";
+    document.getElementById("sprintInfo").textContent = sprint
+      ? `Sprint: ${sprint.name} • ${sprint.start_date} → ${sprint.end_date}`
+      : "Sprint: None";
+    document.getElementById("viewInfo").textContent = viewMode === "board" ? "View: Board" : "View: My Tasks";
+  }
+
+  // ── View mode ─────────────────────────────────────────────────────────────
+  function setViewMode(mode) {
+    viewMode = mode;
+    document.getElementById("boardViewBtn").classList.toggle("activeView", mode === "board");
+    document.getElementById("myTasksBtn").classList.toggle("activeView", mode === "mytasks");
+    updateInfoChips();
+    render();
+  }
+
+  // ── Create sprint ─────────────────────────────────────────────────────────
+  function openSprintModal(show) {
+    document.getElementById("sprintError").style.display = "none";
+    document.getElementById("sprintModalBack").style.display = show ? "flex" : "none";
+    if (show) {
+      document.getElementById("sprintProject").value = selectedProjectId;
+      document.getElementById("sprintName").focus();
+    }
+  }
+
+  async function createSprint() {
+    const errorEl = document.getElementById("sprintError");
+    errorEl.style.display = "none";
+
+    const name = document.getElementById("sprintName").value.trim();
+    const projectId = parseInt(document.getElementById("sprintProject").value);
+    const startDate = document.getElementById("sprintStart").value;
+    const endDate = document.getElementById("sprintEnd").value;
+
+    if (!name) { errorEl.textContent = "Sprint name is required."; errorEl.style.display = "block"; return; }
+    if (!startDate || !endDate) { errorEl.textContent = "Start and end dates are required."; errorEl.style.display = "block"; return; }
+    if (endDate < startDate) { errorEl.textContent = "End date cannot be before start date."; errorEl.style.display = "block"; return; }
+
+    try {
+      const res = await apiFetch(`${API}/sprints`, {
+        method: "POST",
+        body: JSON.stringify({ project_id: projectId, name, start_date: startDate, end_date: endDate }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        openSprintModal(false);
+        document.getElementById("sprintName").value = "";
+        document.getElementById("sprintStart").value = "";
+        document.getElementById("sprintEnd").value = "";
+        selectedProjectId = projectId;
+        document.getElementById("projectSelect").value = projectId;
+        await loadSprints();
+        document.getElementById("sprintSelect").value = data.id;
+        selectedSprintId = data.id;
+        await render();
+      } else {
+        errorEl.textContent = data.detail || "Failed to create sprint.";
+        errorEl.style.display = "block";
+      }
+    } catch { errorEl.textContent = "Could not connect to the server."; errorEl.style.display = "block"; }
+  }
+
+  // ── Delete sprint ─────────────────────────────────────────────────────────
+  async function confirmDeleteSprint() {
+    const sprint = allSprints.find(s => s.id === selectedSprintId);
+    if (!sprint) return;
+    if (!confirm(`Delete sprint "${sprint.name}"? All tasks will move to the backlog.`)) return;
+    try {
+      const res = await apiFetch(`${API}/sprints/${selectedSprintId}`, { method: "DELETE" });
+      if (res.ok || res.status === 204) { selectedSprintId = null; await loadSprints(); }
+    } catch { alert("Could not connect to the server."); }
+  }
+
+  // ── Add ticket ────────────────────────────────────────────────────────────
+  function openTicketModal(show) {
+    document.getElementById("ticketError").style.display = "none";
+    document.getElementById("ticketModalBack").style.display = show ? "flex" : "none";
+    if (show) document.getElementById("tTitle").focus();
+  }
+
+  async function addTicket() {
+    const errorEl = document.getElementById("ticketError");
+    errorEl.style.display = "none";
+
+    const title = document.getElementById("tTitle").value.trim();
+    if (!title) { errorEl.textContent = "Title is required."; errorEl.style.display = "block"; return; }
+    if (!selectedProjectId) { errorEl.textContent = "No project selected."; errorEl.style.display = "block"; return; }
+
+    const payload = {
+      project_id: selectedProjectId,
+      sprint_id: selectedSprintId || null,
+      title,
+      priority: document.getElementById("tPriority").value,
+      status: document.getElementById("tStatus").value,
+      description: document.getElementById("tDesc").value.trim() || null,
+    };
+
+    try {
+      const res = await apiFetch(`${API}/tasks`, { method: "POST", body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (res.ok) {
+        openTicketModal(false);
+        document.getElementById("tTitle").value = "";
+        document.getElementById("tPriority").value = "Medium";
+        document.getElementById("tStatus").value = "To-Do";
+        document.getElementById("tDesc").value = "";
+        await render();
+      } else {
+        errorEl.textContent = data.detail || "Failed to add ticket.";
+        errorEl.style.display = "block";
+      }
+    } catch { errorEl.textContent = "Could not connect to the server."; errorEl.style.display = "block"; }
+  }
+
+  // ── Delete ticket ─────────────────────────────────────────────────────────
+  async function deleteTicket(id) {
+    if (!confirm("Delete this ticket?")) return;
+    try {
+      const res = await apiFetch(`${API}/tasks/${id}`, { method: "DELETE" });
+      if (res.ok || res.status === 204) await render();
+      else { const d = await res.json(); alert(d.detail || "Failed to delete ticket."); }
+    } catch { alert("Could not connect to the server."); }
+  }
+
+  // ── Task detail modal ─────────────────────────────────────────────────────
+  async function openTaskDetail(id) {
+    const task = currentTasks.find(t => t.id === id) ||
+                 backlogTasks.find(t => t.id === id);
+    if (!task) return;
+
+    activeTaskId = id;
+
+    document.getElementById("taskDetailTitle").textContent = task.title;
+    document.getElementById("taskDetailPriority").textContent = task.priority;
+    document.getElementById("taskDetailStatus").textContent = `Status: ${task.status}`;
+    document.getElementById("taskDetailId").textContent = `#${task.id}`;
+
+    // Description
+    const descEl = document.getElementById("taskDetailDesc");
+    if (task.description && task.description.trim()) {
+      descEl.textContent = task.description;
+      descEl.classList.remove("empty");
+    } else {
+      descEl.textContent = "No description provided.";
+      descEl.classList.add("empty");
+    }
+
+    // Reset comment input
+    document.getElementById("commentInput").value = "";
+    document.getElementById("commentError").style.display = "none";
+
+    document.getElementById("taskDetailModalBack").style.display = "flex";
+
+    // Load comments
+    await loadComments(id);
+  }
+
+  function closeTaskDetail() {
+    document.getElementById("taskDetailModalBack").style.display = "none";
+    activeTaskId = null;
+  }
+
+  // ── Comments ──────────────────────────────────────────────────────────────
+  async function loadComments(taskId) {
+    const listEl = document.getElementById("commentList");
+    listEl.innerHTML = `<div class="commentEmpty">Loading comments...</div>`;
+
+    try {
+      const res = await apiFetch(`${API}/tasks/${taskId}/comments`);
+      if (!res.ok) { listEl.innerHTML = `<div class="commentEmpty">Failed to load comments.</div>`; return; }
+      const comments = await res.json();
+      renderComments(comments);
+    } catch { listEl.innerHTML = `<div class="commentEmpty">Could not load comments.</div>`; }
+  }
+
+  function renderComments(comments) {
+    const listEl = document.getElementById("commentList");
+    if (comments.length === 0) {
+      listEl.innerHTML = `<div class="commentEmpty">No comments yet. Be the first to add one.</div>`;
+      return;
+    }
+
+    listEl.innerHTML = comments.map(c => {
+      const date = new Date(c.created_at).toLocaleString(undefined, {
+        month: "short", day: "numeric",
+        hour: "2-digit", minute: "2-digit",
+      });
+
+      const deleteBtn = userRole === "admin"
+        ? `<button class="iconBtn" style="padding:2px 6px;font-size:11px;" onclick="deleteComment(${c.id})">✕</button>`
+        : "";
+
+      return `
+        <div class="commentItem">
+          <div class="commentHeader">
+            <span class="commentAuthor">${escapeHtml(c.employee_name || "Employee #" + c.employee_id)}</span>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span>${date}</span>
+              ${deleteBtn}
+            </div>
+          </div>
+          <div class="commentText">${escapeHtml(c.comment_text)}</div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function submitComment() {
+    const errorEl = document.getElementById("commentError");
+    errorEl.style.display = "none";
+
+    const text = document.getElementById("commentInput").value.trim();
+    if (!text) { errorEl.textContent = "Comment cannot be empty."; errorEl.style.display = "block"; return; }
+    if (!activeTaskId) return;
+
+    try {
+      const res = await apiFetch(`${API}/tasks/${activeTaskId}/comments`, {
+        method: "POST",
+        body: JSON.stringify({
+          employee_id: userId,
+          comment_text: text,
+        }),
+      });
+
+      if (res.ok) {
+        document.getElementById("commentInput").value = "";
+        await loadComments(activeTaskId);
+      } else {
+        const d = await res.json();
+        errorEl.textContent = d.detail || "Failed to post comment.";
+        errorEl.style.display = "block";
+      }
+    } catch { errorEl.textContent = "Could not connect to the server."; errorEl.style.display = "block"; }
+  }
+
+  async function deleteComment(commentId) {
+    if (!confirm("Delete this comment?")) return;
+    try {
+      const res = await apiFetch(`${API}/comments/${commentId}`, { method: "DELETE" });
+      if (res.ok) await loadComments(activeTaskId);
+      else { const d = await res.json(); alert(d.detail || "Failed to delete comment."); }
+    } catch { alert("Could not connect to the server."); }
+  }
+
+  // ── Drag and drop ─────────────────────────────────────────────────────────
+  function attachDragAndDrop() {
+    const tickets = document.querySelectorAll(".ticket[draggable='true']");
+    const dropzones = document.querySelectorAll(".dropzone");
+
+    tickets.forEach(ticket => {
+      ticket.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("text/plain", ticket.dataset.id);
+        e.dataTransfer.effectAllowed = "move";
+        ticket.classList.add("dragging");
+      });
+      ticket.addEventListener("dragend", () => {
+        ticket.classList.remove("dragging");
+        dropzones.forEach(z => z.classList.remove("dragOver"));
+      });
+    });
+
+    dropzones.forEach(zone => {
+      zone.addEventListener("dragover", e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        zone.classList.add("dragOver");
+      });
+      zone.addEventListener("dragleave", e => {
+        if (!zone.contains(e.relatedTarget)) zone.classList.remove("dragOver");
+      });
+      zone.addEventListener("drop", async e => {
+        e.preventDefault();
+        zone.classList.remove("dragOver");
+
+        const id = parseInt(e.dataTransfer.getData("text/plain"));
+        const newStatus = zone.dataset.status;
+        if (!id || !newStatus) return;
+
+        const isBacklog = newStatus === "Backlog";
+        const task = currentTasks.find(t => t.id === id) ||
+                     backlogTasks.find(t => t.id === id);
+
+        const payload = isBacklog
+          ? { sprint_id: null }
+          : { status: newStatus, sprint_id: selectedSprintId };
+
+        if (task) {
+          if (isBacklog) { task.sprint_id = null; }
+          else { task.status = newStatus; task.sprint_id = selectedSprintId; }
+        }
+
+        try {
+          await apiFetch(`${API}/tasks/${id}`, {
+            method: "PATCH",
+            body: JSON.stringify(payload),
+          });
+        } catch { }
+
+        await render();
+      });
+    });
+  }
+
+  // ── Search ────────────────────────────────────────────────────────────────
+  let searchTimeout;
+  document.getElementById("q").addEventListener("input", () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(render, 300);
+  });
+
+  // ── Logout ────────────────────────────────────────────────────────────────
+  function logout() { localStorage.clear(); window.location.href = "index.html"; }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function escapeHtml(s) {
+    return String(s ?? "")
+      .replaceAll("&","&amp;").replaceAll("<","&lt;")
+      .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  document.getElementById("taskDetailModalBack").addEventListener("click", e => {
+    if (e.target.id === "taskDetailModalBack") closeTaskDetail();
+  });
+  document.getElementById("sprintModalBack").addEventListener("click", e => {
+    if (e.target.id === "sprintModalBack") openSprintModal(false);
+  });
+  document.getElementById("ticketModalBack").addEventListener("click", e => {
+    if (e.target.id === "ticketModalBack") openTicketModal(false);
+  });
+
+  init();
 </script>
+
 </body>
 </html>

@@ -3,6 +3,8 @@ from datetime import date, datetime
 from pydantic import BaseModel, EmailStr, field_validator, model_validator
 
 
+# ── Employee ──────────────────────────────────────────────────────────────────
+
 class EmployeeBase(BaseModel):
     full_name: str
     email: EmailStr
@@ -37,11 +39,36 @@ class EmployeeRead(EmployeeBase):
         from_attributes = True
 
 
+# ── Employee Skill ────────────────────────────────────────────────────────────
+
+class EmployeeSkillCreate(BaseModel):
+    skill: str
+
+
+class EmployeeSkillRead(BaseModel):
+    id: int
+    employee_id: int
+    skill: str
+
+    class Config:
+        from_attributes = True
+
+
+# ── Auth ──────────────────────────────────────────────────────────────────────
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+
+# ── Project ───────────────────────────────────────────────────────────────────
+
 class ProjectBase(BaseModel):
     name: str
     description: str | None = None
     start_date: date | None = None
     end_date: date | None = None
+    status: str | None = "Active"
 
     @field_validator("name")
     @classmethod
@@ -67,6 +94,7 @@ class ProjectUpdate(BaseModel):
     description: str | None = None
     start_date: date | None = None
     end_date: date | None = None
+    status: str | None = None
 
     @field_validator("name")
     @classmethod
@@ -94,31 +122,38 @@ class ProjectRead(ProjectBase):
         from_attributes = True
 
 
-class LoginRequest(BaseModel):
-    email: EmailStr
-    password: str
+# ── Project Member ────────────────────────────────────────────────────────────
 
-
-class EmployeeSkillCreate(BaseModel):
-    skill: str
-
-
-class EmployeeSkillRead(BaseModel):
-    id: int
+class ProjectMemberCreate(BaseModel):
     employee_id: int
-    skill: str
+    member_role: str | None = None
+
+
+class ProjectMemberRead(BaseModel):
+    id: int
+    project_id: int
+    employee_id: int
+    member_role: str | None = None
+    joined_at: datetime
 
     class Config:
         from_attributes = True
 
 
-# ----- Component -----
+# ── Component ─────────────────────────────────────────────────────────────────
+
 class ComponentBase(BaseModel):
     project_id: int
     name: str
 
+
 class ComponentCreate(ComponentBase):
     pass
+
+
+class ComponentUpdate(BaseModel):
+    name: str | None = None
+
 
 class ComponentRead(ComponentBase):
     id: int
@@ -127,31 +162,30 @@ class ComponentRead(ComponentBase):
         from_attributes = True
 
 
-# ----- Task -----
-class TaskBase(BaseModel):
-    project_id: int
-    sprint_id: int | None = None
-    title: str
-    status: str = "To-Do"
-    priority: str = "Medium"
+# ── Label ─────────────────────────────────────────────────────────────────────
 
-class TaskCreate(TaskBase):
+class LabelBase(BaseModel):
+    project_id: int
+    name: str
+
+
+class LabelCreate(LabelBase):
     pass
 
-class TaskUpdate(BaseModel):
-    sprint_id: int | None = None
-    title: str | None = None
-    status: str | None = None
-    priority: str | None = None
 
-class TaskRead(TaskBase):
+class LabelUpdate(BaseModel):
+    name: str | None = None
+
+
+class LabelRead(LabelBase):
     id: int
 
     class Config:
         from_attributes = True
 
 
-# ----- Sprint -----
+# ── Sprint ────────────────────────────────────────────────────────────────────
+
 class SprintBase(BaseModel):
     project_id: int
     name: str
@@ -164,8 +198,10 @@ class SprintBase(BaseModel):
             raise ValueError("end_date cannot be before start_date")
         return self
 
+
 class SprintCreate(SprintBase):
     pass
+
 
 class SprintUpdate(BaseModel):
     name: str | None = None
@@ -178,6 +214,7 @@ class SprintUpdate(BaseModel):
             raise ValueError("end_date cannot be before start_date")
         return self
 
+
 class SprintRead(SprintBase):
     id: int
 
@@ -185,7 +222,72 @@ class SprintRead(SprintBase):
         from_attributes = True
 
 
-# ----- Comments -----
+# ── Task ──────────────────────────────────────────────────────────────────────
+
+class TaskBase(BaseModel):
+    project_id: int
+    sprint_id: int | None = None
+    components_id: int | None = None
+    title: str
+    status: str = "To-Do"
+    priority: str = "Medium"
+    description: str | None = None
+
+
+class TaskCreate(TaskBase):
+    pass
+
+
+class TaskUpdate(BaseModel):
+    sprint_id: int | None = None
+    components_id: int | None = None
+    title: str | None = None
+    status: str | None = None
+    priority: str | None = None
+    description: str | None = None
+
+class TaskRead(TaskBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
+
+# ── Task Assignment ───────────────────────────────────────────────────────────
+
+class TaskAssignmentCreate(BaseModel):
+    employee_id: int
+
+
+class TaskAssignmentRead(BaseModel):
+    id: int
+    task_id: int
+    employee_id: int
+    assigned_at: datetime
+    employee: EmployeeRead | None = None
+
+    class Config:
+        from_attributes = True
+
+
+# ── Task Label ────────────────────────────────────────────────────────────────
+
+class TaskLabelCreate(BaseModel):
+    label_id: int
+
+
+class TaskLabelRead(BaseModel):
+    id: int
+    task_id: int
+    label_id: int
+    label: LabelRead | None = None
+
+    class Config:
+        from_attributes = True
+
+
+# ── Comment ───────────────────────────────────────────────────────────────────
+
 class CommentBase(BaseModel):
     employee_id: int
     comment_text: str
@@ -219,6 +321,7 @@ class CommentRead(CommentBase):
     id: int
     task_id: int
     created_at: datetime
+    employee_name: str | None = None
 
     class Config:
         from_attributes = True
