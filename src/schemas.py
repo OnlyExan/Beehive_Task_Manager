@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from pydantic import BaseModel, EmailStr, field_validator, model_validator
 
@@ -169,6 +169,44 @@ class SprintUpdate(BaseModel):
 
 class SprintRead(SprintBase):
     id: int
+
+    class Config:
+        from_attributes = True
+
+#-----comments-----
+class CommentBase(BaseModel):
+    employee_id: int
+    comment_text: str
+
+    @field_validator("comment_text")
+    @classmethod
+    def validate_comment(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("comment cannot be empty")
+        return value
+
+
+class CommentCreate(CommentBase):
+    pass
+
+
+class CommentUpdate(BaseModel):
+    comment_text: str
+
+    @field_validator("comment_text")
+    @classmethod
+    def validate_comment(cls, value: str) -> str:
+        value = value.strip()
+        if not value:
+            raise ValueError("comment cannot be empty")
+        return value
+
+
+class CommentRead(CommentBase):
+    id: int
+    task_id: int
+    created_at: datetime
 
     class Config:
         from_attributes = True
