@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Beehive • Employees</title>
+
+<style>
+:root{
+  --bg:#000;
+  --panel:#0b0b0b;
+  --card:#121212;
+  --card2:#161616;
+  --border:#242424;
+  --text:#fff;
+  --muted:#bdbdbd;
+  --accent:#f7b500;
+  --accentSoft: rgba(247,181,0,.18);
+  --danger:#ff6b6b;
+  --shadow: 0 18px 50px rgba(0,0,0,.45);
+  --radius: 16px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+.app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns: 260px 1fr;
+}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+}
+.sidebar{
+  background:var(--panel);
+  border-right:1px solid var(--border);
+  padding:18px 14px;
+}
+.brand{display:flex;align-items:center;gap:10px;padding:10px 10px 16px;}
+.logo{
+  width:38px;height:38px;border-radius:14px;
+  background:radial-gradient(circle at 30% 30%,#ffd66b,var(--accent));
+  display:grid;place-items:center;color:#1a1300;font-weight:900;
+}
+.small{font-size:12px;color:var(--muted);}
+.nav{display:grid;gap:8px;padding:8px;}
+.nav a{
+  text-decoration:none;display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:14px;color:var(--muted);border:1px solid transparent;
+}
+.nav a:hover{background:var(--card);border-color:var(--border);color:var(--text);}
+.nav a.active{background:var(--accentSoft);border-color:rgba(247,181,0,.35);color:var(--text);}
+.nav .dot{
+  width:10px;height:10px;border-radius:999px;
+  background:var(--accent);box-shadow:0 0 0 4px rgba(247,181,0,.12);
+}
+.demo-banner{
+  background:rgba(247,181,0,.12);
+  border-bottom:1px solid rgba(247,181,0,.35);
+  color:var(--accent);
+  text-align:center;
+  padding:8px 16px;
+  font-size:13px;
+  font-weight:700;
+}
+.main{display:flex;flex-direction:column;}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px;border-bottom:1px solid var(--border);
+  background:rgba(0,0,0,.55);backdrop-filter:blur(10px);
+  position:sticky;top:0;gap:12px;flex-wrap:wrap;
+}
+.search{
+  display:flex;align-items:center;gap:10px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:10px 12px;width:min(400px,100%);
+}
+.search input{width:100%;border:0;outline:0;background:transparent;color:var(--text);font-size:14px;}
+.btn{
+  border:1px solid var(--border);background:var(--card);
+  color:var(--text);padding:10px 14px;border-radius:14px;
+  cursor:pointer;font-weight:700;font-size:13px;
+}
+.btn:hover{border-color:rgba(247,181,0,.35);}
+.btn.primary{background:linear-gradient(180deg,#ffd66b,var(--accent));border:0;color:#1a1300;}
+.btn.danger{border-color:var(--danger);color:var(--danger);}
+.btn.danger:hover{background:rgba(255,107,107,.12);}
+.btn.small{padding:6px 10px;font-size:12px;}
+.userpill{
+  border:1px solid var(--border);background:var(--card);
+  padding:8px 12px;border-radius:999px;color:var(--muted);font-size:13px;
+}
+.content{padding:20px;}
+.hgroup{margin-bottom:16px;}
+.hgroup h1{margin:0;color:var(--accent);font-size:22px;}
+.hgroup p{margin:6px 0 0;color:var(--muted);}
+.panel{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);box-shadow:var(--shadow);overflow:auto;
+}
+table{width:100%;border-collapse:collapse;min-width:600px;}
+th,td{padding:12px 16px;border-bottom:1px solid var(--border);text-align:left;font-size:14px;}
+th{color:var(--accent);font-weight:800;background:rgba(255,255,255,.02);}
+td{color:var(--muted);}
+tr:last-child td{border-bottom:0;}
+tr:hover td{background:rgba(255,255,255,.02);color:var(--text);}
+.rolebadge{
+  display:inline-block;padding:3px 10px;border-radius:999px;
+  font-size:11px;font-weight:700;text-transform:uppercase;
+}
+.rolebadge.admin{background:var(--accentSoft);color:var(--accent);border:1px solid rgba(247,181,0,.35);}
+.rolebadge.employee{background:rgba(100,180,255,.12);color:#6ab4ff;border:1px solid rgba(100,180,255,.25);}
+.actions{display:flex;gap:8px;}
+.empty{padding:30px;text-align:center;color:var(--muted);}
+.modalBack{
+  position:fixed;inset:0;background:rgba(0,0,0,.65);
+  display:none;align-items:center;justify-content:center;padding:18px;z-index:100;
+}
+.modal{
+  width:min(520px,100%);background:var(--card2);
+  border:1px solid var(--border);border-radius:18px;
+  box-shadow:var(--shadow);padding:20px;
+}
+.modal h2{margin:0 0 16px;color:var(--accent);}
+.formRow{display:grid;gap:6px;margin-bottom:12px;}
+label{color:var(--muted);font-size:13px;}
+input,select{
+  width:100%;padding:10px 12px;border-radius:14px;
+  border:1px solid var(--border);background:#0c0c0c;
+  color:var(--text);outline:none;font-size:14px;
+}
+.modalActions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px;}
+.errorMsg{
+  padding:10px 14px;border-radius:10px;
+  background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.35);
+  color:var(--danger);font-size:13px;margin-bottom:12px;display:none;
+}
+.successMsg{
+  padding:10px 14px;border-radius:10px;
+  background:rgba(46,204,113,.12);border:1px solid rgba(46,204,113,.35);
+  color:#2ecc71;font-size:13px;margin-bottom:12px;display:none;
+}
+</style>
+</head>
+
+<body>
+
+<script>
+  // ── DEMO MODE ─────────────────────────────────────────────────────────────
+  // Set to true to run without the API (for demos, presentations, etc.)
+  // Set to false when the API is running normally
+  const DEMO_MODE = true;
+
+  const DEMO_USER = {
+    token: "demo_token",
+    id: 1,
+    full_name: "Demo Admin",
+    role: "admin",
+  };
+
+  if (DEMO_MODE) {
+    localStorage.setItem("bh_token", DEMO_USER.token);
+    localStorage.setItem("bh_user_id", DEMO_USER.id);
+    localStorage.setItem("bh_user_name", DEMO_USER.full_name);
+    localStorage.setItem("bh_user_role", DEMO_USER.role);
+  }
+
+  // ── Mock data ─────────────────────────────────────────────────────────────
+  let mockEmployees = [
+    { id: 1, full_name: "Demo Admin", email: "admin@example.com", role: "admin" },
+    { id: 2, full_name: "Alice Dev", email: "alice@example.com", role: "employee" },
+    { id: 3, full_name: "Bob Tester", email: "bob@example.com", role: "employee" },
+    { id: 4, full_name: "Carol Manager", email: "carol@example.com", role: "employee" },
+  ];
+  let mockNextId = 5;
+
+  function mockResponse(url, options = {}) {
+    const method = (options.method || "GET").toUpperCase();
+    const body = options.body ? JSON.parse(options.body) : null;
+
+    // DELETE /employees/{id}
+    if (method === "DELETE" && url.match(/\/employees\/\d+$/)) {
+      const id = parseInt(url.split("/").pop());
+      mockEmployees = mockEmployees.filter(e => e.id !== id);
+      return fakeOk({}, 204);
+    }
+
+    // PUT /employees/{id}
+    if (method === "PUT" && url.match(/\/employees\/\d+$/)) {
+      const id = parseInt(url.split("/").pop());
+      const idx = mockEmployees.findIndex(e => e.id === id);
+      if (idx !== -1) mockEmployees[idx] = { ...mockEmployees[idx], ...body };
+      return fakeOk(mockEmployees[idx] || {});
+    }
+
+    // POST /employees
+    if (method === "POST" && url.endsWith("/employees")) {
+      const newEmp = { id: mockNextId++, ...body };
+      mockEmployees.push(newEmp);
+      return fakeOk(newEmp);
+    }
+
+    // GET /employees
+    if (method === "GET" && url.endsWith("/employees")) {
+      return fakeOk([...mockEmployees]);
+    }
+
+    return fakeOk({});
+  }
+
+  function fakeOk(data, status = 200) {
+    return { ok: status < 400, status, json: async () => data };
+  }
+</script>
+
+<div class="demo-banner" id="demo-banner" style="display:none;">
+  Demo mode — running without API. Set DEMO_MODE = false to connect to the backend.
+</div>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">B</div>
+      <div>
+        <div style="font-weight:800;">Beehive</div>
+        <div class="small">Admin Panel</div>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="dashboard.html"><span class="dot"></span>Dashboard</a>
+      <a href="projects.html"><span class="dot"></span>Projects</a>
+      <a href="sprints.html"><span class="dot"></span>Sprints</a>
+      <a class="active" href="employees.html"><span class="dot"></span>Employees</a>
+      <a href="#" onclick="logout()"><span class="dot"></span>Logout</a>
+    </nav>
+  </aside>
+
+  <section class="main">
+    <header class="topbar">
+      <div class="search">
+        🔎 <input id="q" type="text" placeholder="Search by name, email, or role" oninput="filterTable()" />
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button class="btn primary" onclick="openCreateModal()">+ Add employee</button>
+        <div class="userpill" id="user-pill">Admin</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="hgroup">
+        <h1>Employees</h1>
+        <p>Manage team members, roles, and access. Admin only.</p>
+      </div>
+
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="employee-rows">
+            <tr><td colspan="4" class="empty">Loading employees...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </section>
+</div>
+
+<!-- Create Employee Modal -->
+<div class="modalBack" id="createModalBack">
+  <div class="modal">
+    <h2>Add Employee</h2>
+    <div class="errorMsg" id="createError"></div>
+    <div class="successMsg" id="createSuccess"></div>
+    <div class="formRow">
+      <label for="c-name">Full name</label>
+      <input id="c-name" type="text" placeholder="e.g. Jane Smith" />
+    </div>
+    <div class="formRow">
+      <label for="c-email">Email</label>
+      <input id="c-email" type="email" placeholder="jane@example.com" />
+    </div>
+    <div class="formRow">
+      <label for="c-password">Password</label>
+      <input id="c-password" type="password" placeholder="Min. 8 chars, 1 letter, 1 number" />
+    </div>
+    <div class="formRow">
+      <label for="c-role">Role</label>
+      <select id="c-role">
+        <option value="employee">Employee</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+    <div class="modalActions">
+      <button class="btn" onclick="closeCreateModal()">Cancel</button>
+      <button class="btn primary" onclick="createEmployee()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Employee Modal -->
+<div class="modalBack" id="editModalBack">
+  <div class="modal">
+    <h2>Edit Employee</h2>
+    <div class="errorMsg" id="editError"></div>
+    <input type="hidden" id="e-id" />
+    <div class="formRow">
+      <label for="e-name">Full name</label>
+      <input id="e-name" type="text" />
+    </div>
+    <div class="formRow">
+      <label for="e-email">Email</label>
+      <input id="e-email" type="email" />
+    </div>
+    <div class="formRow">
+      <label for="e-role">Role</label>
+      <select id="e-role">
+        <option value="employee">Employee</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+    <div class="modalActions">
+      <button class="btn" onclick="closeEditModal()">Cancel</button>
+      <button class="btn primary" onclick="saveEmployee()">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const API = "http://127.0.0.1:8000";
+  const token = localStorage.getItem("bh_token");
+  const userRole = localStorage.getItem("bh_user_role");
+  const userName = localStorage.getItem("bh_user_name");
+
+  // ── Auth guard — admin only ───────────────────────────────────────────────
+  if (!token) window.location.href = "index.html";
+  if (userRole !== "admin") window.location.href = "dashboard.html";
+
+  if (DEMO_MODE) document.getElementById("demo-banner").style.display = "block";
+  document.getElementById("user-pill").textContent = userName || "Admin";
+
+  // ── API helper ────────────────────────────────────────────────────────────
+  async function apiFetch(url, options = {}) {
+    if (DEMO_MODE) return mockResponse(url, options);
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        ...(options.headers || {}),
+      },
+    });
+    if (res.status === 401) {
+      localStorage.clear();
+      window.location.href = "index.html";
+    }
+    return res;
+  }
+
+  // ── Load employees ────────────────────────────────────────────────────────
+  let allEmployees = [];
+
+  async function loadEmployees() {
+    const tbody = document.getElementById("employee-rows");
+    try {
+      const res = await apiFetch(`${API}/employees`);
+      if (!res.ok) {
+        tbody.innerHTML = `<tr><td colspan="4" class="empty">Failed to load employees.</td></tr>`;
+        return;
+      }
+      allEmployees = await res.json();
+      renderTable(allEmployees);
+    } catch (err) {
+      tbody.innerHTML = `<tr><td colspan="4" class="empty">Could not connect to the server.</td></tr>`;
+    }
+  }
+
+  function renderTable(employees) {
+    const tbody = document.getElementById("employee-rows");
+    if (employees.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="4" class="empty">No employees found.</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = employees.map(emp => `
+      <tr>
+        <td style="color:#fff;font-weight:700;">${escapeHtml(emp.full_name)}</td>
+        <td>${escapeHtml(emp.email)}</td>
+        <td>
+          <span class="rolebadge ${emp.role === 'admin' ? 'admin' : 'employee'}">
+            ${escapeHtml(emp.role)}
+          </span>
+        </td>
+        <td>
+          <div class="actions">
+            <button class="btn small" onclick="openEditModal(${emp.id}, '${escapeHtml(emp.full_name)}', '${escapeHtml(emp.email)}', '${escapeHtml(emp.role)}')">Edit</button>
+            <button class="btn small danger" onclick="deleteEmployee(${emp.id}, '${escapeHtml(emp.full_name)}')">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  function filterTable() {
+    const q = document.getElementById("q").value.trim().toLowerCase();
+    if (!q) { renderTable(allEmployees); return; }
+    renderTable(allEmployees.filter(emp =>
+      emp.full_name.toLowerCase().includes(q) ||
+      emp.email.toLowerCase().includes(q) ||
+      emp.role.toLowerCase().includes(q)
+    ));
+  }
+
+  // ── Create employee ───────────────────────────────────────────────────────
+  function openCreateModal() {
+    document.getElementById("c-name").value = "";
+    document.getElementById("c-email").value = "";
+    document.getElementById("c-password").value = "";
+    document.getElementById("c-role").value = "employee";
+    document.getElementById("createError").style.display = "none";
+    document.getElementById("createSuccess").style.display = "none";
+    document.getElementById("createModalBack").style.display = "flex";
+  }
+
+  function closeCreateModal() {
+    document.getElementById("createModalBack").style.display = "none";
+  }
+
+  async function createEmployee() {
+    const errorEl = document.getElementById("createError");
+    const successEl = document.getElementById("createSuccess");
+    errorEl.style.display = "none";
+    successEl.style.display = "none";
+
+    const payload = {
+      full_name: document.getElementById("c-name").value.trim(),
+      email: document.getElementById("c-email").value.trim(),
+      password: document.getElementById("c-password").value,
+      role: document.getElementById("c-role").value,
+    };
+
+    if (!payload.full_name || !payload.email || !payload.password) {
+      errorEl.textContent = "All fields are required.";
+      errorEl.style.display = "block";
+      return;
+    }
+
+    try {
+      const res = await apiFetch(`${API}/employees`, { method: "POST", body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (res.ok) {
+        successEl.textContent = `${data.full_name} has been added successfully.`;
+        successEl.style.display = "block";
+        loadEmployees();
+        setTimeout(closeCreateModal, 1500);
+      } else {
+        errorEl.textContent = data.detail || "Failed to create employee.";
+        errorEl.style.display = "block";
+      }
+    } catch (err) {
+      errorEl.textContent = "Could not connect to the server.";
+      errorEl.style.display = "block";
+    }
+  }
+
+  // ── Edit employee ─────────────────────────────────────────────────────────
+  function openEditModal(id, name, email, role) {
+    document.getElementById("e-id").value = id;
+    document.getElementById("e-name").value = name;
+    document.getElementById("e-email").value = email;
+    document.getElementById("e-role").value = role;
+    document.getElementById("editError").style.display = "none";
+    document.getElementById("editModalBack").style.display = "flex";
+  }
+
+  function closeEditModal() {
+    document.getElementById("editModalBack").style.display = "none";
+  }
+
+  async function saveEmployee() {
+    const errorEl = document.getElementById("editError");
+    errorEl.style.display = "none";
+
+    const id = document.getElementById("e-id").value;
+    const payload = {
+      full_name: document.getElementById("e-name").value.trim(),
+      email: document.getElementById("e-email").value.trim(),
+      role: document.getElementById("e-role").value,
+    };
+
+    if (!payload.full_name || !payload.email) {
+      errorEl.textContent = "Name and email are required.";
+      errorEl.style.display = "block";
+      return;
+    }
+
+    try {
+      const res = await apiFetch(`${API}/employees/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (res.ok) {
+        closeEditModal();
+        loadEmployees();
+      } else {
+        errorEl.textContent = data.detail || "Failed to update employee.";
+        errorEl.style.display = "block";
+      }
+    } catch (err) {
+      errorEl.textContent = "Could not connect to the server.";
+      errorEl.style.display = "block";
+    }
+  }
+
+  // ── Delete employee ───────────────────────────────────────────────────────
+  async function deleteEmployee(id, name) {
+    if (!confirm(`Are you sure you want to delete ${name}? This cannot be undone.`)) return;
+    try {
+      const res = await apiFetch(`${API}/employees/${id}`, { method: "DELETE" });
+      if (res.ok || res.status === 204) {
+        loadEmployees();
+      } else {
+        const data = await res.json();
+        alert(data.detail || "Failed to delete employee.");
+      }
+    } catch (err) {
+      alert("Could not connect to the server.");
+    }
+  }
+
+  // ── Logout ────────────────────────────────────────────────────────────────
+  function logout() {
+    localStorage.clear();
+    window.location.href = "index.html";
+  }
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  function escapeHtml(s) {
+    return String(s ?? "")
+      .replaceAll("&", "&amp;").replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;").replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  document.getElementById("createModalBack").addEventListener("click", e => {
+    if (e.target.id === "createModalBack") closeCreateModal();
+  });
+  document.getElementById("editModalBack").addEventListener("click", e => {
+    if (e.target.id === "editModalBack") closeEditModal();
+  });
+
+  loadEmployees();
+</script>
+
+</body>
+</html>
