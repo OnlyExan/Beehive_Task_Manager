@@ -98,7 +98,27 @@ def list_project_members(
     project = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
-    return db.query(models.ProjectMember).filter(models.ProjectMember.project_id == project_id).all()
+
+    members = db.query(models.ProjectMember).filter(
+        models.ProjectMember.project_id == project_id
+    ).all()
+
+    # Enrich with employee full_name
+    result = []
+    for member in members:
+        employee = db.query(models.Employee).filter(
+            models.Employee.id == member.employee_id
+        ).first()
+        result.append({
+            "id": member.id,
+            "project_id": member.project_id,
+            "employee_id": member.employee_id,
+            "member_role": member.member_role,
+            "joined_at": member.joined_at,
+            "full_name": employee.full_name if employee else "Unknown",
+        })
+
+    return result
 
 
 @router.post("/{project_id}/members", response_model=schemas.ProjectMemberRead, status_code=status.HTTP_201_CREATED)

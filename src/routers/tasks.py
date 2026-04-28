@@ -137,7 +137,25 @@ def list_task_assignments(
     task = db.query(models.Task).filter(models.Task.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
-    return db.query(models.TaskAssignment).filter(models.TaskAssignment.task_id == task_id).all()
+
+    assignments = db.query(models.TaskAssignment).filter(
+        models.TaskAssignment.task_id == task_id
+    ).all()
+
+    result = []
+    for a in assignments:
+        employee = db.query(models.Employee).filter(
+            models.Employee.id == a.employee_id
+        ).first()
+        result.append({
+            "id": a.id,
+            "task_id": a.task_id,
+            "employee_id": a.employee_id,
+            "assigned_at": a.assigned_at,
+            "full_name": employee.full_name if employee else "Unknown",
+        })
+
+    return result
 
 
 @router.post("/{task_id}/assignments", response_model=schemas.TaskAssignmentRead, status_code=status.HTTP_201_CREATED)

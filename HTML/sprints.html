@@ -187,6 +187,11 @@ body{
   border:1px solid rgba(247,181,0,.35);background:var(--accentSoft);
   color:var(--accent);font-weight:800;
 }
+.assignee{
+  padding:4px 8px;border-radius:999px;
+  border:1px solid var(--border);background:#0c0c0c;
+  color:var(--text);font-weight:700;
+}
 .ticketActions{display:flex;gap:6px;}
 .iconBtn{
   border:1px solid var(--border);background:#0c0c0c;
@@ -221,7 +226,7 @@ input,textarea,select{
   border:1px solid var(--border);background:#0c0c0c;
   color:var(--text);outline:none;
 }
-textarea{min-height:80px;resize:vertical;}
+textarea{min-height:90px;resize:vertical;}
 .modalActions{display:flex;justify-content:flex-end;gap:10px;margin-top:12px;}
 .errorMsg{
   padding:10px 14px;border-radius:10px;
@@ -233,8 +238,6 @@ textarea{min-height:80px;resize:vertical;}
   letter-spacing:.8px;color:var(--muted);margin:16px 0 8px;
 }
 hr{border:0;border-top:1px solid var(--border);margin:14px 0;}
-
-/* Task detail specific */
 .taskDetailMeta{
   display:flex;gap:10px;flex-wrap:wrap;
   margin-bottom:12px;font-size:13px;color:var(--muted);
@@ -246,8 +249,22 @@ hr{border:0;border-top:1px solid var(--border);margin:14px 0;}
   white-space:pre-wrap;min-height:60px;
 }
 .taskDetailDesc.empty{font-style:italic;}
-
-/* Comments */
+.assigneeList{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;min-height:28px;}
+.assigneeChip{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 10px;border-radius:999px;
+  background:rgba(100,180,255,.12);
+  border:1px solid rgba(100,180,255,.25);
+  color:#6ab4ff;font-size:12px;font-weight:700;
+}
+.assigneeChip button{
+  background:none;border:none;color:#6ab4ff;
+  cursor:pointer;padding:0;font-size:14px;line-height:1;
+}
+.assigneeChip button:hover{color:#fff;}
+.assigneeEmpty{color:var(--muted);font-size:13px;font-style:italic;}
+.addRow{display:flex;gap:8px;margin-top:8px;}
+.addRow select{flex:1;}
 .commentList{display:grid;gap:10px;margin-top:8px;}
 .commentItem{
   background:#0c0c0c;border:1px solid var(--border);
@@ -261,9 +278,7 @@ hr{border:0;border-top:1px solid var(--border);margin:14px 0;}
 .commentText{font-size:14px;line-height:1.5;color:var(--text);}
 .commentEmpty{color:var(--muted);font-size:13px;font-style:italic;}
 .commentInputRow{display:flex;gap:8px;margin-top:10px;}
-.commentInputRow textarea{
-  flex:1;min-height:60px;resize:vertical;
-}
+.commentInputRow textarea{flex:1;min-height:60px;resize:vertical;}
 </style>
 </head>
 
@@ -316,69 +331,88 @@ let mockComments = {
     { id: 2, task_id: 1, employee_id: 2, employee_name: "Alice Dev", comment_text: "Looks good, approved!", created_at: "2026-01-06T14:30:00Z" },
   ],
   2: [
-    { id: 3, task_id: 2, employee_id: 1, employee_name: "Demo Admin", comment_text: "Still working on the migrations.", created_at: "2026-01-07T09:00:00Z" }
+    { id: 3, task_id: 2, employee_id: 1, employee_name: "Demo Admin", comment_text: "Still working on the migrations.", created_at: "2026-01-07T09:00:00Z" },
   ],
 };
 let mockNextCommentId = 4;
+
+let mockAssignments = {
+  1: [{ id: 1, task_id: 1, employee_id: 2, full_name: "Alice Dev", assigned_at: "2026-01-05T10:00:00Z" }],
+  2: [{ id: 2, task_id: 2, employee_id: 1, full_name: "Demo Admin", assigned_at: "2026-01-06T09:00:00Z" }],
+  3: [], 4: [], 5: [], 6: [],
+};
+let mockNextAssignmentId = 3;
+
+let mockProjectMembers = {
+  1: [
+    { id: 1, project_id: 1, employee_id: 1, full_name: "Demo Admin", member_role: "Lead" },
+    { id: 2, project_id: 1, employee_id: 2, full_name: "Alice Dev", member_role: "Developer" },
+    { id: 3, project_id: 1, employee_id: 3, full_name: "Bob Tester", member_role: "QA" },
+  ],
+  2: [{ id: 4, project_id: 2, employee_id: 1, full_name: "Demo Admin", member_role: "Lead" }],
+};
 
 function mockResponse(url, options = {}) {
   const method = (options.method || "GET").toUpperCase();
   const body = options.body ? JSON.parse(options.body) : null;
 
-  // DELETE /comments/{id}
+  if (method === "DELETE" && url.match(/\/tasks\/\d+\/assignments\/\d+$/)) {
+    const parts = url.split("/");
+    const empId = parseInt(parts.pop());
+    const taskId = parseInt(parts[parts.length - 2]);
+    if (mockAssignments[taskId]) mockAssignments[taskId] = mockAssignments[taskId].filter(a => a.employee_id !== empId);
+    return fakeOk({}, 204);
+  }
+  if (method === "POST" && url.match(/\/tasks\/\d+\/assignments$/)) {
+    const taskId = parseInt(url.split("/").slice(-2)[0]);
+    const members = mockProjectMembers[selectedProjectId] || [];
+    const member = members.find(m => m.employee_id === body.employee_id);
+    const newA = { id: mockNextAssignmentId++, task_id: taskId, employee_id: body.employee_id, full_name: member?.full_name || "Unknown", assigned_at: new Date().toISOString() };
+    if (!mockAssignments[taskId]) mockAssignments[taskId] = [];
+    mockAssignments[taskId].push(newA);
+    return fakeOk(newA, 201);
+  }
+  if (method === "GET" && url.match(/\/tasks\/\d+\/assignments$/)) {
+    const taskId = parseInt(url.split("/").slice(-2)[0]);
+    return fakeOk(mockAssignments[taskId] || []);
+  }
+  if (method === "GET" && url.match(/\/projects\/\d+\/members$/)) {
+    const projId = parseInt(url.split("/").slice(-2)[0]);
+    return fakeOk(mockProjectMembers[projId] || []);
+  }
   if (method === "DELETE" && url.match(/\/comments\/\d+$/)) {
     const id = parseInt(url.split("/").pop());
-    Object.keys(mockComments).forEach(taskId => {
-      mockComments[taskId] = mockComments[taskId].filter(c => c.id !== id);
-    });
+    Object.keys(mockComments).forEach(tid => { mockComments[tid] = mockComments[tid].filter(c => c.id !== id); });
     return fakeOk({}, 200);
   }
-
-  // POST /tasks/{id}/comments
   if (method === "POST" && url.match(/\/tasks\/\d+\/comments$/)) {
     const taskId = parseInt(url.split("/").slice(-2)[0]);
-    const newComment = {
-      id: mockNextCommentId++,
-      task_id: taskId,
-      employee_id: body.employee_id,
-      employee_name: body.employee_name,
-      comment_text: body.comment_text,
-      created_at: new Date().toISOString(),
-    };
+    const newC = { id: mockNextCommentId++, task_id: taskId, employee_id: body.employee_id, employee_name: DEMO_USER.full_name, comment_text: body.comment_text, created_at: new Date().toISOString() };
     if (!mockComments[taskId]) mockComments[taskId] = [];
-    mockComments[taskId].push(newComment);
-    return fakeOk(newComment, 201);
+    mockComments[taskId].push(newC);
+    return fakeOk(newC, 201);
   }
-
-  // GET /tasks/{id}/comments
   if (method === "GET" && url.match(/\/tasks\/\d+\/comments$/)) {
     const taskId = parseInt(url.split("/").slice(-2)[0]);
     return fakeOk(mockComments[taskId] || []);
   }
-
-  // PATCH/PUT /tasks/{id}
   if ((method === "PATCH" || method === "PUT") && url.match(/\/tasks\/\d+$/)) {
     const id = parseInt(url.split("/").pop());
     const idx = mockTasks.findIndex(t => t.id === id);
     if (idx !== -1) mockTasks[idx] = { ...mockTasks[idx], ...body };
     return fakeOk(mockTasks[idx]);
   }
-
-  // DELETE /tasks/{id}
   if (method === "DELETE" && url.match(/\/tasks\/\d+$/)) {
     const id = parseInt(url.split("/").pop());
     mockTasks = mockTasks.filter(t => t.id !== id);
     return fakeOk({}, 204);
   }
-
-  // POST /tasks
   if (method === "POST" && url.endsWith("/tasks")) {
     const newTask = { id: mockNextTaskId++, status: "To-Do", priority: "Medium", description: null, components_id: null, ...body };
     mockTasks.push(newTask);
+    mockAssignments[newTask.id] = [];
     return fakeOk(newTask, 201);
   }
-
-  // GET /tasks
   if (method === "GET" && url.includes("/tasks")) {
     const params = new URLSearchParams(url.split("?")[1] || "");
     let tasks = [...mockTasks];
@@ -390,35 +424,24 @@ function mockResponse(url, options = {}) {
     }
     return fakeOk(tasks);
   }
-
-  // DELETE /sprints/{id}
   if (method === "DELETE" && url.match(/\/sprints\/\d+$/)) {
     const id = parseInt(url.split("/").pop());
     mockSprints = mockSprints.filter(s => s.id !== id);
     mockTasks = mockTasks.map(t => t.sprint_id === id ? { ...t, sprint_id: null } : t);
     return fakeOk({}, 204);
   }
-
-  // POST /sprints
   if (method === "POST" && url.endsWith("/sprints")) {
     const newSprint = { id: mockNextSprintId++, ...body };
     mockSprints.push(newSprint);
     return fakeOk(newSprint, 201);
   }
-
-  // GET /sprints
   if (method === "GET" && url.includes("/sprints")) {
     const params = new URLSearchParams(url.split("?")[1] || "");
     let sprints = [...mockSprints];
     if (params.get("project_id")) sprints = sprints.filter(s => s.project_id === parseInt(params.get("project_id")));
     return fakeOk(sprints);
   }
-
-  // GET /projects
-  if (method === "GET" && url.endsWith("/projects")) {
-    return fakeOk([...mockProjects]);
-  }
-
+  if (method === "GET" && url.endsWith("/projects")) return fakeOk([...mockProjects]);
   return fakeOk({});
 }
 
@@ -535,19 +558,19 @@ function fakeOk(data, status = 200) {
     <div class="errorMsg" id="sprintError"></div>
     <div class="formGrid" style="margin-top:10px;">
       <div class="formRow">
-        <label>Sprint name</label>
+        <label for="sprintName">Sprint name</label>
         <input id="sprintName" placeholder="e.g., Sprint 1" />
       </div>
       <div class="formRow">
-        <label>Project</label>
+        <label for="sprintProject">Project</label>
         <select id="sprintProject"></select>
       </div>
       <div class="formRow">
-        <label>Start date</label>
+        <label for="sprintStart">Start date</label>
         <input id="sprintStart" type="date" />
       </div>
       <div class="formRow">
-        <label>End date</label>
+        <label for="sprintEnd">End date</label>
         <input id="sprintEnd" type="date" />
       </div>
     </div>
@@ -558,7 +581,7 @@ function fakeOk(data, status = 200) {
   </div>
 </div>
 
-<!-- Add Ticket Modal -->
+<!-- Add Ticket Modal — matches original layout exactly -->
 <div id="ticketModalBack" class="modalBack" role="dialog" aria-modal="true">
   <div class="modal">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
@@ -566,33 +589,51 @@ function fakeOk(data, status = 200) {
       <button class="btn" onclick="openTicketModal(false)">Close</button>
     </div>
     <div class="errorMsg" id="ticketError"></div>
+
     <div class="formGrid" style="margin-top:10px;">
-      <div class="formRow" style="grid-column:1 / -1;">
-        <label>Title</label>
-        <input id="tTitle" placeholder="e.g., Build project settings page" />
-      </div>
       <div class="formRow">
-        <label>Priority</label>
-        <select id="tPriority">
-          <option value="Low">Low</option>
-          <option value="Medium" selected>Medium</option>
-          <option value="High">High</option>
+        <label for="tpri">Priority</label>
+        <select id="tpri">
+          <option value="Low">P4 - Low</option>
+          <option value="Medium" selected>P3 - Normal</option>
+          <option value="High">P2 - High</option>
+          <option value="Urgent">P1 - Urgent</option>
         </select>
       </div>
+
       <div class="formRow">
-        <label>Status</label>
-        <select id="tStatus">
+        <label for="tstate">Column</label>
+        <select id="tstate">
           <option value="To-Do">To-Do</option>
           <option value="In-Progress">In Progress</option>
           <option value="Review">Review</option>
           <option value="Done">Done</option>
         </select>
       </div>
-      <div class="formRow" style="grid-column:1 / -1;">
-        <label>Description (optional)</label>
-        <textarea id="tDesc" placeholder="What needs to be done?"></textarea>
+
+      <div class="formRow" style="grid-column: 1 / -1;">
+        <label for="tsum">Summary</label>
+        <input id="tsum" placeholder="e.g., Build project settings page" />
+      </div>
+
+      <div class="formRow">
+        <label for="ttag">Tag</label>
+        <input id="ttag" placeholder="e.g., ui" />
+      </div>
+
+      <div class="formRow">
+        <label for="tassignee">Assignee (optional)</label>
+        <select id="tassignee">
+          <option value="">Unassigned</option>
+        </select>
+      </div>
+
+      <div class="formRow" style="grid-column: 1 / -1;">
+        <label for="tdesc">Description (optional)</label>
+        <textarea id="tdesc" placeholder="Notes..."></textarea>
       </div>
     </div>
+
     <div class="modalActions">
       <button class="btn" onclick="openTicketModal(false)">Cancel</button>
       <button class="btn primary" onclick="addTicket()">Add Ticket</button>
@@ -608,7 +649,6 @@ function fakeOk(data, status = 200) {
       <button class="btn" onclick="closeTaskDetail()">Close</button>
     </div>
 
-    <!-- Meta -->
     <div class="taskDetailMeta">
       <span class="tag" id="taskDetailPriority"></span>
       <span id="taskDetailStatus"></span>
@@ -621,13 +661,22 @@ function fakeOk(data, status = 200) {
 
     <hr />
 
+    <!-- Assignees -->
+    <div class="sectionLabel">Assignees</div>
+    <div id="assigneeList" class="assigneeList"></div>
+    <div class="addRow">
+      <select id="assigneeSelect"></select>
+      <button class="btn primary" onclick="assignEmployee()">Assign</button>
+    </div>
+    <div class="errorMsg" id="assignError"></div>
+
+    <hr />
+
     <!-- Comments -->
     <div class="sectionLabel">Comments</div>
     <div id="commentList" class="commentList">
       <div class="commentEmpty">Loading comments...</div>
     </div>
-
-    <!-- Add comment -->
     <div class="commentInputRow">
       <textarea id="commentInput" placeholder="Add a comment..."></textarea>
       <button class="btn primary" onclick="submitComment()" style="align-self:flex-end;">Post</button>
@@ -647,12 +696,9 @@ function fakeOk(data, status = 200) {
   const userName = localStorage.getItem("bh_user_name");
   const userId = parseInt(localStorage.getItem("bh_user_id") || "0");
 
-  // ── Auth guard ────────────────────────────────────────────────────────────
   if (!token) window.location.href = "index.html";
-
   if (DEMO_MODE) document.getElementById("demo-banner").style.display = "block";
   document.getElementById("user-pill").textContent = userName || "User";
-
   if (userRole === "admin") {
     document.querySelectorAll(".admin-only").forEach(el => el.style.display = "inline-flex");
   }
@@ -682,10 +728,7 @@ function fakeOk(data, status = 200) {
   let selectedSprintId = null;
   let activeTaskId = null;
 
-  // ── Init ──────────────────────────────────────────────────────────────────
-  async function init() {
-    await loadProjects();
-  }
+  async function init() { await loadProjects(); }
 
   // ── Projects ──────────────────────────────────────────────────────────────
   async function loadProjects() {
@@ -770,7 +813,6 @@ function fakeOk(data, status = 200) {
         apiFetch(`${API}/tasks?${sprintParams}`),
         apiFetch(`${API}/tasks?project_id=${selectedProjectId}`),
       ]);
-
       currentTasks = sprintRes.ok ? await sprintRes.json() : [];
       const allProjTasks = allProjRes.ok ? await allProjRes.json() : [];
       backlogTasks = allProjTasks.filter(t => !t.sprint_id);
@@ -778,12 +820,8 @@ function fakeOk(data, status = 200) {
 
     updateInfoChips();
     fillPersonSelect(currentTasks);
-
-    if (viewMode === "board") {
-      renderBoard(currentTasks, backlogTasks);
-    } else {
-      renderMyTasks(currentTasks);
-    }
+    if (viewMode === "board") renderBoard(currentTasks, backlogTasks);
+    else renderMyTasks()
   }
 
   function renderBoard(sprintTasks, backlog) {
@@ -812,37 +850,53 @@ function fakeOk(data, status = 200) {
     attachDragAndDrop();
   }
 
-  function renderMyTasks(tasks) {
-    document.getElementById("boardWrap").style.display = "none";
-    const wrap = document.getElementById("myTasksWrap");
-    wrap.style.display = "grid";
+async function renderMyTasks() {
+  document.getElementById("boardWrap").style.display = "none";
+  const wrap = document.getElementById("myTasksWrap");
+  wrap.style.display = "grid";
 
-    if (tasks.length === 0) {
-      wrap.innerHTML = `<div class="emptyState">No tasks in this sprint.</div>`;
-      return;
-    }
-
-    wrap.innerHTML = tasks.map(t => `
-      <div class="taskRow clickable" onclick="openTaskDetail(${t.id})">
-        <div class="taskTop">
-          <div>
-            <div class="key">#${t.id}</div>
-            <div class="taskTitle">${escapeHtml(t.title)}</div>
-          </div>
-          <span class="tag">${escapeHtml(t.priority)}</span>
-        </div>
-        <div class="taskMeta">
-          <span>Status: ${escapeHtml(t.status)}</span>
-          ${userRole === "admin" ? `<button class="iconBtn" onclick="event.stopPropagation();deleteTicket(${t.id})">Delete</button>` : ""}
-        </div>
-      </div>
-    `).join("");
+  // fetch assignments for current user across this sprint
+  const myTasks = [];
+  for (const task of currentTasks) {
+    try {
+      const res = await apiFetch(`${API}/tasks/${task.id}/assignments`);
+      if (!res.ok) continue;
+      const assignments = await res.json();
+      const isAssigned = assignments.some(a => a.employee_id === userId);
+      if (isAssigned) myTasks.push(task);
+    } catch { }
   }
 
+  if (myTasks.length === 0) {
+    wrap.innerHTML = `<div class="emptyState">No tasks assigned to you in this sprint.</div>`;
+    return;
+  }
+
+  wrap.innerHTML = myTasks.map(t => `
+    <div class="taskRow clickable" onclick="openTaskDetail(${t.id})">
+      <div class="taskTop">
+        <div>
+          <div class="key">#${t.id}</div>
+          <div class="taskTitle">${escapeHtml(t.title)}</div>
+        </div>
+        <span class="tag">${escapeHtml(t.priority)}</span>
+      </div>
+      <div class="taskMeta">
+        <span>Status: ${escapeHtml(t.status)}</span>
+        ${userRole === "admin" ? `<button class="iconBtn" onclick="event.stopPropagation();deleteTicket(${t.id})">Delete</button>` : ""}
+      </div>
+    </div>
+  `).join("");
+}
+
   function ticketCard(t) {
+    const assignments = (DEMO_MODE ? mockAssignments[t.id] : []) || [];
+    const assigneeNames = assignments.map(a => escapeHtml(a.full_name)).join(", ");
+
     const deleteBtn = userRole === "admin"
       ? `<button class="iconBtn" onclick="event.stopPropagation();deleteTicket(${t.id})">✕</button>`
       : "";
+
     return `
       <div class="ticket clickable" draggable="true" data-id="${t.id}" onclick="openTaskDetail(${t.id})">
         <div class="tTop">
@@ -852,6 +906,10 @@ function fakeOk(data, status = 200) {
         <div class="summary">${escapeHtml(t.title)}</div>
         <div class="meta">
           <span class="tag">${escapeHtml(t.status)}</span>
+          ${assigneeNames ? `<span class="assignee">${assigneeNames}</span>` : ""}
+        </div>
+        <div class="meta" style="margin-top:8px;">
+          <span style="font-size:11px;color:var(--muted);">${escapeHtml(t.priority)}</span>
           <span class="ticketActions">${deleteBtn}</span>
         </div>
       </div>
@@ -865,7 +923,7 @@ function fakeOk(data, status = 200) {
   // ── Person select ─────────────────────────────────────────────────────────
   function fillPersonSelect(tasks) {
     const sel = document.getElementById("personSelect");
-    sel.innerHTML = `<option value="All">All Tasks</option>` +
+    sel.innerHTML = `<option value="All">All People</option>` +
       tasks.map(t => `<option value="${t.id}">#${t.id} ${escapeHtml(t.title).substring(0, 20)}</option>`).join("");
     sel.onchange = () => { if (viewMode === "mytasks") renderMyTasks(currentTasks); };
   }
@@ -887,7 +945,8 @@ function fakeOk(data, status = 200) {
     document.getElementById("boardViewBtn").classList.toggle("activeView", mode === "board");
     document.getElementById("myTasksBtn").classList.toggle("activeView", mode === "mytasks");
     updateInfoChips();
-    render();
+    if (mode === "board") renderBoard(currentTasks, backlogTasks);
+    else renderMyTasks(); // no argument needed anymore
   }
 
   // ── Create sprint ─────────────────────────────────────────────────────────
@@ -948,39 +1007,65 @@ function fakeOk(data, status = 200) {
     } catch { alert("Could not connect to the server."); }
   }
 
-  // ── Add ticket ────────────────────────────────────────────────────────────
-  function openTicketModal(show) {
+  // ── Add ticket modal ──────────────────────────────────────────────────────
+  async function openTicketModal(show) {
     document.getElementById("ticketError").style.display = "none";
     document.getElementById("ticketModalBack").style.display = show ? "flex" : "none";
-    if (show) document.getElementById("tTitle").focus();
+    if (show) {
+      document.getElementById("tsum").focus();
+      // Load project members into the assignee dropdown
+      try {
+        const res = await apiFetch(`${API}/projects/${selectedProjectId}/members`);
+        const members = res.ok ? await res.json() : [];
+        const sel = document.getElementById("tassignee");
+        sel.innerHTML = `<option value="">Unassigned</option>` +
+          members.map(m => `<option value="${m.employee_id}">${escapeHtml(m.full_name)}</option>`).join("");
+      } catch { }
+    }
   }
 
   async function addTicket() {
     const errorEl = document.getElementById("ticketError");
     errorEl.style.display = "none";
 
-    const title = document.getElementById("tTitle").value.trim();
-    if (!title) { errorEl.textContent = "Title is required."; errorEl.style.display = "block"; return; }
+    const title = document.getElementById("tsum").value.trim();
+    if (!title) { errorEl.textContent = "Summary is required."; errorEl.style.display = "block"; return; }
     if (!selectedProjectId) { errorEl.textContent = "No project selected."; errorEl.style.display = "block"; return; }
+
+    // Map priority label back to value
+    const priorityMap = { "P4 - Low": "Low", "P3 - Normal": "Medium", "P2 - High": "High", "P1 - Urgent": "Urgent" };
+    const selectedPriLabel = document.getElementById("tpri").options[document.getElementById("tpri").selectedIndex].text;
+    const priority = priorityMap[selectedPriLabel] || document.getElementById("tpri").value;
+
+    const assigneeId = document.getElementById("tassignee").value ? parseInt(document.getElementById("tassignee").value) : null;
 
     const payload = {
       project_id: selectedProjectId,
       sprint_id: selectedSprintId || null,
       title,
-      priority: document.getElementById("tPriority").value,
-      status: document.getElementById("tStatus").value,
-      description: document.getElementById("tDesc").value.trim() || null,
+      priority,
+      status: document.getElementById("tstate").value,
+      description: document.getElementById("tdesc").value.trim() || null,
     };
 
     try {
       const res = await apiFetch(`${API}/tasks`, { method: "POST", body: JSON.stringify(payload) });
       const data = await res.json();
       if (res.ok) {
+        // If an assignee was selected, assign them immediately
+        if (assigneeId) {
+          await apiFetch(`${API}/tasks/${data.id}/assignments`, {
+            method: "POST",
+            body: JSON.stringify({ employee_id: assigneeId }),
+          });
+        }
         openTicketModal(false);
-        document.getElementById("tTitle").value = "";
-        document.getElementById("tPriority").value = "Medium";
-        document.getElementById("tStatus").value = "To-Do";
-        document.getElementById("tDesc").value = "";
+        document.getElementById("tsum").value = "";
+        document.getElementById("ttag").value = "";
+        document.getElementById("tpri").value = "Medium";
+        document.getElementById("tstate").value = "To-Do";
+        document.getElementById("tassignee").value = "";
+        document.getElementById("tdesc").value = "";
         await render();
       } else {
         errorEl.textContent = data.detail || "Failed to add ticket.";
@@ -1001,18 +1086,15 @@ function fakeOk(data, status = 200) {
 
   // ── Task detail modal ─────────────────────────────────────────────────────
   async function openTaskDetail(id) {
-    const task = currentTasks.find(t => t.id === id) ||
-                 backlogTasks.find(t => t.id === id);
+    const task = currentTasks.find(t => t.id === id) || backlogTasks.find(t => t.id === id);
     if (!task) return;
 
     activeTaskId = id;
-
     document.getElementById("taskDetailTitle").textContent = task.title;
     document.getElementById("taskDetailPriority").textContent = task.priority;
     document.getElementById("taskDetailStatus").textContent = `Status: ${task.status}`;
     document.getElementById("taskDetailId").textContent = `#${task.id}`;
 
-    // Description
     const descEl = document.getElementById("taskDetailDesc");
     if (task.description && task.description.trim()) {
       descEl.textContent = task.description;
@@ -1022,14 +1104,14 @@ function fakeOk(data, status = 200) {
       descEl.classList.add("empty");
     }
 
-    // Reset comment input
     document.getElementById("commentInput").value = "";
     document.getElementById("commentError").style.display = "none";
-
+    document.getElementById("assignError").style.display = "none";
+    document.getElementById("assigneeList").innerHTML = `<span class="assigneeEmpty">Loading...</span>`;
+    document.getElementById("commentList").innerHTML = `<div class="commentEmpty">Loading comments...</div>`;
     document.getElementById("taskDetailModalBack").style.display = "flex";
 
-    // Load comments
-    await loadComments(id);
+    await Promise.all([loadAssignments(id), loadComments(id)]);
   }
 
   function closeTaskDetail() {
@@ -1037,44 +1119,84 @@ function fakeOk(data, status = 200) {
     activeTaskId = null;
   }
 
+  // ── Assignments ───────────────────────────────────────────────────────────
+  async function loadAssignments(taskId) {
+    try {
+      const [assignRes, memberRes] = await Promise.all([
+        apiFetch(`${API}/tasks/${taskId}/assignments`),
+        apiFetch(`${API}/projects/${selectedProjectId}/members`),
+      ]);
+      const assignments = assignRes.ok ? await assignRes.json() : [];
+      const members = memberRes.ok ? await memberRes.json() : [];
+      renderAssignees(assignments, taskId);
+      renderAssigneeDropdown(members, assignments);
+    } catch { document.getElementById("assigneeList").innerHTML = `<span class="assigneeEmpty">Failed to load assignees.</span>`; }
+  }
+
+  function renderAssignees(assignments, taskId) {
+    const el = document.getElementById("assigneeList");
+    if (assignments.length === 0) { el.innerHTML = `<span class="assigneeEmpty">No one assigned yet.</span>`; return; }
+    el.innerHTML = assignments.map(a => `
+      <div class="assigneeChip">
+        ${escapeHtml(a.full_name || "Employee #" + a.employee_id)}
+        <button onclick="unassignEmployee(${taskId}, ${a.employee_id})" title="Unassign">✕</button>
+      </div>
+    `).join("");
+  }
+
+  function renderAssigneeDropdown(members, currentAssignments) {
+    const assignedIds = currentAssignments.map(a => a.employee_id);
+    const available = members.filter(m => !assignedIds.includes(m.employee_id));
+    const sel = document.getElementById("assigneeSelect");
+    if (available.length === 0) { sel.innerHTML = `<option value="">All members assigned</option>`; return; }
+    sel.innerHTML = `<option value="">Select a member...</option>` +
+      available.map(m => `<option value="${m.employee_id}">${escapeHtml(m.full_name)}</option>`).join("");
+  }
+
+  async function assignEmployee() {
+    const errorEl = document.getElementById("assignError");
+    errorEl.style.display = "none";
+    const empId = parseInt(document.getElementById("assigneeSelect").value);
+    if (!empId) { errorEl.textContent = "Select a member to assign."; errorEl.style.display = "block"; return; }
+    try {
+      const res = await apiFetch(`${API}/tasks/${activeTaskId}/assignments`, {
+        method: "POST", body: JSON.stringify({ employee_id: empId }),
+      });
+      if (res.ok) { await loadAssignments(activeTaskId); await render(); }
+      else { const d = await res.json(); errorEl.textContent = d.detail || "Failed to assign."; errorEl.style.display = "block"; }
+    } catch { errorEl.textContent = "Could not connect to the server."; errorEl.style.display = "block"; }
+  }
+
+  async function unassignEmployee(taskId, empId) {
+    try {
+      const res = await apiFetch(`${API}/tasks/${taskId}/assignments/${empId}`, { method: "DELETE" });
+      if (res.ok || res.status === 204) { await loadAssignments(taskId); await render(); }
+    } catch { alert("Could not connect to the server."); }
+  }
+
   // ── Comments ──────────────────────────────────────────────────────────────
   async function loadComments(taskId) {
     const listEl = document.getElementById("commentList");
-    listEl.innerHTML = `<div class="commentEmpty">Loading comments...</div>`;
-
     try {
       const res = await apiFetch(`${API}/tasks/${taskId}/comments`);
       if (!res.ok) { listEl.innerHTML = `<div class="commentEmpty">Failed to load comments.</div>`; return; }
-      const comments = await res.json();
-      renderComments(comments);
+      renderComments(await res.json());
     } catch { listEl.innerHTML = `<div class="commentEmpty">Could not load comments.</div>`; }
   }
 
   function renderComments(comments) {
     const listEl = document.getElementById("commentList");
-    if (comments.length === 0) {
-      listEl.innerHTML = `<div class="commentEmpty">No comments yet. Be the first to add one.</div>`;
-      return;
-    }
-
+    if (comments.length === 0) { listEl.innerHTML = `<div class="commentEmpty">No comments yet. Be the first to add one.</div>`; return; }
     listEl.innerHTML = comments.map(c => {
-      const date = new Date(c.created_at).toLocaleString(undefined, {
-        month: "short", day: "numeric",
-        hour: "2-digit", minute: "2-digit",
-      });
-
+      const date = new Date(c.created_at).toLocaleString(undefined, { month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
       const deleteBtn = userRole === "admin"
         ? `<button class="iconBtn" style="padding:2px 6px;font-size:11px;" onclick="deleteComment(${c.id})">✕</button>`
         : "";
-
       return `
         <div class="commentItem">
           <div class="commentHeader">
             <span class="commentAuthor">${escapeHtml(c.employee_name || "Employee #" + c.employee_id)}</span>
-            <div style="display:flex;align-items:center;gap:8px;">
-              <span>${date}</span>
-              ${deleteBtn}
-            </div>
+            <div style="display:flex;align-items:center;gap:8px;"><span>${date}</span>${deleteBtn}</div>
           </div>
           <div class="commentText">${escapeHtml(c.comment_text)}</div>
         </div>
@@ -1085,28 +1207,15 @@ function fakeOk(data, status = 200) {
   async function submitComment() {
     const errorEl = document.getElementById("commentError");
     errorEl.style.display = "none";
-
     const text = document.getElementById("commentInput").value.trim();
     if (!text) { errorEl.textContent = "Comment cannot be empty."; errorEl.style.display = "block"; return; }
     if (!activeTaskId) return;
-
     try {
       const res = await apiFetch(`${API}/tasks/${activeTaskId}/comments`, {
-        method: "POST",
-        body: JSON.stringify({
-          employee_id: userId,
-          comment_text: text,
-        }),
+        method: "POST", body: JSON.stringify({ employee_id: userId, comment_text: text }),
       });
-
-      if (res.ok) {
-        document.getElementById("commentInput").value = "";
-        await loadComments(activeTaskId);
-      } else {
-        const d = await res.json();
-        errorEl.textContent = d.detail || "Failed to post comment.";
-        errorEl.style.display = "block";
-      }
+      if (res.ok) { document.getElementById("commentInput").value = ""; await loadComments(activeTaskId); }
+      else { const d = await res.json(); errorEl.textContent = d.detail || "Failed to post comment."; errorEl.style.display = "block"; }
     } catch { errorEl.textContent = "Could not connect to the server."; errorEl.style.display = "block"; }
   }
 
@@ -1137,42 +1246,25 @@ function fakeOk(data, status = 200) {
     });
 
     dropzones.forEach(zone => {
-      zone.addEventListener("dragover", e => {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = "move";
-        zone.classList.add("dragOver");
-      });
-      zone.addEventListener("dragleave", e => {
-        if (!zone.contains(e.relatedTarget)) zone.classList.remove("dragOver");
-      });
+      zone.addEventListener("dragover", e => { e.preventDefault(); e.dataTransfer.dropEffect = "move"; zone.classList.add("dragOver"); });
+      zone.addEventListener("dragleave", e => { if (!zone.contains(e.relatedTarget)) zone.classList.remove("dragOver"); });
       zone.addEventListener("drop", async e => {
         e.preventDefault();
         zone.classList.remove("dragOver");
-
         const id = parseInt(e.dataTransfer.getData("text/plain"));
         const newStatus = zone.dataset.status;
         if (!id || !newStatus) return;
 
         const isBacklog = newStatus === "Backlog";
-        const task = currentTasks.find(t => t.id === id) ||
-                     backlogTasks.find(t => t.id === id);
-
-        const payload = isBacklog
-          ? { sprint_id: null }
-          : { status: newStatus, sprint_id: selectedSprintId };
+        const task = currentTasks.find(t => t.id === id) || backlogTasks.find(t => t.id === id);
+        const payload = isBacklog ? { sprint_id: null } : { status: newStatus, sprint_id: selectedSprintId };
 
         if (task) {
           if (isBacklog) { task.sprint_id = null; }
           else { task.status = newStatus; task.sprint_id = selectedSprintId; }
         }
 
-        try {
-          await apiFetch(`${API}/tasks/${id}`, {
-            method: "PATCH",
-            body: JSON.stringify(payload),
-          });
-        } catch { }
-
+        try { await apiFetch(`${API}/tasks/${id}`, { method: "PATCH", body: JSON.stringify(payload) }); } catch { }
         await render();
       });
     });
@@ -1190,21 +1282,12 @@ function fakeOk(data, status = 200) {
 
   // ── Helpers ───────────────────────────────────────────────────────────────
   function escapeHtml(s) {
-    return String(s ?? "")
-      .replaceAll("&","&amp;").replaceAll("<","&lt;")
-      .replaceAll(">","&gt;").replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
+    return String(s ?? "").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#039;");
   }
 
-  document.getElementById("taskDetailModalBack").addEventListener("click", e => {
-    if (e.target.id === "taskDetailModalBack") closeTaskDetail();
-  });
-  document.getElementById("sprintModalBack").addEventListener("click", e => {
-    if (e.target.id === "sprintModalBack") openSprintModal(false);
-  });
-  document.getElementById("ticketModalBack").addEventListener("click", e => {
-    if (e.target.id === "ticketModalBack") openTicketModal(false);
-  });
+  document.getElementById("taskDetailModalBack").addEventListener("click", e => { if (e.target.id === "taskDetailModalBack") closeTaskDetail(); });
+  document.getElementById("sprintModalBack").addEventListener("click", e => { if (e.target.id === "sprintModalBack") openSprintModal(false); });
+  document.getElementById("ticketModalBack").addEventListener("click", e => { if (e.target.id === "ticketModalBack") openTicketModal(false); });
 
   init();
 </script>

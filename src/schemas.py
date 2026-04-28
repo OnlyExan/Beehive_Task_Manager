@@ -135,6 +135,7 @@ class ProjectMemberRead(BaseModel):
     employee_id: int
     member_role: str | None = None
     joined_at: datetime
+    full_name: str | None = None  # add this
 
     class Config:
         from_attributes = True
@@ -264,7 +265,7 @@ class TaskAssignmentRead(BaseModel):
     task_id: int
     employee_id: int
     assigned_at: datetime
-    employee: EmployeeRead | None = None
+    full_name: str | None = None  # add this
 
     class Config:
         from_attributes = True
