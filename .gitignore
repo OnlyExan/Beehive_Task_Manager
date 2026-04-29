@@ -11,3 +11,5 @@ Readme_Starting_venv.txt
 
 # Ignore env files
 .env
+
+outside/
