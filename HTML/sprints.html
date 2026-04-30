@@ -471,6 +471,22 @@ textarea{
   line-height:1.5;
   white-space:pre-wrap;
 }
+
+<hr style="border:0; border-top:1px solid var(--border); margin:16px 0;">
+
+<h3 style="color:var(--accent); margin:0 0 10px;">Comments</h3>
+
+<div id="commentsList" style="display:grid; gap:10px; margin-bottom:12px;"></div>
+
+<div class="formRow">
+  <label for="newComment">Add comment</label>
+  <textarea id="newComment" placeholder="Write a comment..."></textarea>
+</div>
+
+<div class="modalActions">
+  <button class="btn primary" onclick="addTaskComment()">Post Comment</button>
+</div>
+
 .taskDetailMeta{
   display:flex;
   gap:10px;
@@ -710,6 +726,14 @@ const LS_SELECTED_SPRINT = "beehive_selected_sprint";
 const LS_SELECTED_PERSON = "beehive_selected_person";
 const LS_VIEW_MODE = "beehive_view_mode";
 
+let currentTaskId = null;
+const CURRENT_EMPLOYEE_ID = 1; // change this later when login is connected
+
+
+
+
+
+
 function load(key){
   try{
     return JSON.parse(localStorage.getItem(key)) || [];
@@ -903,11 +927,124 @@ function openTaskDetail(key){
       ? ticket.description
       : "No description provided for this task.";
 
+  currentTaskId = ticket.id;
+  loadTaskComments(currentTaskId);
+  document.getElementById("newComment").value = "";
+
   document.getElementById("taskDetailModalBack").style.display = "flex";
 }
 
 function closeTaskDetail(){
   document.getElementById("taskDetailModalBack").style.display = "none";
+  async function loadTaskComments(taskId){
+  const commentsList = document.getElementById("commentsList");
+  commentsList.innerHTML = `<div class="small">Loading comments...</div>`;
+
+  try{
+    const res = await fetch(`http://127.0.0.1:8000/tasks/${taskId}/comments`);
+
+    if(!res.ok){
+      commentsList.innerHTML = `<div class="small">Could not load comments.</div>`;
+      return;
+    }
+
+    const comments = await res.json();
+
+    if(comments.length === 0){
+      commentsList.innerHTML = `<div class="small">No comments yet.</div>`;
+      return;
+    }
+
+    commentsList.innerHTML = comments.map(comment => `
+      <div style="
+        background:#0c0c0c;
+        border:1px solid var(--border);
+        border-radius:14px;
+        padding:10px 12px;
+      ">
+        <div style="color:var(--text); white-space:pre-wrap;">
+          ${escapeHtml(comment.comment_text)}
+        </div>
+
+        <div class="small" style="margin-top:8px;">
+          Employee ${escapeHtml(new Date(comment.created_at).toLocaleString())}
+        </div>
+
+        <button class="iconBtn" style="margin-top:8px;" onclick="deleteTaskComment(${comment.id})">
+          Delete
+        </button>
+      </div>
+    `).join("");
+
+  }catch(error){
+    console.warn("Error loading comments:", error);
+    commentsList.innerHTML = `<div class="small">Backend unavailable.</div>`;
+  }
+}
+
+
+async function addTaskComment(){
+  if(!currentTaskId){
+    alert("No task selected.");
+    return;
+  }
+
+  const commentBox = document.getElementById("newComment");
+  const commentText = commentBox.value.trim();
+
+  if(!commentText){
+    alert("Comment cannot be empty.");
+    return;
+  }
+
+  try{
+    const res = await fetch(`http://127.0.0.1:8000/tasks/${currentTaskId}/comments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        employee_id: CURRENT_EMPLOYEE_ID,
+        comment_text: commentText
+      })
+    });
+
+    if(!res.ok){
+      alert("Could not add comment.");
+      return;
+    }
+
+    commentBox.value = "";
+    loadTaskComments(currentTaskId);
+
+  }catch(error){
+    console.warn("Error adding comment:", error);
+    alert("Backend unavailable.");
+  }
+}
+
+
+async function deleteTaskComment(commentId){
+  const confirmed = confirm("Delete this comment?");
+  if(!confirmed) return;
+
+  try{
+    const res = await fetch(`http://127.0.0.1:8000/comments/${commentId}`, {
+      method: "DELETE"
+    });
+
+    if(!res.ok){
+      alert("Could not delete comment.");
+      return;
+    }
+
+    loadTaskComments(currentTaskId);
+
+  }catch(error){
+    console.warn("Error deleting comment:", error);
+    alert("Backend unavailable.");
+  }
+}
 }
 
 function createSprint(){
