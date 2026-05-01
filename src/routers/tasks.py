@@ -97,3 +97,19 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
 
     db.delete(task)
     db.commit()
+
+@router.patch("/{task_id}/status", response_model=schemas.TaskRead)
+def change_task_status(task_id: int, status_update: schemas.TaskStatusUpdate, db: Session = Depends(get_db)):
+    valid_statuses = ["To-Do", "In-Progress", "Review", "Done"]
+    
+    if status_update.status not in valid_statuses:
+        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {valid_statuses}")
+    
+    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    task.status = status_update.status
+    db.commit()
+    db.refresh(task)
+    return task
