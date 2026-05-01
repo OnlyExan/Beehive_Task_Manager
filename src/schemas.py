@@ -139,6 +139,10 @@ class TaskRead(TaskBase):
 
     class Config:
         from_attributes = True
+# ----- Task Status Update -----
+class TaskStatusUpdate(BaseModel):
+    status: str
+
 
 # ----- Sprint -----
 class SprintBase(BaseModel):
