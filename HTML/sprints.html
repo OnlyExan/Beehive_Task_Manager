@@ -1140,26 +1140,37 @@ function attachDragAndDrop(){
   });
 }
 
-function render(){
+async function fetchTickets(projectId, sprintId, search = "") {
+  const params = new URLSearchParams();
+  if (projectId) params.set("project_id", projectId);
+  if (sprintId)  params.set("sprint_id", sprintId);
+  if (search)    params.set("search", search);
+
+  const res = await fetch(`http://127.0.0.1:8000/tasks?${params}`);
+  if (!res.ok) return [];
+  return await res.json();
+}
+
+async function render() {
   const projects = getProjects();
   const projectKey = document.getElementById("projectSelect").value;
-  const sprintId = document.getElementById("sprintSelect").value;
+  const sprintId   = document.getElementById("sprintSelect").value;
   const selectedPerson = document.getElementById("personSelect").value || "All";
-  const q = (document.getElementById("q").value || "").trim().toLowerCase();
+  const q = (document.getElementById("q").value || "").trim();
   const viewMode = getViewMode();
 
   const emptyProjects = document.getElementById("emptyProjects");
-  const emptySprints = document.getElementById("emptySprints");
-  const boardWrap = document.getElementById("boardWrap");
-  const myTasksWrap = document.getElementById("myTasksWrap");
+  const emptySprints  = document.getElementById("emptySprints");
+  const boardWrap     = document.getElementById("boardWrap");
+  const myTasksWrap   = document.getElementById("myTasksWrap");
 
-  if(projects.length === 0){
+  if (projects.length === 0) {
     emptyProjects.style.display = "block";
-    emptySprints.style.display = "none";
-    boardWrap.style.display = "none";
-    myTasksWrap.style.display = "none";
+    emptySprints.style.display  = "none";
+    boardWrap.style.display     = "none";
+    myTasksWrap.style.display   = "none";
     document.getElementById("projectInfo").textContent = "Project: None";
-    document.getElementById("sprintInfo").textContent = "Sprint: None";
+    document.getElementById("sprintInfo").textContent  = "Sprint: None";
     return;
   }
 
@@ -1173,10 +1184,10 @@ function render(){
   const sprints = getSprints().filter(s => s.projectKey === projectKey);
   const selectedSprint = sprints.find(s => s.id === sprintId);
 
-  if(!selectedSprint){
+  if (!selectedSprint) {
     emptySprints.style.display = "block";
-    boardWrap.style.display = "none";
-    myTasksWrap.style.display = "none";
+    boardWrap.style.display    = "none";
+    myTasksWrap.style.display  = "none";
     document.getElementById("sprintInfo").textContent = "Sprint: None";
     return;
   }
@@ -1185,49 +1196,50 @@ function render(){
   document.getElementById("sprintInfo").textContent =
     `Sprint: ${selectedSprint.name} • ${formatDateRange(selectedSprint.start, selectedSprint.end)}`;
 
-  let tickets = getTickets()
-    .filter(t => t.projectKey === projectKey && t.sprintId === sprintId)
-    .filter(t => (t.key + " " + t.summary + " " + t.tag + " " + (t.assignee || "")).toLowerCase().includes(q));
+  // Fetch from backend — search param goes to the API
+  let tickets = await fetchTickets(projectKey, sprintId, q);
 
-  if(viewMode === "mytasks" && selectedPerson !== "All"){
+  // Person filter still done client-side (backend doesn't know about assignee yet)
+  if (viewMode === "mytasks" && selectedPerson !== "All") {
     tickets = tickets.filter(t => (t.assignee || "Unassigned") === selectedPerson);
   }
 
-  if(viewMode === "board"){
-    boardWrap.style.display = "grid";
+  if (viewMode === "board") {
+    boardWrap.style.display   = "grid";
     myTasksWrap.style.display = "none";
 
     const groups = {
-      backlog: tickets.filter(t => t.state === "backlog"),
-      todo: tickets.filter(t => t.state === "todo"),
+      backlog:  tickets.filter(t => t.state === "backlog"),
+      todo:     tickets.filter(t => t.state === "todo"),
       progress: tickets.filter(t => t.state === "progress"),
-      review: tickets.filter(t => t.state === "review"),
-      done: tickets.filter(t => t.state === "done")
+      review:   tickets.filter(t => t.state === "review"),
+      done:     tickets.filter(t => t.state === "done"),
     };
 
-    document.getElementById("backlog").innerHTML = groups.backlog.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
-    document.getElementById("todo").innerHTML = groups.todo.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
+    document.getElementById("backlog").innerHTML  = groups.backlog.map(ticketCard).join("")  || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
+    document.getElementById("todo").innerHTML     = groups.todo.map(ticketCard).join("")     || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
     document.getElementById("progress").innerHTML = groups.progress.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
-    document.getElementById("review").innerHTML = groups.review.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
-    document.getElementById("done").innerHTML = groups.done.map(ticketCard).join("") || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
+    document.getElementById("review").innerHTML   = groups.review.map(ticketCard).join("")   || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
+    document.getElementById("done").innerHTML     = groups.done.map(ticketCard).join("")     || `<div style="color:#bdbdbd;font-size:13px;">No tickets.</div>`;
 
-    document.getElementById("c_backlog").textContent = groups.backlog.length;
-    document.getElementById("c_todo").textContent = groups.todo.length;
+    document.getElementById("c_backlog").textContent  = groups.backlog.length;
+    document.getElementById("c_todo").textContent     = groups.todo.length;
     document.getElementById("c_progress").textContent = groups.progress.length;
-    document.getElementById("c_review").textContent = groups.review.length;
-    document.getElementById("c_done").textContent = groups.done.length;
+    document.getElementById("c_review").textContent   = groups.review.length;
+    document.getElementById("c_done").textContent     = groups.done.length;
 
     attachDragAndDrop();
   } else {
-    boardWrap.style.display = "none";
+    boardWrap.style.display   = "none";
     myTasksWrap.style.display = "grid";
 
-    if(selectedPerson === "All"){
-      myTasksWrap.innerHTML = `<div class="emptyState">Choose a person in the person selector to view that person’s tasks.</div>`;
+    if (selectedPerson === "All") {
+      myTasksWrap.innerHTML = `<div class="emptyState">Choose a person in the person selector to view that person's tasks.</div>`;
       return;
     }
 
-    myTasksWrap.innerHTML = tickets.map(myTaskRow).join("") || `<div class="emptyState">No tasks assigned to ${escapeHtml(selectedPerson)} in this sprint.</div>`;
+    myTasksWrap.innerHTML = tickets.map(myTaskRow).join("")
+      || `<div class="emptyState">No tasks assigned to ${escapeHtml(selectedPerson)} in this sprint.</div>`;
   }
 }
 
@@ -1235,7 +1247,14 @@ fillProjectSelect();
 fillSprintSelect();
 fillPersonSelect();
 setViewMode(getViewMode());
-document.getElementById("q").addEventListener("input", render);
+
+// Debounce search so it doesn't fire on every keystroke
+let searchTimeout;
+document.getElementById("q").addEventListener("input", () => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(render, 300);
+});
+
 document.getElementById("taskDetailModalBack").addEventListener("click", (e) => {
   if(e.target.id === "taskDetailModalBack"){
     closeTaskDetail();
