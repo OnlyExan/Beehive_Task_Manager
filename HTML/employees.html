@@ -480,17 +480,17 @@ textarea{
 </div>
 
 <script>
-const EMPLOYEE_KEY = "beehive_employees_v1";
+const API = "http://127.0.0.1:8000"
 
-function loadEmployees(){
-  try{
-    return JSON.parse(localStorage.getItem(EMPLOYEE_KEY)) || [];
-  }catch{
-    return [];
-  }
+
+async function loadEmployees(){
+    const res = await fetch(`${API}/employees`);
+    if(!res.ok) return [];
+    return await res.json();
 }
 
 function saveEmployees(items){
+  
   localStorage.setItem(EMPLOYEE_KEY, JSON.stringify(items));
 }
 
@@ -560,16 +560,16 @@ function openEmployeeModal(show){
   }
 }
 
-function editEmployee(index){
-  const employees = loadEmployees();
-  const e = employees[index];
+async function editEmployee(index){
+  const employees = await loadEmployees();
+  const e = employees.find(emp => emp.id === index);
+
+  editingId = index;
 
   document.getElementById("employeeModalTitle").textContent = "Edit Employee";
-  document.getElementById("editingIndex").value = index;
-  document.getElementById("ename").value = e.name;
-  document.getElementById("eemail").value = e.email;
-  document.getElementById("erole").value = e.role;
-  document.getElementById("eskills").value = e.skills;
+  ename.value = e.full_name;
+  eemail.value = e.email;
+  erole.value = e.role;
 
   document.getElementById("employeeBack").style.display = "flex";
 }
@@ -606,21 +606,19 @@ function saveEmployee(){
   render();
 }
 
-function deleteEmployee(index){
-  const employees = loadEmployees();
-  const employee = employees[index];
+async function deleteEmployee(index){
+  if(!confirm("Delete this employee?")) return;
 
-  const confirmed = confirm(`Are you sure you want to delete ${employee.name}?`);
-  if(!confirmed) return;
+  await fetch(`${API}/employees/${id}`, {
+    method: "DELETE"
+  });
 
-  employees.splice(index, 1);
-  saveEmployees(employees);
   render();
 }
 
-function showSkills(index){
-  const employees = loadEmployees();
-  const e = employees[index];
+async function showSkills(index){
+ const res = await fetch(`${API}/employees/${id}/skills`);
+ const e = await res.json();
 
   const skills = String(e.skills || "")
     .split(",")

@@ -59,8 +59,8 @@ class Task(Base):
 
     id = Column(Integer, primary_key=True, index=True)
 
-    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False), nullable=False
-    sprint_id = Column(Integer, ForeignKey("sprints.id"), ondelete="SET NULL", nullable=True), nullable=True       # nullable
+    project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    sprint_id = Column(Integer, ForeignKey("sprints.id"), ondelete="SET NULL", nullable=True)       # nullable
     title = Column(Text, nullable=False)
     status = Column(Text, nullable=False, default="To-Do")
     priority = Column(Text, nullable=False, default="Medium")
