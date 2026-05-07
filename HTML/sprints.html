@@ -728,8 +728,41 @@ function fakeOk(data, status = 200) {
   let selectedProjectId = null;
   let selectedSprintId = null;
   let activeTaskId = null;
+  let isProjectMember = false; 
 
-  async function init() { await loadProjects(); }
+  async function init() {
+    await loadProjects();
+
+    // Priority 1 — URL param (coming from projects page click)
+    const params = new URLSearchParams(window.location.search);
+    const projectIdFromUrl = parseInt(params.get("project_id"));
+
+    // Priority 2 — last visited project saved in localStorage
+    const lastProjectId = parseInt(localStorage.getItem("bh_last_project_id") || "0");
+    const lastSprintId = parseInt(localStorage.getItem("bh_last_sprint_id") || "0");
+
+    const targetProjectId = projectIdFromUrl || lastProjectId;
+
+    if (targetProjectId && targetProjectId !== selectedProjectId) {
+      const sel = document.getElementById("projectSelect");
+      sel.value = targetProjectId;
+      selectedProjectId = targetProjectId;
+      document.getElementById("sprintProject").value = targetProjectId;
+      await loadSprints();
+    }
+
+    // Restore last sprint if it belongs to this project
+    if (lastSprintId) {
+      const sprintSel = document.getElementById("sprintSelect");
+      const sprintExists = allSprints.some(s => s.id === lastSprintId);
+      if (sprintExists) {
+        sprintSel.value = lastSprintId;
+        selectedSprintId = lastSprintId;
+        localStorage.setItem("bh_last_sprint_id", lastSprintId);
+        await render();
+      }
+    }
+  }
 
   // ── Projects ──────────────────────────────────────────────────────────────
   async function loadProjects() {
@@ -757,6 +790,7 @@ function fakeOk(data, status = 200) {
       sel.addEventListener("change", () => {
         selectedProjectId = parseInt(sel.value);
         sprintProjSel.value = sel.value;
+        localStorage.setItem("bh_last_project_id", selectedProjectId);
         loadSprints();
       });
 
@@ -768,9 +802,17 @@ function fakeOk(data, status = 200) {
   async function loadSprints() {
     if (!selectedProjectId) return;
     try {
-      const res = await apiFetch(`${API}/sprints?project_id=${selectedProjectId}`);
-      if (!res.ok) return;
-      allSprints = await res.json();
+      const memberRes = await apiFetch(`${API}/projects/${selectedProjectId}/members`);
+      const members = memberRes.ok ? await memberRes.json() : [];
+      isProjectMember = userRole === "admin" || members.some(m => m.employee_id === userId);
+    } catch {
+      isProjectMember = userRole === "admin";
+    }
+
+    try {
+    const res = await apiFetch(`${API}/sprints?project_id=${selectedProjectId}`);
+    if (!res.ok) return;
+    allSprints = await res.json();
 
       const sel = document.getElementById("sprintSelect");
 
@@ -791,6 +833,7 @@ function fakeOk(data, status = 200) {
 
       sel.onchange = () => {
         selectedSprintId = parseInt(sel.value);
+        localStorage.setItem("bh_last_sprint_id", selectedSprintId);
         render();
       };
 
@@ -989,6 +1032,7 @@ async function renderMyTasks() {
         await loadSprints();
         document.getElementById("sprintSelect").value = data.id;
         selectedSprintId = data.id;
+        localStorage.setItem("bh_last_sprint_id", data.id);
         await render();
       } else {
         errorEl.textContent = data.detail || "Failed to create sprint.";
@@ -1255,6 +1299,12 @@ async function renderMyTasks() {
         const id = parseInt(e.dataTransfer.getData("text/plain"));
         const newStatus = zone.dataset.status;
         if (!id || !newStatus) return;
+
+        // Block if not a member
+        if (!isProjectMember) {
+          alert("You are not a member of this project and cannot move tasks.");
+          return;
+        }
 
         const isBacklog = newStatus === "Backlog";
         const task = currentTasks.find(t => t.id === id) || backlogTasks.find(t => t.id === id);

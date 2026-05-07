@@ -5,6 +5,7 @@ from sqlalchemy import or_
 from src.database import SessionLocal
 from src import models, schemas
 from src.security.roles import require_roles
+from src.security.auth import get_current_user
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
@@ -98,11 +99,24 @@ def update_task(
     task_id: int,
     task_in: schemas.TaskUpdate,
     db: Session = Depends(get_db),
-    _=Depends(require_roles("admin", "employee")),
+    current_user=Depends(get_current_user),
 ):
     task = db.query(models.Task).filter(models.Task.id == task_id).first()
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
+
+    # Admins can update any task
+    # Employees can only update tasks in projects they are a member of
+    if current_user.role != "admin":
+        member = db.query(models.ProjectMember).filter(
+            models.ProjectMember.project_id == task.project_id,
+            models.ProjectMember.employee_id == current_user.id,
+        ).first()
+        if not member:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not a member of this project",
+            )
 
     data = task_in.model_dump(exclude_unset=True)
     for field, value in data.items():

@@ -157,7 +157,7 @@ textarea{min-height:90px;resize:vertical;}
 
 <script>
 // ── DEMO MODE ───────────────────────────────────────────────────────────────
-const DEMO_MODE = true;
+const DEMO_MODE = false;
 
 const DEMO_USER = {
   token: "demo_token",
@@ -353,256 +353,279 @@ function fakeOk(data, status = 200) {
 </div>
 
 <script>
-  const API = "http://127.0.0.1:8000";
-  const token = localStorage.getItem("bh_token");
-  const userRole = localStorage.getItem("bh_user_role");
-  const userName = localStorage.getItem("bh_user_name");
+const API = "http://127.0.0.1:8000";
+const token = localStorage.getItem("bh_token");
+const userRole = localStorage.getItem("bh_user_role");
+const userName = localStorage.getItem("bh_user_name");
 
-  // ── Auth guard — admin only ────────────────────────────────────────────────
-  if (!token) window.location.href = "index.html";
-  if (userRole !== "admin") window.location.href = "dashboard.html";
+// Auth guard
+if (!token) window.location.href = "index.html";
+if (userRole !== "admin") window.location.href = "dashboard.html";
 
-  if (DEMO_MODE) document.getElementById("demo-banner").style.display = "block";
-  document.getElementById("signedInUser").textContent = `Signed in • ${userName || "Admin"}`;
+document.getElementById("signedInUser").textContent = `Signed in • ${userName || "Admin"}`;
 
-  // ── API helper ────────────────────────────────────────────────────────────
-  async function apiFetch(url, options = {}) {
-    if (DEMO_MODE) return mockResponse(url, options);
-    const res = await fetch(url, {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
-        ...(options.headers || {}),
-      },
-    });
-    if (res.status === 401) { localStorage.clear(); window.location.href = "index.html"; }
-    return res;
-  }
+// ── API helper ─────────────────────────────────────────────────────────────
+async function apiFetch(url, options = {}) {
+  const res = await fetch(url, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
+      ...(options.headers || {}),
+    },
+  });
+  if (res.status === 401) { localStorage.clear(); window.location.href = "index.html"; }
+  return res;
+}
 
-  // ── State ─────────────────────────────────────────────────────────────────
-  let allEmployees = [];
+// ── State ──────────────────────────────────────────────────────────────────
+let allEmployees = [];
+let allSkills = {};
+let editingId = null;
 
-  // ── Load employees ────────────────────────────────────────────────────────
-  async function loadEmployees() {
-    const tbody = document.getElementById("rows");
-    try {
-      const res = await apiFetch(`${API}/employees`);
-      if (!res.ok) {
-        tbody.innerHTML = `<tr><td colspan="5" style="padding:18px;color:var(--muted);">Failed to load employees.</td></tr>`;
-        return;
-      }
-      allEmployees = await res.json();
-      renderTable(allEmployees);
-    } catch (err) {
-      console.error(err);
-      tbody.innerHTML = `<tr><td colspan="5" style="padding:18px;color:var(--muted);">Could not connect to the server.</td></tr>`;
-    }
-  }
-
-  function renderTable(employees) {
-    const tbody = document.getElementById("rows");
-
-    if (employees.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="color:var(--muted);padding:18px;">No employees found. Click <b style="color:var(--accent);">+ Add Employee</b> to get started.</td></tr>`;
+// ── Load employees + skills ────────────────────────────────────────────────
+async function loadEmployees() {
+  const tbody = document.getElementById("rows");
+  try {
+    const res = await apiFetch(`${API}/employees`);
+    if (!res.ok) {
+      tbody.innerHTML = `<tr><td colspan="5" style="padding:18px;color:var(--muted);">Failed to load employees.</td></tr>`;
       return;
     }
+    allEmployees = await res.json();
 
-    tbody.innerHTML = employees.map(e => {
-      // Skills only shown in demo mode — not fetched from API yet
-      const skills = DEMO_MODE ? (mockSkills[e.id] || []) : [];
-      const skillText = skills.join(", ");
-
-      return `
-        <tr>
-          <td>
-            <span class="link" onclick="showSkills(${e.id})">${escapeHtml(e.full_name)}</span>
-          </td>
-          <td>${escapeHtml(e.email)}</td>
-          <td>
-            <span class="badge ${e.role === 'employee' ? 'employee' : ''}">
-              ${escapeHtml(e.role.toUpperCase())}
-            </span>
-          </td>
-          <td>
-            <span class="small">${escapeHtml(shortSkills(skillText))}</span>
-          </td>
-          <td>
-            <button class="btn" onclick="editEmployee(${e.id})">Edit</button>
-            <button class="btn danger" onclick="deleteEmployee(${e.id}, '${escapeHtml(e.full_name)}')">Delete</button>
-          </td>
-        </tr>
-      `;
-    }).join("");
-  }
-
-  function filterTable() {
-    const q = (document.getElementById("q").value || "").trim().toLowerCase();
-    if (!q) { renderTable(allEmployees); return; }
-    renderTable(allEmployees.filter(e => {
-      const skills = DEMO_MODE ? (mockSkills[e.id] || []).join(" ") : "";
-      return (e.full_name + " " + e.email + " " + e.role + " " + skills).toLowerCase().includes(q);
-    }));
-  }
-
-  // ── Add / Edit employee ───────────────────────────────────────────────────
-  function openEmployeeModal(show) {
-    document.getElementById("empError").style.display = "none";
-    document.getElementById("employeeBack").style.display = show ? "flex" : "none";
-    if (show) {
-      document.getElementById("employeeModalTitle").textContent = "Add Employee";
-      document.getElementById("editingId").value = "";
-      document.getElementById("ename").value = "";
-      document.getElementById("eemail").value = "";
-      document.getElementById("erole").value = "employee";
-      document.getElementById("epassword").value = "";
-      document.getElementById("eskills").value = "";
-      document.getElementById("passwordRow").style.display = "grid";
-      document.getElementById("ename").focus();
-    }
-  }
-
-  function editEmployee(id) {
-    const employee = allEmployees.find(e => e.id === id);
-    if (!employee) return;
-
-    const skills = DEMO_MODE ? (mockSkills[id] || []) : [];
-
-    document.getElementById("employeeModalTitle").textContent = "Edit Employee";
-    document.getElementById("editingId").value = id;
-    document.getElementById("ename").value = employee.full_name;
-    document.getElementById("eemail").value = employee.email;
-    document.getElementById("erole").value = employee.role;
-    document.getElementById("epassword").value = "";
-    document.getElementById("eskills").value = skills.join(", ");
-    document.getElementById("empError").style.display = "none";
-    // Hide password when editing
-    document.getElementById("passwordRow").style.display = "none";
-    document.getElementById("employeeBack").style.display = "flex";
-  }
-
-  async function saveEmployee() {
-    const errorEl = document.getElementById("empError");
-    errorEl.style.display = "none";
-
-    const name = document.getElementById("ename").value.trim();
-    const email = document.getElementById("eemail").value.trim();
-    const role = document.getElementById("erole").value;
-    const password = document.getElementById("epassword").value;
-    const skillsRaw = document.getElementById("eskills").value.trim();
-    const editingId = document.getElementById("editingId").value;
-    const isEditing = editingId !== "";
-
-    if (!name || !email) {
-      errorEl.textContent = "Name and email are required.";
-      errorEl.style.display = "block";
-      return;
+    // Fetch skills for all employees in parallel - Joshua
+    const skillResults = await Promise.all(
+      allEmployees.map(e => apiFetch(`${API}/employees/${e.id}/skills`))
+    );
+    for (let i = 0; i < allEmployees.length; i++) {
+      allSkills[allEmployees[i].id] = skillResults[i].ok
+        ? await skillResults[i].json()
+        : [];
     }
 
-    if (!isEditing && !password) {
-      errorEl.textContent = "Password is required for new employees.";
-      errorEl.style.display = "block";
-      return;
-    }
-
-    try {
-      let employeeId;
-
-      if (isEditing) {
-        const res = await apiFetch(`${API}/employees/${editingId}`, {
-          method: "PUT",
-          body: JSON.stringify({ full_name: name, email, role }),
-        });
-        const data = await res.json();
-        if (!res.ok) { errorEl.textContent = data.detail || "Failed to update employee."; errorEl.style.display = "block"; return; }
-        employeeId = parseInt(editingId);
-      } else {
-        const res = await apiFetch(`${API}/employees`, {
-          method: "POST",
-          body: JSON.stringify({ full_name: name, email, role, password }),
-        });
-        const data = await res.json();
-        if (!res.ok) { errorEl.textContent = data.detail || "Failed to create employee."; errorEl.style.display = "block"; return; }
-        employeeId = data.id;
-      }
-
-      // Update demo skills locally — not synced to API yet
-      if (DEMO_MODE) {
-        mockSkills[employeeId] = skillsRaw
-          .split(",")
-          .map(s => s.trim())
-          .filter(Boolean);
-      }
-
-      document.getElementById("employeeBack").style.display = "none";
-      await loadEmployees();
-
-    } catch {
-      errorEl.textContent = "Could not connect to the server.";
-      errorEl.style.display = "block";
-    }
+    render();
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML = `<tr><td colspan="5" style="padding:18px;color:var(--muted);">Could not connect to the server.</td></tr>`;
   }
+}
 
-  async function deleteEmployee(id, name) {
-    if (!confirm(`Are you sure you want to delete ${name}?`)) return;
-    try {
-      const res = await apiFetch(`${API}/employees/${id}`, { method: "DELETE" });
-      if (res.ok || res.status === 204) await loadEmployees();
-      else { const d = await res.json(); alert(d.detail || "Failed to delete employee."); }
-    } catch { alert("Could not connect to the server."); }
-  }
+// ── Render table ───────────────────────────────────────────────────────────
+function render() {
+  const q = (document.getElementById("q").value || "").trim().toLowerCase();
+  const rows = document.getElementById("rows");
 
-  // ── Skills modal ──────────────────────────────────────────────────────────
-  function showSkills(id) {
-    const employee = allEmployees.find(e => e.id === id);
-    if (!employee) return;
+  const filtered = allEmployees.filter(e => {
+    const skills = (allSkills[e.id] || []).map(s => s.skill).join(" ");
+    return (e.full_name + " " + e.email + " " + e.role + " " + skills)
+      .toLowerCase().includes(q);
+  });
 
-    const skills = DEMO_MODE ? (mockSkills[id] || []) : [];
-
-    document.getElementById("skillsTitle").textContent = `${employee.full_name}'s Skills`;
-    document.getElementById("skillsContent").innerHTML = `
-      <p><b>Email:</b> ${escapeHtml(employee.email)}</p>
-      <p><b>Role:</b> ${escapeHtml(employee.role.toUpperCase())}</p>
-      <p><b>Skills:</b></p>
-      ${skills.length > 0
-        ? `<ul>${skills.map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>`
-        : `<p style="color:var(--muted);font-style:italic;">No skills added yet.</p>`
-      }
+  if (filtered.length === 0) {
+    rows.innerHTML = `
+      <tr>
+        <td colspan="5" style="color:#bdbdbd;padding:18px;">
+          No employees found. Click <b style="color:#f7b500;">Add Employee</b> to get started.
+        </td>
+      </tr>
     `;
-
-    document.getElementById("skillsBack").style.display = "flex";
+    return;
   }
 
-  function closeSkills() {
-    document.getElementById("skillsBack").style.display = "none";
+  rows.innerHTML = filtered.map(e => {
+    const skills = (allSkills[e.id] || []).map(s => s.skill).join(", ");
+    return `
+      <tr>
+        <td>
+          <span class="link" onclick="showSkills(${e.id})">${escapeHtml(e.full_name)}</span>
+        </td>
+        <td>${escapeHtml(e.email)}</td>
+        <td>
+          <span class="badge ${e.role === 'employee' ? 'employee' : ''}">
+            ${escapeHtml(e.role.toUpperCase())}
+          </span>
+        </td>
+        <td>
+          <span class="small">${escapeHtml(shortSkills(skills))}</span>
+        </td>
+        <td>
+          <button class="btn" onclick="editEmployee(${e.id})">Edit</button>
+          <button class="btn danger" onclick="deleteEmployee(${e.id}, '${escapeHtml(e.full_name)}')">Delete</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+// ── Open / close modal ─────────────────────────────────────────────────────
+function openEmployeeModal(show) {
+  document.getElementById("employeeBack").style.display = show ? "flex" : "none";
+  if (show) {
+    editingId = null;
+    document.getElementById("employeeModalTitle").textContent = "Add Employee";
+    document.getElementById("ename").value = "";
+    document.getElementById("eemail").value = "";
+    document.getElementById("erole").value = "employee";
+    document.getElementById("epassword").value = "";
+    document.getElementById("eskills").value = "";
+    document.getElementById("passwordRow").style.display = "grid";
+    document.getElementById("ename").focus();
+  }
+}
+
+// ── Edit employee ──────────────────────────────────────────────────────────
+function editEmployee(id) {
+  const employee = allEmployees.find(e => e.id === id);
+  if (!employee) return;
+
+  editingId = id;
+  const skills = (allSkills[id] || []).map(s => s.skill).join(", ");
+
+  document.getElementById("employeeModalTitle").textContent = "Edit Employee";
+  document.getElementById("ename").value = employee.full_name;
+  document.getElementById("eemail").value = employee.email;
+  document.getElementById("erole").value = employee.role;
+  document.getElementById("epassword").value = "";
+  document.getElementById("eskills").value = skills;
+  document.getElementById("passwordRow").style.display = "none";
+  document.getElementById("employeeBack").style.display = "flex";
+}
+
+// ── Save employee ──────────────────────────────────────────────────────────
+async function saveEmployee() {
+  const name = document.getElementById("ename").value.trim();
+  const email = document.getElementById("eemail").value.trim();
+  const role = document.getElementById("erole").value;
+  const password = document.getElementById("epassword").value;
+  const skillsRaw = document.getElementById("eskills").value.trim();
+  const isEditing = editingId !== null;
+
+  if (!name || !email) {
+    alert("Name and email are required.");
+    return;
+  }
+  if (!isEditing && !password) {
+    alert("Password is required for new employees.");
+    return;
   }
 
-  // ── Logout ────────────────────────────────────────────────────────────────
-  function logout() {
-    localStorage.clear();
-    window.location.href = "index.html";
+  try {
+    let employeeId;
+
+    if (isEditing) {
+      const res = await apiFetch(`${API}/employees/${editingId}`, {
+        method: "PUT",
+        body: JSON.stringify({ full_name: name, email, role }),
+      });
+      if (!res.ok) { const d = await res.json(); alert(d.detail || "Failed to update."); return; }
+      employeeId = editingId;
+    } else {
+      const res = await apiFetch(`${API}/employees`, {
+        method: "POST",
+        body: JSON.stringify({ full_name: name, email, role, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) { alert(data.detail || "Failed to create."); return; }
+      employeeId = data.id;
+    }
+
+    // Sync skills
+    const newSkills = skillsRaw.split(",").map(s => s.trim()).filter(Boolean);
+    const currentSkills = allSkills[employeeId] || [];
+    const currentNames = currentSkills.map(s => s.skill);
+
+    // Add new skills
+    for (const skill of newSkills) {
+      if (!currentNames.includes(skill)) {
+        await apiFetch(`${API}/employees/${employeeId}/skills`, {
+          method: "POST",
+          body: JSON.stringify({ skill }),
+        });
+      }
+    }
+
+    // Remove deleted skills
+    for (const existing of currentSkills) {
+      if (!newSkills.includes(existing.skill)) {
+        await apiFetch(
+          `${API}/employees/${employeeId}/skills/${encodeURIComponent(existing.skill)}`,
+          { method: "DELETE" }
+        );
+      }
+    }
+
+    document.getElementById("employeeBack").style.display = "none";
+    await loadEmployees();
+
+  } catch (err) {
+    console.error(err);
+    alert("Could not connect to the server.");
   }
+}
 
-  // ── Helpers ───────────────────────────────────────────────────────────────
-  function shortSkills(text) {
-    return text.length > 45 ? text.slice(0, 45) + "..." : text;
-  }
+// ── Delete employee ────────────────────────────────────────────────────────
+async function deleteEmployee(id, name) {
+  if (!confirm(`Are you sure you want to delete ${name}?`)) return;
+  try {
+    const res = await apiFetch(`${API}/employees/${id}`, { method: "DELETE" });
+    if (res.ok || res.status === 204) await loadEmployees();
+    else { const d = await res.json(); alert(d.detail || "Failed to delete."); }
+  } catch { alert("Could not connect to the server."); }
+}
 
-  function escapeHtml(s) {
-    return String(s ?? "")
-      .replaceAll("&","&amp;").replaceAll("<","&lt;")
-      .replaceAll(">","&gt;").replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
+// ── Show skills modal ──────────────────────────────────────────────────────
+function showSkills(id) {
+  const employee = allEmployees.find(e => e.id === id);
+  if (!employee) return;
 
-  document.getElementById("employeeBack").addEventListener("click", e => {
-    if (e.target.id === "employeeBack") openEmployeeModal(false);
-  });
-  document.getElementById("skillsBack").addEventListener("click", e => {
-    if (e.target.id === "skillsBack") closeSkills();
-  });
+  const skills = (allSkills[id] || []).map(s => s.skill);
 
-  loadEmployees();
+  document.getElementById("skillsTitle").textContent = `${employee.full_name}'s Skills`;
+  document.getElementById("skillsContent").innerHTML = `
+    <p><b>Email:</b> ${escapeHtml(employee.email)}</p>
+    <p><b>Role:</b> ${escapeHtml(employee.role.toUpperCase())}</p>
+    <p><b>Skills:</b></p>
+    ${skills.length > 0
+      ? `<ul>${skills.map(s => `<li>${escapeHtml(s)}</li>`).join("")}</ul>`
+      : `<p style="color:var(--muted);font-style:italic;">No skills added yet.</p>`
+    }
+  `;
+
+  document.getElementById("skillsBack").style.display = "flex";
+}
+
+function closeSkills() {
+  document.getElementById("skillsBack").style.display = "none";
+}
+
+// ── Logout ─────────────────────────────────────────────────────────────────
+function logout() {
+  localStorage.clear();
+  window.location.href = "index.html";
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function shortSkills(text) {
+  return text.length > 45 ? text.slice(0, 45) + "..." : text;
+}
+
+function escapeHtml(s) {
+  return String(s ?? "")
+    .replaceAll("&","&amp;").replaceAll("<","&lt;")
+    .replaceAll(">","&gt;").replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+document.getElementById("q").addEventListener("input", render);
+document.getElementById("employeeBack").addEventListener("click", e => {
+  if (e.target.id === "employeeBack") openEmployeeModal(false);
+});
+document.getElementById("skillsBack").addEventListener("click", e => {
+  if (e.target.id === "skillsBack") closeSkills();
+});
+
+loadEmployees();
 </script>
 </body>
 </html>
