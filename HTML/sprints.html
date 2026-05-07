@@ -860,10 +860,28 @@ function fakeOk(data, status = 200) {
       currentTasks = sprintRes.ok ? await sprintRes.json() : [];
       const allProjTasks = allProjRes.ok ? await allProjRes.json() : [];
       backlogTasks = allProjTasks.filter(t => !t.sprint_id);
+      const selectedPerson = document.getElementById("personSelect").value;
+
+      if (selectedPerson && selectedPerson !== "All") {
+        const filteredTasks = [];
+
+        for (const task of currentTasks) {
+          const res = await apiFetch(`${API}/tasks/${task.id}/assignments`);
+          if (!res.ok) continue;
+
+          const assignments = await res.json();
+
+          if (assignments.some(a => a.employee_id === parseInt(selectedPerson))) {
+            filteredTasks.push(task);
+          }
+        }
+
+        currentTasks = filteredTasks;
+      }
     } catch { return; }
 
     updateInfoChips();
-    fillPersonSelect(currentTasks);
+    fillPersonSelect();
     if (viewMode === "board") renderBoard(currentTasks, backlogTasks);
     else renderMyTasks()
   }
@@ -965,11 +983,41 @@ async function renderMyTasks() {
   }
 
   // ── Person select ─────────────────────────────────────────────────────────
-  function fillPersonSelect(tasks) {
+  async function fillPersonSelect() {
     const sel = document.getElementById("personSelect");
-    sel.innerHTML = `<option value="All">All People</option>` +
-      tasks.map(t => `<option value="${t.id}">#${t.id} ${escapeHtml(t.title).substring(0, 20)}</option>`).join("");
-    sel.onchange = () => { if (viewMode === "mytasks") renderMyTasks(currentTasks); };
+    const previousValue = sel.value || "All";
+
+    try {
+      const res = await apiFetch(`${API}/projects/${selectedProjectId}/members`);
+
+      if (!res.ok) {
+        sel.innerHTML = `<option value="">No members</option>`;
+        return;
+      }
+
+      const members = await res.json();
+
+      sel.innerHTML =
+        `<option value="All">All People</option>` +
+        members.map(m => `
+          <option value="${m.employee_id}">
+            ${escapeHtml(m.full_name)}
+          </option>
+        `).join("");
+
+      // restore selected person after rebuilding
+      sel.value = previousValue;
+
+      // if that member no longer exists, fallback to All
+      if (!sel.value) sel.value = "All";
+
+      sel.onchange = () => {
+        render();
+      };
+
+    } catch {
+      sel.innerHTML = `<option value="">Failed to load members</option>`;
+    }
   }
 
   // ── Info chips ────────────────────────────────────────────────────────────

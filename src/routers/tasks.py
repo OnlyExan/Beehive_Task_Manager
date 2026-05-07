@@ -260,6 +260,68 @@ def add_task_label(
     db.refresh(task_label)
     return task_label
 
+# ── Task Comments ─────────────────────────────────────────────────────────────
+
+@router.get("/{task_id}/comments", response_model=list[schemas.CommentRead])
+def list_task_comments(
+    task_id: int,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin", "employee")),
+):
+    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    comments = (
+        db.query(models.Comment)
+        .filter(models.Comment.task_id == task_id)
+        .order_by(models.Comment.created_at.asc())
+        .all()
+    )
+
+    # Enrich each comment with the employee name
+    result = []
+    for comment in comments:
+        employee = db.query(models.Employee).filter(
+            models.Employee.id == comment.employee_id
+        ).first()
+        comment_dict = {
+            "id": comment.id,
+            "task_id": comment.task_id,
+            "employee_id": comment.employee_id,
+            "comment_text": comment.comment_text,
+            "created_at": comment.created_at,
+            "employee_name": employee.full_name if employee else "Unknown",
+        }
+        result.append(comment_dict)
+
+    return result
+
+@router.post("/{task_id}/comments", response_model=schemas.CommentRead, status_code=status.HTTP_201_CREATED)
+def add_task_comment(
+    task_id: int,
+    comment_in: schemas.CommentCreate,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin", "employee")),
+):
+    task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+
+    employee = db.query(models.Employee).filter(models.Employee.id == comment_in.employee_id).first()
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
+
+    new_comment = models.Comment(
+        task_id=task_id,
+        employee_id=comment_in.employee_id,
+        comment_text=comment_in.comment_text,
+    )
+    db.add(new_comment)
+    db.commit()
+    db.refresh(new_comment)
+    return new_comment
+
 
 @router.delete("/{task_id}/labels/{label_id}", status_code=status.HTTP_204_NO_CONTENT)
 def remove_task_label(

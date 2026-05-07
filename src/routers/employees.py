@@ -95,6 +95,69 @@ def update_employee(
     db.refresh(employee)
     return employee
 
+@router.get("/{employee_id}/skills", response_model=list[schemas.EmployeeSkillRead])
+def list_employee_skills(
+    employee_id: int,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin", "employee")),
+):
+    employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
+    return db.query(models.EmployeeSkill).filter(models.EmployeeSkill.employee_id == employee_id).all()
+
+
+@router.post("/{employee_id}/skills", response_model=schemas.EmployeeSkillRead, status_code=status.HTTP_201_CREATED)
+def add_employee_skill(
+    employee_id: int,
+    skill_in: schemas.EmployeeSkillCreate,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin")),
+):
+    employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
+
+    skill_name = skill_in.skill.strip()
+    if not skill_name:
+        raise HTTPException(status_code=400, detail="Skill cannot be empty")
+
+    existing = db.query(models.EmployeeSkill).filter(
+        models.EmployeeSkill.employee_id == employee_id,
+        models.EmployeeSkill.skill == skill_name,
+    ).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Skill already exists")
+
+    new_skill = models.EmployeeSkill(employee_id=employee_id, skill=skill_name)
+    db.add(new_skill)
+    db.commit()
+    db.refresh(new_skill)
+    return new_skill
+
+
+@router.delete("/{employee_id}/skills/{skill_name}")
+def remove_employee_skill(
+    employee_id: int,
+    skill_name: str,
+    db: Session = Depends(get_db),
+    _=Depends(require_roles("admin")),
+):
+    employee = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
+    if not employee:
+        raise HTTPException(status_code=404, detail="Employee not found")
+
+    skill = db.query(models.EmployeeSkill).filter(
+        models.EmployeeSkill.employee_id == employee_id,
+        models.EmployeeSkill.skill == skill_name,
+    ).first()
+    if not skill:
+        raise HTTPException(status_code=404, detail="Skill not found for this employee")
+
+    db.delete(skill)
+    db.commit()
+    return {"message": "Skill removed"}
+
 
 @router.delete("/{employee_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_employee(
