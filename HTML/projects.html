@@ -569,6 +569,9 @@ function fakeOk(data, status = 200) {
   if (DEMO_MODE) document.getElementById("demo-banner").style.display = "block";
   document.getElementById("user-pill").textContent = userName || "User";
   if (userRole === "admin") document.getElementById("create-btn").style.display = "inline-flex";
+  if (userRole !== "admin") {
+    document.querySelectorAll("a[href='employees.html']").forEach(el => el.style.display = "none");
+  }
 
   // ── API helper ────────────────────────────────────────────────────────────
   async function apiFetch(url, options = {}) {

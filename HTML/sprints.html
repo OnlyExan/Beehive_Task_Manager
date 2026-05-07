@@ -703,6 +703,9 @@ function fakeOk(data, status = 200) {
   if (userRole === "admin") {
     document.querySelectorAll(".admin-only").forEach(el => el.style.display = "inline-flex");
   }
+  if (userRole !== "admin") {
+    document.querySelectorAll("a[href='employees.html']").forEach(el => el.style.display = "none");
+  }
 
   // ── API helper ────────────────────────────────────────────────────────────
   async function apiFetch(url, options = {}) {
@@ -808,6 +811,11 @@ function fakeOk(data, status = 200) {
     } catch {
       isProjectMember = userRole === "admin";
     }
+
+    const createSprintBtn = document.querySelector("button[onclick=\"openSprintModal(true)\"]");
+    const addTicketBtn = document.querySelector("button[onclick=\"openTicketModal(true)\"]");
+    if (createSprintBtn) createSprintBtn.style.display = isProjectMember ? "" : "none";
+    if (addTicketBtn) addTicketBtn.style.display = isProjectMember ? "" : "none";
 
     try {
     const res = await apiFetch(`${API}/sprints?project_id=${selectedProjectId}`);
@@ -1043,6 +1051,10 @@ async function renderMyTasks() {
 
   // ── Create sprint ─────────────────────────────────────────────────────────
   function openSprintModal(show) {
+    if (show && !isProjectMember) {
+      alert("You are not a member of this project.");
+      return;
+    }
     document.getElementById("sprintError").style.display = "none";
     document.getElementById("sprintModalBack").style.display = show ? "flex" : "none";
     if (show) {
@@ -1102,6 +1114,10 @@ async function renderMyTasks() {
 
   // ── Add ticket modal ──────────────────────────────────────────────────────
   async function openTicketModal(show) {
+    if (show && !isProjectMember) {
+      alert("You are not a member of this project.");
+      return;
+    }
     document.getElementById("ticketError").style.display = "none";
     document.getElementById("ticketModalBack").style.display = show ? "flex" : "none";
     if (show) {

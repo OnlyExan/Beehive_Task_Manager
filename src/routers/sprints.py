@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from src.database import SessionLocal
 from src import models, schemas
 from src.security.roles import require_roles
+from src.security.auth import get_current_user
 
 router = APIRouter(prefix="/sprints", tags=["sprints"])
 
@@ -20,17 +21,31 @@ def get_db():
 def create_sprint(
     sprint_in: schemas.SprintCreate,
     db: Session = Depends(get_db),
-    _=Depends(require_roles("admin", "employee")), 
+    current_user=Depends(get_current_user),
 ):
     project = db.query(models.Project).filter(models.Project.id == sprint_in.project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
+
+    # Admins can create sprints in any project
+    # Employees must be a member of the project
+    if current_user.role != "admin":
+        member = db.query(models.ProjectMember).filter(
+            models.ProjectMember.project_id == sprint_in.project_id,
+            models.ProjectMember.employee_id == current_user.id,
+        ).first()
+        if not member:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not a member of this project",
+            )
 
     sprint = models.Sprint(**sprint_in.model_dump())
     db.add(sprint)
     db.commit()
     db.refresh(sprint)
     return sprint
+
 
 
 @router.get("", response_model=list[schemas.SprintRead])

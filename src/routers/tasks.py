@@ -22,11 +22,24 @@ def get_db():
 def create_task(
     task_in: schemas.TaskCreate,
     db: Session = Depends(get_db),
-    _=Depends(require_roles("admin", "employee")),
+    current_user=Depends(get_current_user),
 ):
     project = db.query(models.Project).filter(models.Project.id == task_in.project_id).first()
     if not project:
         raise HTTPException(status_code=404, detail="Project not found")
+
+    # Admins can create tasks in any project
+    # Employees must be a member of the project
+    if current_user.role != "admin":
+        member = db.query(models.ProjectMember).filter(
+            models.ProjectMember.project_id == task_in.project_id,
+            models.ProjectMember.employee_id == current_user.id,
+        ).first()
+        if not member:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="You are not a member of this project",
+            )
 
     if task_in.sprint_id is not None:
         sprint = db.query(models.Sprint).filter(models.Sprint.id == task_in.sprint_id).first()
