@@ -19,25 +19,25 @@ def seed_employees():
             Employee(
                 full_name="Alice Developer",
                 email="alice@example.com",
-                role="developer",
+                role="employee",
                 hashed_password=hash_password("temppassword123"),
             ),
             Employee(
                 full_name="Bob Manager",
                 email="bob@example.com",
-                role="manager",
+                role="employee",
                 hashed_password=hash_password("temppassword123"),
             ),
             Employee(
                 full_name="Carol Tester",
                 email="carol@example.com",
-                role="tester",
+                role="employee",
                 hashed_password=hash_password("temppassword123"),
             ),
             Employee(
                 full_name="Gabe Gonzalez",
                 email="gabe@example.com",
-                role="administrator",
+                role="admin",
                 hashed_password=hash_password("password1234"),
             ),
         ]

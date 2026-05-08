@@ -11,96 +11,176 @@
   --card:#111111;
   --text:#ffffff;
   --muted:#cccccc;
-  --accent:#f7b500; /* honey yellow */
+  --accent:#f7b500;
+  --danger:#ff6b6b;
+  --border:#222222;
 }
-
 *{box-sizing:border-box;}
-
 body{
   margin:0;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
 }
-
-/* Top Navigation */
 nav{
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:16px 28px;
   background:#0a0a0a;
-  border-bottom:1px solid #222;
+  border-bottom:1px solid var(--border);
+  flex-wrap:wrap;
+  gap:12px;
 }
-
-nav h1{
-  margin:0;
-  font-size:20px;
-  color: var(--accent);
+.nav-left{display:flex;align-items:center;gap:14px;}
+nav h1{margin:0;font-size:20px;color:var(--accent);}
+.userpill{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:6px 12px;
+  border-radius:999px;
+  border:1px solid var(--border);
+  background:#111;
+  font-size:13px;
+  color:var(--muted);
 }
-
-nav a.logout{
-  background: var(--accent);
-  color:#1a1300;
-  text-decoration:none;
-  padding:8px 14px;
-  border-radius:8px;
+.rolebadge{
+  padding:2px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+.rolebadge.admin{
+  background:rgba(247,181,0,.18);
+  color:var(--accent);
+  border:1px solid rgba(247,181,0,.35);
+}
+.rolebadge.employee{
+  background:rgba(100,180,255,.12);
+  color:#6ab4ff;
+  border:1px solid rgba(100,180,255,.25);
+}
+.demo-banner{
+  background: rgba(247,181,0,.12);
+  border-bottom:1px solid rgba(247,181,0,.35);
+  color:var(--accent);
+  text-align:center;
+  padding:8px 16px;
+  font-size:13px;
   font-weight:700;
 }
-
-nav a.logout:hover{opacity:.9}
-
-/* Main Layout */
+.btn{
+  border:1px solid var(--border);
+  background:#111;
+  color:var(--text);
+  padding:8px 14px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:13px;
+}
+.btn:hover{border-color:rgba(247,181,0,.35);}
+.btn.logout{background:var(--accent);color:#1a1300;border:0;}
+.btn.logout:hover{opacity:.9;}
+.hgroup{
+  padding:40px 40px 0;
+  max-width:1200px;
+  margin:0 auto;
+}
+.hgroup h2{margin:0;font-size:26px;color:var(--accent);}
+.hgroup p{margin:6px 0 0;color:var(--muted);}
 .container{
   padding:40px;
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
   gap:30px;
+  max-width:1200px;
+  margin:0 auto;
 }
-
-/* Cards */
 .card{
   display:block;
-  background: var(--card);
+  background:var(--card);
   padding:30px;
   border-radius:14px;
-  border:1px solid #222;
+  border:1px solid var(--border);
   transition:.2s ease;
   cursor:pointer;
   text-decoration:none;
   color:inherit;
 }
-
-.card:hover{
-  border-color: var(--accent);
-  transform: translateY(-4px);
+.card:hover{border-color:var(--accent);transform:translateY(-4px);}
+.card h2{margin-top:0;color:var(--accent);}
+.card p{color:var(--muted);margin-bottom:0;}
+.card .badge{
+  display:inline-block;
+  margin-top:12px;
+  padding:4px 10px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:700;
+  background:rgba(247,181,0,.12);
+  color:var(--accent);
+  border:1px solid rgba(247,181,0,.25);
 }
-
-.card h2{
-  margin-top:0;
-  color: var(--accent);
-}
-
-.card p{
-  color: var(--muted);
-}
-
 .footer{
   text-align:center;
   padding:20px;
-  color: var(--muted);
+  color:var(--muted);
+  font-size:13px;
 }
 </style>
 </head>
 
 <body>
 
+<script>
+  // ── DEMO MODE ─────────────────────────────────────────────────────────────
+  // Set to true to run without the API (for demos, presentations, etc.)
+  // Set to false when the API is running normally
+  const DEMO_MODE = false;
+
+  const DEMO_USER = {
+    token: "demo_token",
+    id: 1,
+    full_name: "Demo Admin",
+    role: "admin",   // change to "employee" to demo employee view
+  };
+
+  if (DEMO_MODE) {
+    localStorage.setItem("bh_token", DEMO_USER.token);
+    localStorage.setItem("bh_user_id", DEMO_USER.id);
+    localStorage.setItem("bh_user_name", DEMO_USER.full_name);
+    localStorage.setItem("bh_user_role", DEMO_USER.role);
+  }
+</script>
+
+<!-- Demo banner — only visible in demo mode -->
+<div class="demo-banner" id="demo-banner" style="display:none;">
+  Demo mode — running without API. Set DEMO_MODE = false to connect to the backend.
+</div>
+
 <nav>
-  <h1>🐝 Beehive</h1>
-  <a class="logout" href="index.html">Logout</a>
+  <div class="nav-left">
+    <h1>🐝 Beehive</h1>
+    <div class="userpill">
+      <span id="user-name">Loading...</span>
+      <span class="rolebadge" id="role-badge"></span>
+    </div>
+  </div>
+  <div>
+    <button class="btn logout" onclick="logout()">Logout</button>
+  </div>
 </nav>
 
-<div class="container">
+<div class="hgroup">
+  <h2>Dashboard</h2>
+  <p>Welcome back. Choose where you want to go.</p>
+</div>
+
+<div class="container" id="card-container">
   <a class="card" href="projects.html">
     <h2>Projects</h2>
     <p>Create, manage, and organize all your active projects.</p>
@@ -112,9 +192,127 @@ nav a.logout:hover{opacity:.9}
   </a>
 </div>
 
-<div class="footer">
-  © 2026 Beehive Task Management
-</div>
+
+
+<div class="footer">© 2026 Beehive Task Management</div>
+
+<script>
+  const API = "http://127.0.0.1:8000";
+
+  // ── Auth guard ────────────────────────────────────────────────────────────
+  const token = localStorage.getItem("bh_token");
+  const userName = localStorage.getItem("bh_user_name");
+  const userRole = localStorage.getItem("bh_user_role");
+
+  if (!token) {
+    window.location.href = "index.html";
+  }
+
+  // ── Show demo banner ──────────────────────────────────────────────────────
+  if (DEMO_MODE) {
+    document.getElementById("demo-banner").style.display = "block";
+  }
+
+  // ── Show user info ────────────────────────────────────────────────────────
+  document.getElementById("user-name").textContent = userName || "Unknown";
+  const badge = document.getElementById("role-badge");
+  badge.textContent = userRole || "unknown";
+  badge.classList.add(userRole === "admin" ? "admin" : "employee");
+
+  // ── Inject employees card for admins only ─────────────────────────────────
+  if (userRole === "admin") {
+    const container = document.getElementById("card-container");
+    const employeeCard = document.createElement("a");
+    employeeCard.className = "card";
+    employeeCard.href = "employees.html";
+    employeeCard.innerHTML = `
+      <h2>Employees</h2>
+      <p>Manage team members, assign roles, and control access.</p>
+      <span class="badge">Admin only</span>
+    `;
+    container.appendChild(employeeCard);
+  }
+
+  // ── API helper ────────────────────────────────────────────────────────────
+  async function apiFetch(url, options = {}) {
+    if (DEMO_MODE) return mockResponse(url, options);
+
+    const res = await fetch(url, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+        ...(options.headers || {}),
+      },
+    });
+    if (res.status === 401) {
+      localStorage.clear();
+      window.location.href = "index.html";
+    }
+    return res;
+  }
+
+  // ── Mock responses for demo mode ──────────────────────────────────────────
+  function mockResponse(url, options = {}) {
+    const method = (options.method || "GET").toUpperCase();
+
+    if (url.includes("/employees")) {
+      if (method === "GET") return fakeOk([
+        { id: 1, full_name: "Demo Admin", email: "admin@example.com", role: "admin" },
+        { id: 2, full_name: "Alice Dev", email: "alice@example.com", role: "employee" },
+        { id: 3, full_name: "Bob Tester", email: "bob@example.com", role: "employee" },
+      ]);
+      if (method === "POST") return fakeOk({ id: 4, full_name: "New Employee", email: "new@example.com", role: "employee" });
+      if (method === "PUT") return fakeOk({ id: 1, full_name: "Updated", email: "updated@example.com", role: "employee" });
+      if (method === "DELETE") return fakeOk({}, 204);
+    }
+
+    if (url.includes("/projects")) {
+      if (method === "GET") return fakeOk([
+        { id: 1, name: "Beehive App", description: "Main project", start_date: "2026-01-01", end_date: "2026-12-31" },
+        { id: 2, name: "Marketing Site", description: "Company website", start_date: null, end_date: null },
+      ]);
+      if (method === "POST") return fakeOk({ id: 3, name: "New Project", description: "", start_date: null, end_date: null });
+      if (method === "DELETE") return fakeOk({}, 200);
+    }
+
+    if (url.includes("/sprints")) {
+      if (method === "GET") return fakeOk([
+        { id: 1, project_id: 1, name: "Sprint 1", start_date: "2026-01-01", end_date: "2026-01-14" },
+        { id: 2, project_id: 1, name: "Sprint 2", start_date: "2026-01-15", end_date: "2026-01-28" },
+      ]);
+      if (method === "POST") return fakeOk({ id: 3, project_id: 1, name: "Sprint 3", start_date: "2026-02-01", end_date: "2026-02-14" });
+    }
+
+    if (url.includes("/tasks")) {
+      if (method === "GET") return fakeOk([
+        { id: 1, project_id: 1, sprint_id: 1, title: "Build login page", status: "Done", priority: "High" },
+        { id: 2, project_id: 1, sprint_id: 1, title: "Set up database", status: "In-Progress", priority: "High" },
+        { id: 3, project_id: 1, sprint_id: 1, title: "Write tests", status: "To-Do", priority: "Medium" },
+        { id: 4, project_id: 1, sprint_id: null, title: "Update docs", status: "To-Do", priority: "Low" },
+      ]);
+      if (method === "POST") return fakeOk({ id: 5, project_id: 1, sprint_id: 1, title: "New Task", status: "To-Do", priority: "Medium" });
+      if (method === "PATCH" || method === "PUT") return fakeOk({ id: 1, title: "Updated task", status: "Done", priority: "High" });
+      if (method === "DELETE") return fakeOk({}, 204);
+    }
+
+    return fakeOk({});
+  }
+
+  function fakeOk(data, status = 200) {
+    return {
+      ok: status < 400,
+      status,
+      json: async () => data,
+    };
+  }
+
+  // ── Logout ────────────────────────────────────────────────────────────────
+  function logout() {
+    localStorage.clear();
+    window.location.href = "index.html";
+  }
+</script>
 
 </body>
 </html>

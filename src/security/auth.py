@@ -1,4 +1,5 @@
 # src/security/auth.py
+import os
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
 
@@ -9,15 +10,14 @@ from sqlalchemy.orm import Session
 
 from src.database import SessionLocal
 from src import models
-from src.security.passwords import verify_password 
+from src.security.passwords import verify_password
 
 
-# ===== JWT config (align these with your app’s settings) =====
-SECRET_KEY = "change_me_to_a_long_random_secret"
+# ===== JWT config =====
+SECRET_KEY = os.environ["SECRET_KEY"]          # pulled from .env — never hardcode this
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
-# Token URL is the path of your login endpoint (e.g. /auth/login)
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
@@ -32,20 +32,13 @@ def get_db():
 
 # ===== Authentication helpers =====
 
-def authenticate_employee(
-    email: str,
-    password: str,
-    db: Session,
-) -> models.Employee | None:
+def authenticate_employee(email: str, password: str, db: Session) -> models.Employee | None:
     """Return employee if email/password are valid, else None."""
     user = db.query(models.Employee).filter(models.Employee.email == email).first()
     if user is None:
         return None
-
-    # uses your bcrypt-based verify_password
     if not verify_password(password, user.hashed_password):
         return None
-
     return user
 
 
@@ -56,8 +49,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
         expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
+    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 # ===== Current user dependency =====
@@ -75,17 +67,17 @@ def get_current_user(
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        employee_id: int | None = payload.get("sub")
-        if employee_id is None:
+
+        # sub is stored as a string — convert to int for the DB lookup
+        sub = payload.get("sub")
+        if sub is None:
             raise credentials_exception
-    except jwt.PyJWTError:
+        employee_id = int(sub)
+
+    except (jwt.PyJWTError, ValueError):
         raise credentials_exception
 
-    user = (
-        db.query(models.Employee)
-        .filter(models.Employee.id == employee_id)
-        .first()
-    )
+    user = db.query(models.Employee).filter(models.Employee.id == employee_id).first()
     if user is None:
         raise credentials_exception
 
