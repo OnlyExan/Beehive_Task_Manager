@@ -6,6 +6,7 @@ from . import models, schemas
 from .database import SessionLocal, engine
 from src.routers import tasks, employees, sprints, auth, setup, projects
 from src.security.roles import require_roles
+from src.security.auth import get_current_user
 from fastapi.middleware.cors import CORSMiddleware
 
 models.Base.metadata.create_all(bind=engine)
@@ -51,11 +52,19 @@ def home():
 def delete_comment(
     comment_id: int,
     db: Session = Depends(get_db),
-    _=Depends(require_roles("admin")),
+    current_user=Depends(get_current_user),
 ):
     comment = db.query(models.Comment).filter(models.Comment.id == comment_id).first()
     if not comment:
         raise HTTPException(status_code=404, detail="Comment not found")
+
+    # Admin can delete any comment, employee can only delete their own
+    if current_user.role != "admin" and comment.employee_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You can only delete your own comments",
+        )
+
     db.delete(comment)
     db.commit()
     return {"message": "Comment deleted successfully"}
